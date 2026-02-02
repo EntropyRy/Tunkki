@@ -28,9 +28,11 @@ final class EventAdminController extends CRUDController
         $emails = implode(';', $emails);
 
         return $this->render('admin/event/nakki_list.html.twig', [
+            'object' => $event,
             'event' => $event,
             'nakkiBookings' => $nakkis,
             'emails' => $emails,
+            'action' => 'show',
         ]);
     }
 
@@ -41,8 +43,10 @@ final class EventAdminController extends CRUDController
 
         // $email_url = $this->admin->generateUrl('rsvpEmail', ['id' => $event->getId()]);
         return $this->render('admin/event/rsvps.html.twig', [
+            'object' => $event,
             'event' => $event,
             'rsvps' => $rsvps,
+            'action' => 'show',
             // 'email_url' => $email_url
         ]);
     }

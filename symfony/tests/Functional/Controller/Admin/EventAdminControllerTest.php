@@ -195,6 +195,71 @@ final class EventAdminControllerTest extends FixturesWebTestCase
         $this->client->assertSelectorTextContains('table.table tbody', (string) $member->getEmail());
     }
 
+    public function testNakkiListActionShowsEmptySlotsForSameTime(): void
+    {
+        $event = EventFactory::new()->published()->create([
+            'url' => 'event-nakki-slots-'.uniqid('', true),
+            'name' => 'Event Nakki Slots EN',
+            'nimi' => 'Event Nakki Slots FI',
+        ]);
+        $nakkikone = NakkikoneFactory::new()->enabled()->create([
+            'event' => $event,
+        ]);
+
+        $start = new \DateTimeImmutable('2031-01-01 10:00');
+        $end = $start->modify('+1 hour');
+
+        $nakki = NakkiFactory::new()->with([
+            'nakkikone' => $nakkikone,
+            'startAt' => $start,
+            'endAt' => $end,
+        ])->create();
+        $nakkiEntity = $nakki instanceof Proxy ? $nakki->_real() : $nakki;
+
+        $booked = NakkiBookingFactory::new()->booked()->create([
+            'nakki' => $nakkiEntity,
+            'nakkikone' => $nakkikone,
+            'startAt' => $start,
+            'endAt' => $end,
+        ]);
+        $bookedMember = $booked->getMember();
+        self::assertNotNull($bookedMember);
+        $bookedMember->setUsername('booked-member');
+        NakkiBookingFactory::new()->free()->create([
+            'nakki' => $nakkiEntity,
+            'nakkikone' => $nakkikone,
+            'startAt' => $start,
+            'endAt' => $end,
+        ]);
+        NakkiBookingFactory::new()->free()->create([
+            'nakki' => $nakkiEntity,
+            'nakkikone' => $nakkikone,
+            'startAt' => $start,
+            'endAt' => $end,
+        ]);
+
+        [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN');
+
+        $crawler = $this->client->request('GET', "/admin/event/{$event->getId()}/nakkilist");
+        $this->assertResponseIsSuccessful();
+
+        $table = $crawler->filter('table.nakki-timetable[data-nakki-id="'.$nakkiEntity->getId().'"]');
+        self::assertCount(1, $table);
+
+        $slots = $table->filter('.nakki-slot');
+        self::assertCount(3, $slots);
+
+        $emptySlots = $table->filter('.nakki-slot--empty');
+        self::assertCount(2, $emptySlots);
+
+        $member = $booked->getMember();
+        self::assertNotNull($member);
+        $this->client->assertSelectorTextContains(
+            'table.nakki-timetable[data-nakki-id="'.$nakkiEntity->getId().'"]',
+            (string) $member->getUsername(),
+        );
+    }
+
     public function testRsvpActionRendersDoorListForEventRsvps(): void
     {
         $event = EventFactory::new()->published()->create([

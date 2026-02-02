@@ -35,3 +35,15 @@
   column-count:         1;
   }
 }
+
+.nakki-slot-list .nakki-slot {
+  display: block;
+}
+
+.nakki-slot-list .nakki-slot--empty {
+  min-height: 1.25rem;
+}
+
+.nakki-slot-list .nakki-slot.border-bottom {
+  border-bottom: 1px solid #ddd !important;
+}

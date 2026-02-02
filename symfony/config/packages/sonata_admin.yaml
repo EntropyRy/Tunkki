@@ -114,6 +114,4 @@ sonata_admin:
           - sonata.page.admin.site
           - entropy.admin.access_groups
         roles: [SONATA_SUPER_ADMIN]
-  assets:
-    extra_stylesheets:
-      - css/admin.css
+  assets: { }
