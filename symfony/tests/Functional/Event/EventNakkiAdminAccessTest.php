@@ -6,7 +6,9 @@ namespace App\Tests\Functional\Event;
 
 use App\Factory\EventFactory;
 use App\Factory\MemberFactory;
+use App\Factory\NakkiFactory;
 use App\Factory\NakkiDefinitionFactory;
+use App\Factory\NakkikoneFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
 
@@ -233,6 +235,31 @@ final class EventNakkiAdminAccessTest extends FixturesWebTestCase
         $response = $client->getResponse();
 
         self::assertSame(403, $response->getStatusCode(), 'Regular user should get 403 Forbidden (EN)');
+    }
+
+    public function testRegularUserDeniedWhenNoResponsiblesConfigured(): void
+    {
+        $event = EventFactory::new()->published()->create([
+            'url' => 'test-event-no-resp-'.uniqid('', true),
+        ]);
+        $nakkikone = NakkikoneFactory::new()->enabled()->create([
+            'event' => $event,
+        ]);
+        NakkiFactory::new()->with([
+            'nakkikone' => $nakkikone,
+            'responsible' => null,
+        ])->create();
+
+        $email = 'regular-no-resp-'.bin2hex(random_bytes(4)).'@example.com';
+        [$_regular, $client] = $this->loginAsEmail($email);
+
+        $year = $event->getEventDate()->format('Y');
+        $path = "/{$year}/{$event->getUrl()}/nakkikone/hallinta";
+
+        $client->request('GET', $path);
+        $response = $client->getResponse();
+
+        self::assertSame(403, $response->getStatusCode(), 'Regular user should get 403 Forbidden without responsibles');
     }
 
     /* -----------------------------------------------------------------
