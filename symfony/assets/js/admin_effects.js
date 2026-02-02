@@ -147,10 +147,11 @@
     }
     function snowDefaults() {
         return {
-            amount: 500,
+            amountOfSnow: 500,
             size: 2,
             speed: 5,
-            color: "rgba(230, 230, 230, 1)",
+            colorLight: "rgba(50, 50, 50, 0.8)",
+            colorDark: "rgba(230, 230, 230, 1)",
         };
     }
     function starsDefaults() {
