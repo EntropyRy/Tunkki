@@ -20,24 +20,6 @@ class NakkiBookingRepository extends ServiceEntityRepository
         parent::__construct($registry, NakkiBooking::class);
     }
 
-    public function save(NakkiBooking $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->persist($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
-    public function remove(NakkiBooking $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
     /**
      * @return NakkiBooking[] Returns an array of NakkiBooking objects
      */
