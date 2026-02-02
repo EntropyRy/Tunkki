@@ -75,9 +75,6 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
 
                 if (null !== $existingUser) {
                     $member = $existingUser->getMember();
-                    if (null === $member) {
-                        throw new AuthenticationException('User account corrupted: no member record');
-                    }
 
                     if (
                         strtolower((string) $member->getUsername()) != $username
@@ -111,9 +108,6 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
                         );
                     }
                     $user = $member->getUser();
-                    if (null === $user) {
-                        throw new AuthenticationException('Member account corrupted: no user record');
-                    }
                     $user->setMattermostId($id);
                     $this->em->persist($user);
                     $this->em->flush();
