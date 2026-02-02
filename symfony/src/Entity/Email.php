@@ -72,12 +72,14 @@ class Email implements \Stringable
         $now = new \DateTimeImmutable();
         $this->createdAt = $now;
         $this->updatedAt = $now;
+        $this->normalizeRecipientGroups();
     }
 
     #[ORM\PreUpdate]
     public function setUpdatedAtValue(): void
     {
         $this->updatedAt = new \DateTimeImmutable();
+        $this->normalizeRecipientGroups();
     }
 
     public function getSubject(): string
@@ -142,6 +144,11 @@ class Email implements \Stringable
         );
 
         return $this;
+    }
+
+    private function normalizeRecipientGroups(): void
+    {
+        $this->setRecipientGroups($this->getRecipientGroups());
     }
 
     public function getCreatedAt(): \DateTimeImmutable
