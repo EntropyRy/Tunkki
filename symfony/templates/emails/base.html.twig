@@ -60,7 +60,7 @@
                                                         <table style="border-top: 1px solid #ddd; padding: 20px 0; width: 100%">
                                                             <tr>
                                                                 <td style="text-align: left">
-                                                                    {% set content = block('content') is defined ? block('content') : body|raw %}
+                                                                    {% set content = block('content') is defined ? block('content') : body|markdown_to_html %}
                                                                     {% if content|length > 0 %}{{ content|raw }}{% endif %}
                                                                 </td>
                                                             </tr>

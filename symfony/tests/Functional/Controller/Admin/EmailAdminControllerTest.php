@@ -14,6 +14,7 @@ use App\Factory\RSVPFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
 use PHPUnit\Framework\Attributes\Group;
+use Twig\Environment;
 
 /**
  * Functional tests for EmailAdminController.
@@ -89,6 +90,32 @@ final class EmailAdminControllerTest extends FixturesWebTestCase
         $this->client->request('GET', "/admin/event/{$event->getId()}/email/{$email->getId()}/edit");
 
         $this->assertResponseIsSuccessful();
+    }
+
+    public function testPreviewContentMatchesSentEmailContentForEventChildAdmin(): void
+    {
+        $event = EventFactory::new()->published()->create();
+        $email = EmailFactory::new()->rsvp()->forEvent($event)->create([
+            'body' => "Hello **world**\n\nLine two.",
+        ]);
+
+        $twig = static::getContainer()->get(Environment::class);
+
+        $context = [
+            'body' => $email->getBody(),
+            'email' => $email,
+            'links' => $email->getAddLoginLinksToFooter(),
+            'img' => $event->getPicture(),
+            'qr' => null,
+        ];
+
+        $previewTemplate = $twig->load('emails/admin_preview.html.twig');
+        $sentTemplate = $twig->load('emails/email.html.twig');
+
+        $previewContent = trim($previewTemplate->renderBlock('content', $context));
+        $sentContent = trim($sentTemplate->renderBlock('content', $context));
+
+        self::assertSame($sentContent, $previewContent);
     }
 
     // =========================================================================

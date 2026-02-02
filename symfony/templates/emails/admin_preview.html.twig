@@ -1,7 +1,7 @@
 {# admin_preview.html.twig #}
 {% extends 'emails/base.html.twig' %}
 {% block content %}
-    <div>{{ body|raw }}</div>
+    <div>{{ body|markdown_to_html|raw }}</div>
     {% if qr is not null %}
         <hr>
         <img style="max-width: 100%" src="data:image/png;base64,{{ qr }}">
