@@ -1,9 +1,12 @@
 {%- block sonata_page_html_tag -%}
     {% set sessionTheme = app.request and app.request.hasSession() ? app.request.session.get('theme') : null %}
+    {% set route = app.request ? app.request.attributes.get('_route') : null %}
     {% if app.user and event is not defined %}
         {% set theme = app.user.member.theme %}
     {% elseif event is defined %}
-        {% if event.theme == 'dynamic' %}
+        {% if route == 'entropy_event_nakki_admin' %}
+            {% set theme = app.user ? app.user.member.theme : sessionTheme %}
+        {% elseif event.theme == 'dynamic' %}
             {% set theme = app.user ? app.user.member.theme : sessionTheme %}
         {% else %}
             {% set theme = event.theme %}

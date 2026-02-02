@@ -410,3 +410,27 @@ a svg {
 .img-filter img {
     mix-blend-mode: var(--img-filter-mode, normal);
 }
+
+[data-bs-theme=dark] .nakkikone-schedule-table .table-success,
+[data-bs-theme=dark] .nakkikone-schedule-table .table-secondary,
+[data-bs-theme=dark] .nakkikone-schedule-table .table-light,
+[data-bs-theme=dark] .nakki-column .table-success,
+[data-bs-theme=dark] .nakki-column .table-secondary,
+[data-bs-theme=dark] .nakki-column .table-light {
+    color: var(--bs-body-color);
+}
+
+[data-bs-theme=dark] .nakkikone-schedule-table .table-success,
+[data-bs-theme=dark] .nakki-column .table-success {
+    background-color: var(--bs-success-bg-subtle);
+}
+
+[data-bs-theme=dark] .nakkikone-schedule-table .table-secondary,
+[data-bs-theme=dark] .nakki-column .table-secondary {
+    background-color: var(--bs-secondary-bg);
+}
+
+[data-bs-theme=dark] .nakkikone-schedule-table .table-light,
+[data-bs-theme=dark] .nakki-column .table-light {
+    background-color: var(--bs-tertiary-bg);
+}

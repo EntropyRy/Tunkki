@@ -249,7 +249,7 @@
                     {# Show start time header if there are multiple interval groups #}
                     {% if timeGroup.intervalGroups|length > 1 %}
                         <div class="fw-semibold text-muted small mb-2">
-                            <span class="badge bg-light text-dark border">{{ timeGroup.startTime|date('d.M Y H:i') }}</span>
+                            <span class="badge bg-body-secondary text-body border">{{ timeGroup.startTime|date('d.M Y H:i') }}</span>
                         </div>
                     {% endif %}
 
@@ -278,7 +278,7 @@
                             <div class="d-flex flex-column gap-2">
                                 {% for booking in group.bookings %}
                                     {% if booking.member %}
-                                        <div class="d-flex align-items-center justify-content-between p-2 bg-light rounded">
+                                        <div class="d-flex align-items-center justify-content-between p-2 bg-body-secondary text-body rounded">
                                             <div class="d-flex align-items-center gap-2">
                                                 <span class="badge bg-primary">{{ 'nakkikone.column.reserved'|trans }}</span>
                                                 <span class="small">
