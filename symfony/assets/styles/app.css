@@ -16,7 +16,7 @@
     margin: 20px auto;
 }
 .linetext span {
-    background: #fff;
+    background: var(--bs-body-bg);
     padding: 0 10px;
     font-size: 1.4rem;
 }
@@ -135,13 +135,13 @@ html {
 }
 body {
     background-image: url(../images/bg_stripe_transparent.png);
-    background-color: white;
+    background-color: var(--bs-body-bg);
     background-position: left top;
     background-size: auto;
     background-repeat: repeat;
     background-attachment: scroll;
     font-family: "Space Grotesk Variable";
-    color: #102c3a;
+    color: var(--bs-body-color);
     letter-spacing: -0.1px;
     padding-bottom: min(4vw, 40px);
 }
@@ -162,7 +162,7 @@ h1 {
 /* Container styles */
 .e-container {
     margin-top: min(4vw, 40px);
-    background: white;
+    background: var(--bs-body-bg);
     box-shadow: 0 0 20px 0px;
     position: relative;
     border-radius: var(--border-radius);

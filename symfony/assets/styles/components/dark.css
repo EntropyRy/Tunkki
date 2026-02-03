@@ -2,8 +2,6 @@
 [data-bs-theme="dark"] {
   body {
     background-image: url("../../images/bg_stripe_black.png");
-    background-color: black;
-    color: #ddedf6;
   }
 
   body .navbar-brand img,
@@ -12,7 +10,7 @@
   }
 
   .e-container {
-    background: #000;
+    background: var(--bs-body-bg);
   }
 
   .e-container .box {
@@ -34,7 +32,7 @@
   }
 
   .e-container .linetext span {
-    background: #000;
+    background: var(--bs-body-bg);
   }
 
   .e-container footer {
