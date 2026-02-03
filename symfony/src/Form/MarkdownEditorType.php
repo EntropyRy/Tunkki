@@ -61,6 +61,13 @@ final class MarkdownEditorType extends AbstractType
         ]);
         $resolver->setAllowedValues('format', ['event', 'simple', 'telegram']);
         $resolver->setAllowedTypes('heading_levels', 'array');
+        $resolver->setNormalizer('heading_levels', static function (Options $options, array $value): array {
+            if ('event' !== $options['format'] && !\in_array(1, $value, true)) {
+                array_unshift($value, 1);
+            }
+
+            return $value;
+        });
         $resolver->setNormalizer('attr', function (
             Options $options,
             array $value,
