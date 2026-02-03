@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Domain\Content\ContentTokenRenderer;
-use App\Form\DataTransformer\HtmlToMarkdownTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -50,9 +49,6 @@ final class MarkdownEditorType extends AbstractType
     #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        if ($options['enable_html_transform']) {
-            $builder->addModelTransformer(new HtmlToMarkdownTransformer());
-        }
     }
 
     #[\Override]
@@ -61,12 +57,10 @@ final class MarkdownEditorType extends AbstractType
         $resolver->setDefaults([
             'format' => 'simple',  // default: simple editor (most common use)
             'heading_levels' => [2, 3, 4, 5, 6],
-            'enable_html_transform' => false,
             'attr' => [],
         ]);
         $resolver->setAllowedValues('format', ['event', 'simple', 'telegram']);
         $resolver->setAllowedTypes('heading_levels', 'array');
-        $resolver->setAllowedTypes('enable_html_transform', 'bool');
         $resolver->setNormalizer('attr', function (
             Options $options,
             array $value,

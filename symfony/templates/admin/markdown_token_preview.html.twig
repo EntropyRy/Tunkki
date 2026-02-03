@@ -1,101 +1,120 @@
 {# Admin preview placeholders for markdown tokens #}
 
 {% block dj_timetable %}
-    <div class="token-preview token-preview--timetable">
-        <strong>DJ Timetable</strong>
-    </div>
+    <span class="token-preview token-preview--timetable" data-token="dj_timetable">
+        <strong class="token-preview__label">DJ Timetable</strong>
+        <span class="token-preview__token">{{ '{{ dj_timetable }}' }}</span>
+    </span>
 {% endblock %}
 
 {% block timetable %}
-    {{ block('dj_timetable') }}
+    <span class="token-preview token-preview--timetable" data-token="timetable">
+        <strong class="token-preview__label">DJ Timetable</strong>
+        <span class="token-preview__token">{{ '{{ timetable }}' }}</span>
+    </span>
 {% endblock %}
 
 {% block timetable_to_page %}
-    <div class="token-preview token-preview--timetable">
-        <strong>Timetable (link)</strong>
-    </div>
+    <span class="token-preview token-preview--timetable" data-token="timetable_to_page">
+        <strong class="token-preview__label">Timetable (link)</strong>
+        <span class="token-preview__token">{{ '{{ timetable_to_page }}' }}</span>
+    </span>
 {% endblock %}
 
 {% block timetable_to_page_with_genre %}
-    <div class="token-preview token-preview--timetable">
-        <strong>Timetable with genre (link)</strong>
-    </div>
+    <span class="token-preview token-preview--timetable" data-token="timetable_to_page_with_genre">
+        <strong class="token-preview__label">Timetable with genre (link)</strong>
+        <span class="token-preview__token">{{ '{{ timetable_to_page_with_genre }}' }}</span>
+    </span>
 {% endblock %}
 
 {% block timetable_with_genre %}
-    <div class="token-preview token-preview--timetable">
-        <strong>Timetable with genre</strong>
-    </div>
+    <span class="token-preview token-preview--timetable" data-token="timetable_with_genre">
+        <strong class="token-preview__label">Timetable with genre</strong>
+        <span class="token-preview__token">{{ '{{ timetable_with_genre }}' }}</span>
+    </span>
 {% endblock %}
 
 {% block vj_timetable %}
-    <div class="token-preview token-preview--timetable">
-        <strong>VJ Timetable</strong>
-    </div>
+    <span class="token-preview token-preview--timetable" data-token="vj_timetable">
+        <strong class="token-preview__label">VJ Timetable</strong>
+        <span class="token-preview__token">{{ '{{ vj_timetable }}' }}</span>
+    </span>
 {% endblock %}
 
 {% block vj_timetable_to_page %}
-    <div class="token-preview token-preview--timetable">
-        <strong>VJ Timetable (link)</strong>
-    </div>
+    <span class="token-preview token-preview--timetable" data-token="vj_timetable_to_page">
+        <strong class="token-preview__label">VJ Timetable (link)</strong>
+        <span class="token-preview__token">{{ '{{ vj_timetable_to_page }}' }}</span>
+    </span>
 {% endblock %}
 
 {% block dj_bio %}
-    <div class="token-preview token-preview--bio">
-        <strong>DJ Bio</strong>
-    </div>
+    <span class="token-preview token-preview--bio" data-token="dj_bio">
+        <strong class="token-preview__label">DJ Bio</strong>
+        <span class="token-preview__token">{{ '{{ dj_bio }}' }}</span>
+    </span>
 {% endblock %}
 
 {% block bios %}
-    <div class="token-preview token-preview--bio">
-        <strong>DJ Bios</strong>
-    </div>
+    <span class="token-preview token-preview--bio" data-token="bios">
+        <strong class="token-preview__label">DJ Bios</strong>
+        <span class="token-preview__token">{{ '{{ bios }}' }}</span>
+    </span>
 {% endblock %}
 
 {% block vj_bio %}
-    <div class="token-preview token-preview--bio">
-        <strong>VJ Bio</strong>
-    </div>
+    <span class="token-preview token-preview--bio" data-token="vj_bio">
+        <strong class="token-preview__label">VJ Bio</strong>
+        <span class="token-preview__token">{{ '{{ vj_bio }}' }}</span>
+    </span>
 {% endblock %}
 
 {% block vj_bios %}
-    <div class="token-preview token-preview--bio">
-        <strong>VJ Bios</strong>
-    </div>
+    <span class="token-preview token-preview--bio" data-token="vj_bios">
+        <strong class="token-preview__label">VJ Bios</strong>
+        <span class="token-preview__token">{{ '{{ vj_bios }}' }}</span>
+    </span>
 {% endblock %}
 
 {% block streamplayer %}
-    <div class="token-preview token-preview--player">
-        <strong>Stream Player</strong>
-    </div>
+    <span class="token-preview token-preview--player" data-token="streamplayer">
+        <strong class="token-preview__label">Stream Player</strong>
+        <span class="token-preview__token">{{ '{{ streamplayer }}' }}</span>
+    </span>
 {% endblock %}
 
 {% block links %}
-    <div class="token-preview token-preview--links">
-        <strong>Links</strong>
-    </div>
+    <span class="token-preview token-preview--links" data-token="links">
+        <strong class="token-preview__label">Links</strong>
+        <span class="token-preview__token">{{ '{{ links }}' }}</span>
+    </span>
 {% endblock %}
 
 {% block RSVP %}
-    <div class="token-preview token-preview--rsvp">
-        <strong>RSVP</strong>
-    </div>
+    <span class="token-preview token-preview--rsvp" data-token="rsvp">
+        <strong class="token-preview__label">RSVP</strong>
+        <span class="token-preview__token">{{ '{{ rsvp }}' }}</span>
+    </span>
 {% endblock %}
 
 {% block stripe_ticket %}
-    <div class="token-preview token-preview--ticket">
-        <strong>Stripe Ticket</strong>
-    </div>
+    <span class="token-preview token-preview--ticket" data-token="stripe_ticket">
+        <strong class="token-preview__label">Stripe Ticket</strong>
+        <span class="token-preview__token">{{ '{{ stripe_ticket }}' }}</span>
+    </span>
 {% endblock %}
 
 {% block art_artist_list %}
-    <div class="token-preview token-preview--list">
-        <strong>Art Artist List</strong>
-    </div>
+    <span class="token-preview token-preview--list" data-token="art_artist_list">
+        <strong class="token-preview__label">Art Artist List</strong>
+        <span class="token-preview__token">{{ '{{ art_artist_list }}' }}</span>
+    </span>
 {% endblock %}
 
 {% block happening_list %}
-    <div class="token-preview token-preview--list">
-        <strong>Happening List</strong>
-    </div>
+    <span class="token-preview token-preview--list" data-token="happening_list">
+        <strong class="token-preview__label">Happening List</strong>
+        <span class="token-preview__token">{{ '{{ happening_list }}' }}</span>
+    </span>
 {% endblock %}

@@ -62,8 +62,26 @@
   background: none !important;
 }
 
+
 .markdown-token-button::before {
   content: none !important;
+}
+
+.markdown-html-to-md-button {
+  background: none;
+  border: 0;
+  padding: 0 8px;
+  width: auto !important;
+  height: 30px;
+  line-height: 30px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #212529 !important;
+}
+
+[data-bs-theme="dark"] .markdown-html-to-md-button {
+  color: #e9ecef;
 }
 
 .toastui-editor-contents .email-event-button-wrap {
@@ -85,6 +103,8 @@
 
 .token-preview {
   display: block;
+  font-size: 0.95rem;
+  line-height: 1.4;
   padding: 0.6rem 0.75rem;
   margin: 0.35rem 0;
   border-radius: 6px;
@@ -94,9 +114,13 @@
   pointer-events: none;
 }
 
-.token-preview strong {
+.token-preview__label {
   display: block;
   margin-bottom: 0.15rem;
+}
+
+.token-preview__token {
+  display: none;
 }
 
 .token-preview ul {
@@ -109,6 +133,32 @@
   color: #c1121f;
   border-color: #f3a6ad;
 }
+
+.toastui-editor-contents .tui-widget {
+  line-height: 1;
+}
+
+.toastui-editor-contents .tui-widget .token-preview {
+  margin: 0;
+}
+
+.toastui-editor-md-container .ProseMirror .token-preview {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+}
+
+.toastui-editor-md-container .ProseMirror .token-preview__label {
+  display: none;
+}
+
+.toastui-editor-md-container .ProseMirror .token-preview__token {
+  display: inline;
+}
+
 
 .token-picker-dialog {
   border: none;

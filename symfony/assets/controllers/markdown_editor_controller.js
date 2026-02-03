@@ -35,7 +35,6 @@ export default class extends Controller {
         ? this.element
         : this.element.querySelector("textarea");
     this.syncing = false;
-    this.tokenButtonAdded = false;
     this.headingCleanupScheduled = false;
     this.onToolbarClick = () => this.scheduleHeadingCleanup();
 
@@ -68,23 +67,21 @@ export default class extends Controller {
         usageStatistics: false,
         initialValue: this.textarea.value || "",
         toolbarItems: this.toolbarItems(),
+        customHTMLRenderer: this.customHTMLRenderer(),
         events: {
           change: () => {
             this.syncTextarea();
-            this.renderPreview();
           },
+          beforeConvertWysiwygToMarkdown: (markdown) =>
+            this.replaceTokenHtmlWithPlaceholder(markdown),
         },
       });
 
       requestAnimationFrame(() => {
-        this.renderPreview();
         this.scheduleHeadingCleanup();
       });
-      if (!this.isSimple) {
-        this.injectTokenButton();
-      }
-      this.injectEventButtons();
       this.container.addEventListener("click", this.onToolbarClick);
+      this.registerCommands();
     } catch (error) {
       console.error("Failed to initialize Toast UI Editor", error);
       this.teardown();
@@ -96,94 +93,74 @@ export default class extends Controller {
   }
 
   toolbarItems() {
+    const htmlToMarkdownItem = this.buildHtmlToMarkdownToolbarItem();
+    const tokenItem = this.buildTokenToolbarItem();
+    const eventButtons = this.buildEventToolbarItems();
+
     switch (this.formatValue) {
       case 'telegram':
         // Only Telegram MarkdownV2 supported: *bold*, _italic_, ~strike~, [link](url)
         return [
           ["bold", "italic", "strike"],
-          ["link"],
+          ["link", htmlToMarkdownItem],
         ];
       case 'simple':
         return [
           ["heading", "bold", "italic", "strike"],
           ["quote", "link", "hr"],
-          ["ul", "ol"],
+          ["ul", "ol", htmlToMarkdownItem],
         ];
       case 'event':
       default:
         return [
-          ["heading", "bold", "italic", "strike"],
-          ["quote", "link", "code", "codeblock"],
-          ["ul", "ol", "task", "table", "hr"],
+          ["heading", "bold", "italic", "strike", tokenItem],
+          ["quote", "link", "code", "codeblock", ...eventButtons],
+          ["ul", "ol", "task", "table", "hr", htmlToMarkdownItem],
         ];
     }
   }
 
-  injectTokenButton() {
-    if (!this.container) return;
-
-    const toolbar = this.container.querySelector(".toastui-editor-defaultUI-toolbar");
-    if (!toolbar) return;
-
-    if (this.tokenButtonAdded || toolbar.querySelector(".markdown-token-button")) {
-      this.tokenButtonAdded = true;
-      return;
-    }
-
-    const group = document.createElement("div");
-    group.className = "toastui-editor-defaultUI-toolbar-group";
-
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "toastui-editor-toolbar-icons markdown-token-button";
-    button.setAttribute("aria-label", "Insert token");
-    button.textContent = "{{}}";
-    button.addEventListener("click", (event) => {
-      event.preventDefault();
-      this.promptAndInsertToken();
-    });
-
-    group.appendChild(button);
-    toolbar.appendChild(group);
-    this.tokenButtonAdded = true;
+  buildTokenToolbarItem() {
+    return {
+      name: "insertToken",
+      tooltip: "Insert token",
+      className: "markdown-token-button",
+      text: "{{}}",
+      command: "insertToken",
+    };
   }
 
-  injectEventButtons() {
-    if (!this.container || !this.hasEventButtonFiValue || !this.hasEventButtonEnValue) return;
-
-    const toolbar = this.container.querySelector(".toastui-editor-defaultUI-toolbar");
-    if (!toolbar) return;
-
-    if (toolbar.querySelector(".markdown-event-button")) {
-      return;
+  buildEventToolbarItems() {
+    if (!this.hasEventButtonFiValue || !this.hasEventButtonEnValue) {
+      return [];
     }
 
-    const group = document.createElement("div");
-    group.className = "toastui-editor-defaultUI-toolbar-group";
+    return [
+      {
+        name: "insertEventFi",
+        tooltip: "Insert event button (FI)",
+        className: "markdown-event-button",
+        text: "Event FI",
+        command: "insertEventFi",
+      },
+      {
+        name: "insertEventEn",
+        tooltip: "Insert event button (EN)",
+        className: "markdown-event-button",
+        text: "Event EN",
+        command: "insertEventEn",
+      },
+    ];
+  }
 
-    const buttonFi = document.createElement("button");
-    buttonFi.type = "button";
-    buttonFi.className = "toastui-editor-toolbar-icons markdown-event-button";
-    buttonFi.setAttribute("aria-label", "Insert event button (FI)");
-    buttonFi.textContent = "Event FI";
-    buttonFi.addEventListener("click", (event) => {
-      event.preventDefault();
-      this.insertEventButton(this.eventButtonFiValue, "Siirry tapahtumaan");
-    });
-
-    const buttonEn = document.createElement("button");
-    buttonEn.type = "button";
-    buttonEn.className = "toastui-editor-toolbar-icons markdown-event-button";
-    buttonEn.setAttribute("aria-label", "Insert event button (EN)");
-    buttonEn.textContent = "Event EN";
-    buttonEn.addEventListener("click", (event) => {
-      event.preventDefault();
-      this.insertEventButton(this.eventButtonEnValue, "Go to event");
-    });
-
-    group.appendChild(buttonFi);
-    group.appendChild(buttonEn);
-    toolbar.appendChild(group);
+  buildHtmlToMarkdownToolbarItem() {
+    return {
+      name: "htmlToMarkdown",
+      tooltip: "Convert HTML to Markdown",
+      className: "markdown-html-to-md-button",
+      text: "HTML→MD",
+      command: "htmlToMarkdown",
+    };
   }
 
   insertEventButton(url, label) {
@@ -198,6 +175,70 @@ export default class extends Controller {
 
     this.editor.insertText(snippet);
     this.syncTextarea();
+  }
+
+  convertHtmlToMarkdown() {
+    if (!this.editor || !this.textarea) return;
+
+    const raw = this.textarea.value || "";
+    if (!this.containsHtml(raw)) {
+      return;
+    }
+
+    this.editor.setHTML(raw);
+    const markdown = this.editor.getMarkdown();
+    this.editor.setMarkdown(markdown, false);
+    this.syncTextarea();
+  }
+
+  containsHtml(value) {
+    return /<[a-z][\s\S]*>/i.test(value);
+  }
+
+  registerCommands() {
+    if (!this.editor) return;
+
+    this.editor.addCommand("markdown", "insertToken", () => {
+      this.promptAndInsertToken();
+      return true;
+    });
+
+    this.editor.addCommand("wysiwyg", "insertToken", () => {
+      this.promptAndInsertToken();
+      return true;
+    });
+
+    this.editor.addCommand("markdown", "htmlToMarkdown", () => {
+      this.convertHtmlToMarkdown();
+      return true;
+    });
+
+    this.editor.addCommand("wysiwyg", "htmlToMarkdown", () => {
+      this.convertHtmlToMarkdown();
+      return true;
+    });
+
+    if (this.hasEventButtonFiValue) {
+      this.editor.addCommand("markdown", "insertEventFi", () => {
+        this.insertEventButton(this.eventButtonFiValue, "Siirry tapahtumaan");
+        return true;
+      });
+      this.editor.addCommand("wysiwyg", "insertEventFi", () => {
+        this.insertEventButton(this.eventButtonFiValue, "Siirry tapahtumaan");
+        return true;
+      });
+    }
+
+    if (this.hasEventButtonEnValue) {
+      this.editor.addCommand("markdown", "insertEventEn", () => {
+        this.insertEventButton(this.eventButtonEnValue, "Go to event");
+        return true;
+      });
+      this.editor.addCommand("wysiwyg", "insertEventEn", () => {
+        this.insertEventButton(this.eventButtonEnValue, "Go to event");
+        return true;
+      });
+    }
   }
 
   promptAndInsertToken() {
@@ -263,26 +304,9 @@ export default class extends Controller {
     this.syncTextarea();
   }
 
-  decorateTokens(html) {
-    const map = this.tokenMap;
-
-    if (!Object.keys(map).length) {
-      return html;
-    }
-
-    return html.replace(/\{\{\s*([a-z0-9_]+)\s*\}\}/gi, (match, rawToken) => {
-      const token = rawToken.toLowerCase();
-      if (map[token]) {
-        return map[token];
-      }
-
-      return `<span class="markdown-token-badge markdown-token-badge--unknown" data-token="${token}">${match}</span>`;
-    });
-  }
-
   syncTextarea() {
     if (this.textarea && this.editor) {
-      const raw = this.editor.getMarkdown();
+      const raw = this.replaceTokenHtmlWithPlaceholder(this.editor.getMarkdown());
       // Strip backslashes in tokens before saving
       const normalized = this.normalizeTokens(raw);
       this.textarea.value = normalized;
@@ -309,17 +333,62 @@ export default class extends Controller {
     });
   }
 
-
-  renderPreview() {
-    if (!this.editor || !this.container) return;
-
-    const previewEl = this.container.querySelector(".toastui-editor-md-preview .toastui-editor-contents");
-    if (!previewEl) return;
-
-    const decorated = this.decorateTokens(this.editor.getHTML());
-    if (decorated !== previewEl.innerHTML) {
-      previewEl.innerHTML = decorated;
+  customHTMLRenderer() {
+    if (this.isSimple) {
+      return {};
     }
+
+    return {
+      text: (node) => {
+        const literal = node.literal || "";
+        const parts = this.splitTokenText(literal);
+        if (parts.length === 1 && parts[0].type === "text") {
+          return parts[0];
+        }
+        return parts;
+      },
+    };
+  }
+
+  splitTokenText(text) {
+    const tokens = [];
+    const regex = /\{\{\s*([a-z0-9_]+)\s*\}\}/gi;
+    let cursor = 0;
+    let match;
+
+    while ((match = regex.exec(text)) !== null) {
+      if (match.index > cursor) {
+        tokens.push({ type: "text", content: text.slice(cursor, match.index) });
+      }
+      tokens.push({ type: "html", content: this.buildTokenHtml(match[1]) });
+      cursor = match.index + match[0].length;
+    }
+
+    if (cursor < text.length) {
+      tokens.push({ type: "text", content: text.slice(cursor) });
+    }
+
+    return tokens.length ? tokens : [{ type: "text", content: text }];
+  }
+
+  buildTokenHtml(token) {
+    const key = token.toLowerCase();
+    const html = this.tokenMap[key];
+
+    if (html) {
+      return html;
+    }
+
+    return `<span class="markdown-token-badge markdown-token-badge--unknown" data-token="${key}">{{ ${key} }}</span>`;
+  }
+
+  replaceTokenHtmlWithPlaceholder(markdown) {
+    if (!markdown) return markdown;
+
+    return markdown.replace(
+      /<[^>]*data-token="([^"]+)"[^>]*>[\s\S]*?<\/[^>]+>/g,
+      (_match, token) => `{{ ${token} }}`,
+    );
   }
 
   scheduleHeadingCleanup() {

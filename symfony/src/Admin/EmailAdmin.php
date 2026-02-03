@@ -303,8 +303,6 @@ final class EmailAdmin extends AbstractAdmin
             }
         }
 
-        $enableHtmlTransform = $email->getUpdatedAt() < new \DateTimeImmutable('2026-02-01 00:00:00');
-
         $formMapper
             ->add('subject', null, [
                 'help' => $subjectHelp,
@@ -313,7 +311,6 @@ final class EmailAdmin extends AbstractAdmin
             ])
             ->add('body', MarkdownEditorType::class, [
                 'attr' => $bodyAttr,
-                'enable_html_transform' => $enableHtmlTransform,
             ])
             ->add('addLoginLinksToFooter', null, ['help' => 'adds links to login']);
     }
