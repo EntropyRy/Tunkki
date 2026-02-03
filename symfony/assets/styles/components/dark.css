@@ -1,7 +1,7 @@
 /* Dark mode styles */
 [data-bs-theme="dark"] {
   body {
-    background-image: url("../../images/bg_stripe_black.png");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='5' height='5'%3E%3Cpath d='M-1,1 L1,-1 M0,5 L5,0 M4,6 L6,4' stroke='rgba(255,255,255,0.08)' stroke-width='1'/%3E%3C/svg%3E");
   }
 
   body .navbar-brand img,
