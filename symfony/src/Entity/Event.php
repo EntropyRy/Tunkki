@@ -66,38 +66,32 @@ class Event implements \Stringable
     private ?Media $picture = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $css = '/* If you want to play with CSS these help you. First remove this and last line
-[data-bs-theme=dark] body, body {
-    background-image: url(/images/bg_stripe_transparent.png);
-    background-color: yellow;
+    private ?string $css = '/* Event CSS - remove this comment block to activate
+/* Light theme */
+:root, [data-bs-theme=light] {
+    --bs-primary: #1f5d7a;
+    --bs-primary-rgb: 31, 93, 122;
+    --bs-link-color: #1f5d7a;
+    --bs-link-hover-color: #174559;
 }
-[data-bs-theme=dark].e-container, .e-container {
-    background: #220101;
-    color: red;
+
+/* Dark theme */
+[data-bs-theme=dark] {
+    --bs-primary: #3a8fb7;
+    --bs-primary-rgb: 58, 143, 183;
+    --bs-body-bg: #0a1215;
+    --bs-link-color: #5aafd7;
+    --bs-link-hover-color: #7abfdf;
 }
+
+/* Button colors (both themes) */
 .btn-primary {
-    --btn-primary: #1f5d7a;
-    --bs-btn-color: #fff;
-    --bs-btn-bg: var(--btn-primary);
-    --bs-btn-border-color: var(--btn-primary);
-    --bs-btn-hover-bg: color-mix(in srgb, var(--btn-primary) 85%, black);
-    --bs-btn-hover-border-color: color-mix(in srgb, var(--btn-primary) 80%, black);
-    --bs-btn-active-bg: color-mix(in srgb, var(--btn-primary) 75%, black);
-    --bs-btn-active-border-color: color-mix(in srgb, var(--btn-primary) 70%, black);
-    --bs-btn-disabled-bg: var(--btn-primary);
-    --bs-btn-disabled-border-color: var(--btn-primary);
-}
-.btn-secondary {
-    --btn-secondary: #495057;
-    --bs-btn-color: #fff;
-    --bs-btn-bg: var(--btn-secondary);
-    --bs-btn-border-color: var(--btn-secondary);
-    --bs-btn-hover-bg: color-mix(in srgb, var(--btn-secondary) 85%, black);
-    --bs-btn-hover-border-color: color-mix(in srgb, var(--btn-secondary) 80%, black);
-    --bs-btn-active-bg: color-mix(in srgb, var(--btn-secondary) 75%, black);
-    --bs-btn-active-border-color: color-mix(in srgb, var(--btn-secondary) 70%, black);
-    --bs-btn-disabled-bg: var(--btn-secondary);
-    --bs-btn-disabled-border-color: var(--btn-secondary);
+    --bs-btn-bg: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-bg: color-mix(in srgb, var(--bs-primary) 85%, black);
+    --bs-btn-hover-border-color: color-mix(in srgb, var(--bs-primary) 80%, black);
+    --bs-btn-active-bg: color-mix(in srgb, var(--bs-primary) 75%, black);
+    --bs-btn-active-border-color: color-mix(in srgb, var(--bs-primary) 70%, black);
 }
 */';
 

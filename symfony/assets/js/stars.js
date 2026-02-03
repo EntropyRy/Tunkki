@@ -1,6 +1,27 @@
 import { readEffectConfigById } from "./effects-config.js";
+
 const canvas = document.getElementById("stars");
+if (!canvas) {
+    throw new Error("Stars canvas not found");
+}
 const context = canvas.getContext("2d");
+
+// Read config with defaults
+const config = readEffectConfigById("stars", {
+    starCount: 60,
+    meteoriteCount: 3,
+    starSpeedMin: 0.1,
+    starSpeedMax: 1.1,
+    meteoriteSpeedMin: 2.0,
+    meteoriteSpeedMax: 5.0,
+});
+
+const STAR_COUNT = config.starCount;
+const STAR_SPEED_MIN = config.starSpeedMin;
+const STAR_SPEED_MAX = config.starSpeedMax;
+const METEORITE_COUNT = config.meteoriteCount;
+const METEORITE_SPEED_MIN = config.meteoriteSpeedMin;
+const METEORITE_SPEED_MAX = config.meteoriteSpeedMax;
 
 // Set the canvas dimensions to match the window size
 canvas.width = window.innerWidth;
