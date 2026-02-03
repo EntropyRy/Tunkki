@@ -90,7 +90,7 @@
                     {{ 'ticket.to_ticket_shop'|trans }}
                 </a>
             {% endif %}
-            {% if event.nakkikone and event.nakkikone.showLinkInEvent|default(false) and event.url and app.user and not eventInPast %}
+            {% if event.nakkikone and event.nakkikone.showLinkInEvent|default(false) and event.url and not eventInPast %}
                 <a class="btn btn-primary"
                     href="{{ path('entropy_event_slug_nakkikone.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}">
                     <twig:ux:icon name="tasks" />
