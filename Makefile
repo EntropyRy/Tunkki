@@ -38,6 +38,7 @@ PHPUNIT_CONFIG        ?= phpunit.dist.xml
 INFECTION_BIN         ?= vendor/bin/infection
 INFECTION_SHOW_MUTATIONS ?=
 INFECTION_EXTRA_ARGS  ?=
+INFECTION_PHP_MEMORY  ?= 2048M
 PHPSTAN_BIN           ?= vendor/bin/phpstan
 
 FILTER                ?=
@@ -216,11 +217,12 @@ coverage: _ensure-vendor prepare-test-db panther-setup
 .PHONY: infection
 infection: _ensure-vendor prepare-test-db
 	@printf "%b\n" "$(CYAN)==> Infection run (filter='$(FILTER)')$(RESET)"
-	@cov_dir="build/infection/coverage"; \
-	mkdir -p "$$cov_dir/coverage-xml"; \
+	@host_cov_dir="symfony/var/infection/coverage"; \
+	container_cov_dir="var/infection/coverage"; \
+	mkdir -p "$$host_cov_dir/coverage-xml"; \
 	printf "%b\n" "$(CYAN)==> Preparing coverage + JUnit for Infection$(RESET)"; \
-	$(PHP_EXEC) -d memory_limit=$(PHPUNIT_MEMORY) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --exclude-group=panther --testsuite=Unit,Functional,Integration --coverage-xml="$$cov_dir/coverage-xml" --log-junit="$$cov_dir/junit.xml"; \
-	cmd="$(PHP_EXEC) $(INFECTION_BIN) --threads=$(INFECTION_THREADS) --min-msi=$(INFECTION_MIN_MSI) --min-covered-msi=$(INFECTION_MIN_COVERED) --coverage=$$cov_dir --skip-initial-tests"; \
+	$(PHP_EXEC) -d memory_limit=$(PHPUNIT_MEMORY) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --exclude-group=panther --testsuite=Unit,Functional,Integration --coverage-xml="$$container_cov_dir/coverage-xml" --log-junit="$$container_cov_dir/junit.xml"; \
+	cmd="$(PHP_EXEC) -d memory_limit=$(INFECTION_PHP_MEMORY) $(INFECTION_BIN) --threads=$(INFECTION_THREADS) --min-msi=$(INFECTION_MIN_MSI) --min-covered-msi=$(INFECTION_MIN_COVERED) --coverage=$$container_cov_dir --skip-initial-tests"; \
 	if [ -n "$(INFECTION_SHOW_MUTATIONS)" ]; then \
 		if [ "$(INFECTION_SHOW_MUTATIONS)" = "1" ]; then cmd="$$cmd --show-mutations"; \
 		else cmd="$$cmd --show-mutations=$(INFECTION_SHOW_MUTATIONS)"; fi; \

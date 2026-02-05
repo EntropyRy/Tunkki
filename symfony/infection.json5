@@ -12,6 +12,13 @@
         "configDir": ".",
         "customPath": "vendor/bin/phpunit"
     },
+    "logs": {
+        "text": "build/infection/infection.log",
+        "summary": "build/infection/summary.log",
+        "html": "build/infection/html"
+    },
+    "tmpDir": "build/infection/tmp",
+    "timeout": 20,
     "testFrameworkOptions": "--exclude-group=panther --testsuite=Unit,Functional,Integration",
     "initialTestsPhpOptions": "-d memory_limit=512M"
 }
