@@ -8,7 +8,6 @@ use App\Controller\ProfileController;
 use App\Entity\Member;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -90,7 +89,6 @@ class TestableProfileController extends ProfileController
  * These tests cover defensive code paths that cannot be reached through
  * functional tests because Symfony's form component guarantees data types.
  */
-#[CoversClass(ProfileController::class)]
 final class ProfileControllerTest extends TestCase
 {
     private TestableProfileController $controller;

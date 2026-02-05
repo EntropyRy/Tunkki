@@ -9,7 +9,6 @@ use App\Entity\Member;
 use App\Entity\User;
 use App\Repository\MemberRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\FormInterface;
@@ -31,7 +30,6 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
  *
  * Focus on request/reset flow branching without real Symfony kernel.
  */
-#[CoversClass(ResetPasswordController::class)]
 final class ResetPasswordControllerTest extends TestCase
 {
     private TestableResetPasswordController $controller;

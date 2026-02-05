@@ -6,7 +6,6 @@ namespace App\Tests\Unit\Form;
 
 use App\Entity\Happening;
 use App\Form\HappeningType;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -21,7 +20,6 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
  * through functional tests because Symfony's form component guarantees
  * the data types in normal operation.
  */
-#[CoversClass(HappeningType::class)]
 final class HappeningTypeTest extends TestCase
 {
     private HappeningType $formType;

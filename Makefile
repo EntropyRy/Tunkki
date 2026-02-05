@@ -36,6 +36,8 @@ VENDOR_DIR            ?= vendor
 PHPUNIT_BIN           ?= $(VENDOR_DIR)/bin/phpunit
 PHPUNIT_CONFIG        ?= phpunit.dist.xml
 INFECTION_BIN         ?= vendor/bin/infection
+INFECTION_SHOW_MUTATIONS ?=
+INFECTION_EXTRA_ARGS  ?=
 PHPSTAN_BIN           ?= vendor/bin/phpstan
 
 FILTER                ?=
@@ -214,7 +216,16 @@ coverage: _ensure-vendor prepare-test-db panther-setup
 .PHONY: infection
 infection: _ensure-vendor prepare-test-db
 	@printf "%b\n" "$(CYAN)==> Infection run (filter='$(FILTER)')$(RESET)"
-	@cmd="$(PHP_EXEC) $(INFECTION_BIN) --threads=$(INFECTION_THREADS) --min-msi=$(INFECTION_MIN_MSI) --min-covered-msi=$(INFECTION_MIN_COVERED)"; \
+	@cov_dir="build/infection/coverage"; \
+	mkdir -p "$$cov_dir/coverage-xml"; \
+	printf "%b\n" "$(CYAN)==> Preparing coverage + JUnit for Infection$(RESET)"; \
+	$(PHP_EXEC) -d memory_limit=$(PHPUNIT_MEMORY) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --exclude-group=panther --testsuite=Unit,Functional,Integration --coverage-xml="$$cov_dir/coverage-xml" --log-junit="$$cov_dir/junit.xml"; \
+	cmd="$(PHP_EXEC) $(INFECTION_BIN) --threads=$(INFECTION_THREADS) --min-msi=$(INFECTION_MIN_MSI) --min-covered-msi=$(INFECTION_MIN_COVERED) --coverage=$$cov_dir --skip-initial-tests"; \
+	if [ -n "$(INFECTION_SHOW_MUTATIONS)" ]; then \
+		if [ "$(INFECTION_SHOW_MUTATIONS)" = "1" ]; then cmd="$$cmd --show-mutations"; \
+		else cmd="$$cmd --show-mutations=$(INFECTION_SHOW_MUTATIONS)"; fi; \
+	fi; \
+	if [ -n "$(INFECTION_EXTRA_ARGS)" ]; then cmd="$$cmd $(INFECTION_EXTRA_ARGS)"; fi; \
 	if [ -n "$(FILTER)" ]; then cmd="$$cmd --filter=$(FILTER)"; fi; \
 	printf "%b\n" "$(YELLOW)$$cmd$(RESET)"; \
 	$$cmd

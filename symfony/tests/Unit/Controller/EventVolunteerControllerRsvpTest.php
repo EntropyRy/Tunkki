@@ -12,7 +12,6 @@ use App\Entity\User;
 use App\Repository\RSVPRepository;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -70,7 +69,6 @@ class TestableEventVolunteerController extends EventVolunteerController
  * (lines 294-295) which is a race condition edge case that cannot be easily
  * triggered in functional tests.
  */
-#[CoversClass(EventVolunteerController::class)]
 final class EventVolunteerControllerRsvpTest extends TestCase
 {
     private TestableEventVolunteerController $controller;

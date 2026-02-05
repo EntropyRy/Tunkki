@@ -115,32 +115,7 @@ final class EmailVerifierTest extends TestCase
 
     public function testHandleEmailConfirmationForAuthenticatedUserMarksMemberVerifiedAndFlushes(): void
     {
-        $verifyEmailHelper = new class implements VerifyEmailHelperInterface {
-            public function generateSignature(
-                string $verifyEmailRouteName,
-                string $userId,
-                string $userEmail,
-                array $extraParams = [],
-            ): VerifyEmailSignatureComponents {
-                throw new \LogicException('not used in this test');
-            }
-
-            public function validateEmailConfirmation(
-                string $uri,
-                string $userId,
-                string $userEmail,
-            ): void {
-                // no-op
-            }
-
-            public function validateEmailConfirmationFromRequest(
-                Request $request,
-                string $userId,
-                string $userEmail,
-            ): void {
-                // no-op (treated as successful validation)
-            }
-        };
+        $verifyEmailHelper = new VerifyEmailHelperSpy();
         $mailer = $this->createStub(MailerInterface::class);
         $em = $this->createMock(EntityManagerInterface::class);
 
@@ -155,12 +130,17 @@ final class EmailVerifierTest extends TestCase
 
         $request = Request::create('/verify-email?signature=xyz');
 
-        // validation handled by helper stub (no-op)
+        // call assertion after action
 
         $em->expects(self::once())->method('flush');
 
         $svc = new EmailVerifier($verifyEmailHelper, $mailer, $em);
         $svc->handleEmailConfirmationForAuthenticatedUser($request, $user);
+
+        self::assertSame(
+            [$request, '42', 'bob@example.test'],
+            $verifyEmailHelper->lastRequestArgs,
+        );
 
         self::assertTrue(
             $member->isEmailVerified(),
@@ -170,32 +150,7 @@ final class EmailVerifierTest extends TestCase
 
     public function testHandleEmailConfirmationAnonymousMarksMemberVerifiedAndFlushes(): void
     {
-        $verifyEmailHelper = new class implements VerifyEmailHelperInterface {
-            public function generateSignature(
-                string $verifyEmailRouteName,
-                string $userId,
-                string $userEmail,
-                array $extraParams = [],
-            ): VerifyEmailSignatureComponents {
-                throw new \LogicException('not used in this test');
-            }
-
-            public function validateEmailConfirmation(
-                string $uri,
-                string $userId,
-                string $userEmail,
-            ): void {
-                // no-op
-            }
-
-            public function validateEmailConfirmationFromRequest(
-                Request $request,
-                string $userId,
-                string $userEmail,
-            ): void {
-                // no-op (treated as successful validation)
-            }
-        };
+        $verifyEmailHelper = new VerifyEmailHelperSpy();
         $mailer = $this->createStub(MailerInterface::class);
         $em = $this->createMock(EntityManagerInterface::class);
 
@@ -210,12 +165,17 @@ final class EmailVerifierTest extends TestCase
 
         $request = Request::create('/verify-email?signature=anon');
 
-        // validation handled by helper stub (no-op)
+        // call assertion after action
 
         $em->expects(self::once())->method('flush');
 
         $svc = new EmailVerifier($verifyEmailHelper, $mailer, $em);
         $svc->handleEmailConfirmationAnonymous($request, $user);
+
+        self::assertSame(
+            [$request, '777', 'carol@example.test'],
+            $verifyEmailHelper->lastRequestArgs,
+        );
 
         self::assertTrue(
             $member->isEmailVerified(),
@@ -232,5 +192,36 @@ final class EmailVerifierTest extends TestCase
         $prop = $ref->getProperty($property);
         $prop->setAccessible(true);
         $prop->setValue($object, $value);
+    }
+}
+
+final class VerifyEmailHelperSpy implements VerifyEmailHelperInterface
+{
+    /** @var array{Request,string,string}|null */
+    public ?array $lastRequestArgs = null;
+
+    public function generateSignature(
+        string $routeName,
+        string $userId,
+        string $userEmail,
+        array $extraParams = [],
+    ): VerifyEmailSignatureComponents {
+        throw new \LogicException('not used in this test');
+    }
+
+    public function validateEmailConfirmation(
+        string $signedUrl,
+        string $userId,
+        string $userEmail,
+    ): void {
+        // no-op
+    }
+
+    public function validateEmailConfirmationFromRequest(
+        Request $request,
+        string $userId,
+        string $userEmail,
+    ): void {
+        $this->lastRequestArgs = [$request, $userId, $userEmail];
     }
 }
