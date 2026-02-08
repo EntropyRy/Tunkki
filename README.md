@@ -1,42 +1,77 @@
 ![coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/EntropyRy/Tunkki/main/symfony/coverage.json)
+
 # Entropy Tunkki
 
-### initialize environment
+Association management platform built with Symfony 7 and PHP 8.4+. Runs in Docker (nginx + PHP-FPM + MariaDB).
 
-- copy .env.example to .env and symfony/.env to /symfony/.env.dev.local and change the defaults
-- `docker compose build; docker compose up -d;`
+## Setup
 
-#### draw the rest of the owl
+### 1. Configure environment
 
-- docker compose exec fpm composer install
+Copy the example files and adjust defaults:
 
-#### database restore from dump
+```bash
+cp .env.example .env
+cp symfony/.env symfony/.env.dev.local
+```
 
-- docker compose exec fpm ./bin/console doctrine:database:import dump.sql
+Edit both files to set database credentials, ports, and other local settings.
 
-#### database creation
+### 2. Build and start containers
 
-- docker compose exec fpm ./bin/console doctrine:schema:update --force
+```bash
+docker compose build
+docker compose up -d
+```
 
-### Access tunkki
+### 3. Install dependencies
 
-- open http://localhost:9090/ in your browser
+```bash
+docker compose exec fpm composer install
+```
 
-### Initial creation of new user and setting it as super admin
+### 4. Set up the database
 
-- docker compose exec fpm ./bin/console entropy:member --password --create-user yourEmail --super-admin
+From a dump:
+```bash
+docker compose exec fpm ./bin/console doctrine:database:import dump.sql
+```
 
-### Setting up main website
+Or create from schema:
+```bash
+docker compose exec fpm ./bin/console doctrine:schema:update --force
+```
 
-- login http://localhost:9090/login
-- open http://localhost:9090/admin/dashboard
-- Leftside navigation Administration -> Site -> Add new -> Fill in the Name, check "Is Default" and "Enabled", Set Host as "localhost or 127.0.0.1", Locale: "Suomi", Relative Path: "/", Enabled From: "select some past date" -> Create -> "Update and close" -> Create Snapshots -> Create
+### 5. Seed the CMS
 
-#### console commands
+Creates the required Sonata Page sites (FI default + EN `/en/`) and root pages:
 
-- docker compose exec fpm ./bin/console
+```bash
+docker compose exec fpm ./bin/console entropy:cms:seed
+```
 
-### Testing
+### 6. Create an admin user
 
-For all testing setup, execution, coverage and mutation-testing details, see TESTING.md.
+```bash
+docker compose exec fpm ./bin/console entropy:member --password --create-user your@email.com --super-admin
+```
 
+### 7. Access Tunkki
+
+Open http://localhost:9090/ in your browser. Login at http://localhost:9090/login.
+
+## Development
+
+| Resource | Purpose |
+|----------|---------|
+| `make help` | List all available Makefile targets |
+| `make test` | Run the full test suite |
+| `make stan` | Run PHPStan static analysis |
+| [CLAUDE.md](CLAUDE.md) | Conventions, commands, and AI assistant guidance |
+| [TESTING.md](TESTING.md) | Comprehensive testing guide, factory catalog, patterns |
+
+### Console commands
+
+```bash
+docker compose exec fpm ./bin/console
+```

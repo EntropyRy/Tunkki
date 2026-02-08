@@ -414,6 +414,28 @@ Central reference for approved semantic states (extend as new domain invariants 
 | `active()` | Active member (for Member) |
 | `withoutUser()` | Member without User (rare, negative tests only) |
 
+### Stripe ID Validation Pattern
+
+Factories MUST use test-mode prefixes for Stripe identifiers:
+
+```php
+// ProductFactory defaults
+'stripeId' => 'prod_test_'.$uniqueSuffix,
+'stripePriceId' => 'price_test_'.$uniqueSuffix,
+
+// CheckoutFactory defaults
+'stripeSessionId' => 'cs_test_'.$uniqueSuffix,
+```
+
+Tests can assert the pattern:
+```php
+$this->assertMatchesRegularExpression(
+    '/^prod_test_[a-zA-Z0-9]+$/',
+    $product->getStripeId(),
+    'Product stripeId should match test mode pattern'
+);
+```
+
 ### State Addition Procedure
 1. Add state method to factory
 2. Add corresponding row to this catalog
