@@ -62,8 +62,12 @@ final class ZMQServiceTest extends TestCase
 
     public function testSendReturnsExceptionWhenZMQNotAvailable(): void
     {
-        // Without ZMQ extension, connect() will fail
-        $service = new ZMQService(new ParameterBag(['door_socket' => 'invalid://']));
+        $service = new class(new ParameterBag(['door_socket' => 'invalid://'])) extends ZMQService {
+            protected function connect(): object
+            {
+                throw new \RuntimeException('connect failed');
+            }
+        };
         $result = $service->send('test');
 
         $this->assertInstanceOf(ZmqResponse::class, $result);
@@ -111,28 +115,48 @@ final class ZMQServiceTest extends TestCase
 
     public function testSendInitBuildsAndSendsCorrectCommand(): void
     {
-        if (!\extension_loaded('zmq')) {
-            $this->markTestSkipped('ZMQ extension not loaded');
-        }
+        $service = new class(new ParameterBag(['door_socket' => 'ignored'])) extends ZMQService {
+            protected function connect(): object
+            {
+                return new class {
+                    public function send(string $command): void
+                    {
+                    }
 
-        // Without a real ZMQ server, this will fail with connection error
-        // But we can verify the method exists and accepts correct parameters
-        $result = $this->service->sendInit('test_user', 1697654321);
+                    public function recv(): string
+                    {
+                        return 'pong';
+                    }
+                };
+            }
+        };
+        $result = $service->sendInit('test_user', 1697654321);
 
         $this->assertInstanceOf(ZmqResponse::class, $result);
+        $this->assertSame(ZmqStatus::OK, $result->status);
     }
 
     public function testSendOpenBuildsAndSendsCorrectCommand(): void
     {
-        if (!\extension_loaded('zmq')) {
-            $this->markTestSkipped('ZMQ extension not loaded');
-        }
+        $service = new class(new ParameterBag(['door_socket' => 'ignored'])) extends ZMQService {
+            protected function connect(): object
+            {
+                return new class {
+                    public function send(string $command): void
+                    {
+                    }
 
-        // Without a real ZMQ server, this will fail with connection error
-        // But we can verify the method exists and accepts correct parameters
-        $result = $this->service->sendOpen('jane_doe', 1697654322);
+                    public function recv(): string
+                    {
+                        return 'pong';
+                    }
+                };
+            }
+        };
+        $result = $service->sendOpen('jane_doe', 1697654322);
 
         $this->assertInstanceOf(ZmqResponse::class, $result);
+        $this->assertSame(ZmqStatus::OK, $result->status);
     }
 
     public function testBuildCommandConsistency(): void
