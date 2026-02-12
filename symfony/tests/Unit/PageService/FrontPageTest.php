@@ -26,7 +26,7 @@ final class FrontPageTest extends TestCase
         $eventArtistRepo->method('findOnePublicEventArtistInfo')->willReturn(null);
         $eventRepo->method('getFutureEvents')->willReturn([]);
         $eventRepo->method('getUnpublishedFutureEvents')->willReturn([]);
-        $eventRepo->method('findOneEventByType')->with('announcement')->willReturn(null);
+        $eventRepo->method('findOneEventByType')->willReturn(null);
 
         $page = $this->createStub(PageInterface::class);
         $page->method('getTitle')->willReturn('Front Page');

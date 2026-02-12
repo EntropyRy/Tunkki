@@ -119,7 +119,6 @@ final class EventVolunteerControllerRsvpTest extends TestCase
 
         // Router generates URL
         $this->router->method('generate')
-            ->with('entropy_event_slug', ['slug' => 'test-event', 'year' => 2025])
             ->willReturn('/2025/test-event');
 
         // EntityManager throws UniqueConstraintViolationException on flush

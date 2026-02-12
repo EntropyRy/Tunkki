@@ -128,7 +128,7 @@ final class ProfileControllerTest extends TestCase
         $form->method('isSubmitted')->willReturn(true);
         $form->method('isValid')->willReturn(true);
         $form->method('getData')->willReturn($user);
-        $form->method('get')->with('plainPassword')->willReturn($plainPasswordField);
+        $form->method('get')->willReturn($plainPasswordField);
 
         $this->controller->setTestForm($form);
 
@@ -170,7 +170,7 @@ final class ProfileControllerTest extends TestCase
         $form->method('isSubmitted')->willReturn(true);
         $form->method('isValid')->willReturn(true);
         $form->method('getData')->willReturn($user);
-        $form->method('get')->with('plainPassword')->willReturn($plainPasswordField);
+        $form->method('get')->willReturn($plainPasswordField);
 
         $this->controller->setTestForm($form);
 

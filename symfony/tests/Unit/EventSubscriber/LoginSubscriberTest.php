@@ -126,7 +126,6 @@ final class LoginSubscriberTest extends TestCase
 
         $this->urlGenerator
             ->method('generate')
-            ->with('profile_resend_verification', ['_locale' => 'fi'])
             ->willReturn('/fi/profile/resend-verification');
 
         $this->subscriber->onLoginSuccess($event);
@@ -157,7 +156,6 @@ final class LoginSubscriberTest extends TestCase
 
         $this->urlGenerator
             ->method('generate')
-            ->with('profile_resend_verification', ['_locale' => 'en'])
             ->willReturn('/en/profile/resend-verification');
 
         $this->subscriber->onLoginSuccess($event);

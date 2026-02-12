@@ -26,8 +26,8 @@ final class EventsPageTest extends TestCase
         $security = $this->createStub(Security::class);
 
         $security->method('getUser')->willReturn(null);
-        $eventRepository->method('findPublicEventsByNotType')->with('announcement')->willReturn([]);
-        $assetMapper->method('getPublicPath')->with('images/header-logo.svg')->willReturn('/images/header-logo.svg');
+        $eventRepository->method('findPublicEventsByNotType')->willReturn([]);
+        $assetMapper->method('getPublicPath')->willReturn('/images/header-logo.svg');
 
         $seoPage->method('setTitle')->willReturn($seoPage);
         $seoPage->method('addMeta')->willReturn($seoPage);

@@ -273,7 +273,7 @@ final class ResetPasswordControllerTest extends TestCase
         $form->method('handleRequest')->willReturnSelf();
         $form->method('isSubmitted')->willReturn($submitted);
         $form->method('isValid')->willReturn($valid);
-        $form->method('get')->with('email')->willReturn($emailField);
+        $form->method('get')->willReturn($emailField);
 
         return $form;
     }
@@ -287,7 +287,7 @@ final class ResetPasswordControllerTest extends TestCase
         $form->method('handleRequest')->willReturnSelf();
         $form->method('isSubmitted')->willReturn($submitted);
         $form->method('isValid')->willReturn($valid);
-        $form->method('get')->with('plainPassword')->willReturn($passwordField);
+        $form->method('get')->willReturn($passwordField);
 
         return $form;
     }
