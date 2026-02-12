@@ -111,7 +111,6 @@ final class LocalizedUrlExtensionTest extends TestCase
         $request = new Request([], [], ['_route' => 'app_event_show', '_route_params' => ['id' => 123]], [], [], ['REQUEST_URI' => '/events/123']);
         $this->requestStack->method('getCurrentRequest')->willReturn($request);
         $this->router->method('generate')
-            ->with('app_event_show.en', ['id' => 123])
             ->willReturn('/en/events/123');
 
         $result = $this->extension->getLocalizedUrl('en');
@@ -176,9 +175,8 @@ final class LocalizedUrlExtensionTest extends TestCase
         $this->requestStack->method('getCurrentRequest')->willReturn($request);
 
         $repository = $this->createStub(EntityRepository::class);
-        $repository->method('find')->with(999)->willReturn(null);
+        $repository->method('find')->willReturn(null);
         $this->entityManager->method('getRepository')
-            ->with(SonataPagePage::class)
             ->willReturn($repository);
 
         $result = $this->extension->getLocalizedUrl('en', 999);
@@ -301,14 +299,13 @@ final class LocalizedUrlExtensionTest extends TestCase
 
         // Menu found via direct comparison
         $menu = $this->createStub(Menu::class);
-        $menu->method('getPageByLang')->with('en')->willReturn($targetPage);
+        $menu->method('getPageByLang')->willReturn($targetPage);
 
         $menuRepository = $this->createStub(EntityRepository::class);
         $menuRepository->method('findOneBy')
             ->willReturnCallback(static fn (array $criteria) => isset($criteria['pageFi']) ? $menu : null);
 
         $this->entityManager->method('getRepository')
-            ->with(Menu::class)
             ->willReturn($menuRepository);
 
         $result = $this->extension->getLocalizedUrl('en', $sourcePage);
@@ -336,7 +333,7 @@ final class LocalizedUrlExtensionTest extends TestCase
 
         // Menu found via pageEn comparison (second findOneBy call)
         $menu = $this->createStub(Menu::class);
-        $menu->method('getPageByLang')->with('fi')->willReturn($targetPage);
+        $menu->method('getPageByLang')->willReturn($targetPage);
 
         $menuRepository = $this->createStub(EntityRepository::class);
         $callCount = 0;
@@ -350,7 +347,6 @@ final class LocalizedUrlExtensionTest extends TestCase
             });
 
         $this->entityManager->method('getRepository')
-            ->with(Menu::class)
             ->willReturn($menuRepository);
 
         $result = $this->extension->getLocalizedUrl('fi', $sourcePage);
@@ -378,7 +374,7 @@ final class LocalizedUrlExtensionTest extends TestCase
 
         // Menu found via ID query
         $menu = $this->createStub(Menu::class);
-        $menu->method('getPageByLang')->with('en')->willReturn($targetPage);
+        $menu->method('getPageByLang')->willReturn($targetPage);
 
         $menuRepository = $this->createStub(EntityRepository::class);
         // Direct comparison returns null (simulating proxy object issue)
@@ -396,7 +392,6 @@ final class LocalizedUrlExtensionTest extends TestCase
         $menuRepository->method('createQueryBuilder')->willReturn($queryBuilder);
 
         $this->entityManager->method('getRepository')
-            ->with(Menu::class)
             ->willReturn($menuRepository);
 
         $result = $this->extension->getLocalizedUrl('en', $sourcePage);
@@ -421,7 +416,7 @@ final class LocalizedUrlExtensionTest extends TestCase
 
         // Menu found
         $menu = $this->createStub(Menu::class);
-        $menu->method('getPageByLang')->with('en')->willReturn($targetPage);
+        $menu->method('getPageByLang')->willReturn($targetPage);
 
         $menuRepository = $this->createStub(EntityRepository::class);
         $menuRepository->method('findOneBy')
@@ -437,7 +432,6 @@ final class LocalizedUrlExtensionTest extends TestCase
         $menuRepository->method('createQueryBuilder')->willReturn($queryBuilder);
 
         $this->entityManager->method('getRepository')
-            ->with(Menu::class)
             ->willReturn($menuRepository);
 
         $result = $this->extension->getLocalizedUrl('en', $sourcePage);
@@ -474,7 +468,6 @@ final class LocalizedUrlExtensionTest extends TestCase
         $menuRepository->method('createQueryBuilder')->willReturn($queryBuilder);
 
         $this->entityManager->method('getRepository')
-            ->with(Menu::class)
             ->willReturn($menuRepository);
 
         $result = $this->extension->getLocalizedUrl('en', $sourcePage);
@@ -508,7 +501,6 @@ final class LocalizedUrlExtensionTest extends TestCase
         $menuRepository->method('createQueryBuilder')->willReturn($queryBuilder);
 
         $this->entityManager->method('getRepository')
-            ->with(Menu::class)
             ->willReturn($menuRepository);
 
         $result = $this->extension->getLocalizedUrl('en', $sourcePage);
@@ -547,7 +539,6 @@ final class LocalizedUrlExtensionTest extends TestCase
         $menuRepository->method('createQueryBuilder')->willReturn($queryBuilder);
 
         $this->entityManager->method('getRepository')
-            ->with(Menu::class)
             ->willReturn($menuRepository);
 
         $result = $this->extension->getLocalizedUrl('en', $sourcePage);
@@ -582,7 +573,6 @@ final class LocalizedUrlExtensionTest extends TestCase
         $menuRepository->method('createQueryBuilder')->willReturn($queryBuilder);
 
         $this->entityManager->method('getRepository')
-            ->with(Menu::class)
             ->willReturn($menuRepository);
 
         $result = $this->extension->getLocalizedUrl('en', $sourcePage);
@@ -617,7 +607,6 @@ final class LocalizedUrlExtensionTest extends TestCase
         $menuRepository->method('createQueryBuilder')->willReturn($queryBuilder);
 
         $this->entityManager->method('getRepository')
-            ->with(Menu::class)
             ->willReturn($menuRepository);
 
         $result = $this->extension->getLocalizedUrl('en', $sourcePage);
@@ -642,7 +631,6 @@ final class LocalizedUrlExtensionTest extends TestCase
         // createQueryBuilder should not be called since ctype_digit('unknown') is false
 
         $this->entityManager->method('getRepository')
-            ->with(Menu::class)
             ->willReturn($menuRepository);
 
         $result = $this->extension->getLocalizedUrl('en', $sourcePage);
@@ -676,7 +664,6 @@ final class LocalizedUrlExtensionTest extends TestCase
         $menuRepository->method('createQueryBuilder')->willReturn($queryBuilder);
 
         $this->entityManager->method('getRepository')
-            ->with(Menu::class)
             ->willReturn($menuRepository);
 
         $result = $this->extension->getLocalizedUrl('en', $sourcePage);
@@ -720,7 +707,6 @@ final class LocalizedUrlExtensionTest extends TestCase
         $menuRepository->method('createQueryBuilder')->willReturn($queryBuilder);
 
         $this->entityManager->method('getRepository')
-            ->with(Menu::class)
             ->willReturn($menuRepository);
 
         $result = $this->extension->getLocalizedUrl('en', $sourcePage);
@@ -747,14 +733,13 @@ final class LocalizedUrlExtensionTest extends TestCase
 
         // Menu found
         $menu = $this->createStub(Menu::class);
-        $menu->method('getPageByLang')->with('en')->willReturn($targetPage);
+        $menu->method('getPageByLang')->willReturn($targetPage);
 
         $menuRepository = $this->createStub(EntityRepository::class);
         $menuRepository->method('findOneBy')
             ->willReturnCallback(static fn (array $criteria) => isset($criteria['pageFi']) ? $menu : null);
 
         $this->entityManager->method('getRepository')
-            ->with(Menu::class)
             ->willReturn($menuRepository);
 
         $result = $this->extension->getLocalizedUrl('en', $sourcePage);
@@ -781,14 +766,13 @@ final class LocalizedUrlExtensionTest extends TestCase
 
         // Menu found
         $menu = $this->createStub(Menu::class);
-        $menu->method('getPageByLang')->with('en')->willReturn($targetPage);
+        $menu->method('getPageByLang')->willReturn($targetPage);
 
         $menuRepository = $this->createStub(EntityRepository::class);
         $menuRepository->method('findOneBy')
             ->willReturnCallback(static fn (array $criteria) => isset($criteria['pageFi']) ? $menu : null);
 
         $this->entityManager->method('getRepository')
-            ->with(Menu::class)
             ->willReturn($menuRepository);
 
         $result = $this->extension->getLocalizedUrl('en', $sourcePage);

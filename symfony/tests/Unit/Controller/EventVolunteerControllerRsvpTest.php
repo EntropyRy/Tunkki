@@ -112,7 +112,6 @@ final class EventVolunteerControllerRsvpTest extends TestCase
 
         // Repository check passes (no existing RSVP found - simulating race condition)
         $this->rsvpRepository->method('existsForMemberAndEvent')
-            ->with($member, $event)
             ->willReturn(false);
 
         // Translator returns the message key as-is

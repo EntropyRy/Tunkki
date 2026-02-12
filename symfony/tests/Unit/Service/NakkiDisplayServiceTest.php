@@ -144,8 +144,8 @@ final class NakkiDisplayServiceTest extends TestCase
     public function testGetNakkiFromGroupIncludesSelectedBookings(): void
     {
         $definition = $this->createStub(NakkiDefinition::class);
-        $definition->method('getName')->with('fi')->willReturn('Security');
-        $definition->method('getDescription')->with('fi')->willReturn('Security work');
+        $definition->method('getName')->willReturn('Security');
+        $definition->method('getDescription')->willReturn('Security work');
 
         $nakki = $this->createStub(Nakki::class);
         $nakki->method('isDisableBookings')->willReturn(false);
@@ -174,8 +174,8 @@ final class NakkiDisplayServiceTest extends TestCase
     public function testGetNakkiFromGroupIncludesUnreservedBookings(): void
     {
         $definition = $this->createStub(NakkiDefinition::class);
-        $definition->method('getName')->with('fi')->willReturn('Bar');
-        $definition->method('getDescription')->with('fi')->willReturn('Bar service');
+        $definition->method('getName')->willReturn('Bar');
+        $definition->method('getDescription')->willReturn('Bar service');
 
         $unreservedBooking = $this->createStub(NakkiBooking::class);
         $unreservedBooking->method('getMember')->willReturn(null); // Not reserved
@@ -207,8 +207,8 @@ final class NakkiDisplayServiceTest extends TestCase
     public function testGetNakkiFromGroupSkipsReservedBookingsWhenNotSelected(): void
     {
         $definition = $this->createStub(NakkiDefinition::class);
-        $definition->method('getName')->with('fi')->willReturn('Cleanup');
-        $definition->method('getDescription')->with('fi')->willReturn('Cleanup work');
+        $definition->method('getName')->willReturn('Cleanup');
+        $definition->method('getDescription')->willReturn('Cleanup work');
 
         $reservedBooking = $this->createStub(NakkiBooking::class);
         $otherMember = $this->createStub(Member::class);
@@ -240,8 +240,8 @@ final class NakkiDisplayServiceTest extends TestCase
     public function testGetNakkiFromGroupPrioritizesSelectedOverUnreserved(): void
     {
         $definition = $this->createStub(NakkiDefinition::class);
-        $definition->method('getName')->with('en')->willReturn('Setup');
-        $definition->method('getDescription')->with('en')->willReturn('Setup work');
+        $definition->method('getName')->willReturn('Setup');
+        $definition->method('getDescription')->willReturn('Setup work');
 
         $selectedBooking = $this->createStub(NakkiBooking::class);
         $selectedBooking->method('getStartAt')->willReturn(new \DateTimeImmutable('2025-01-01 08:00'));
