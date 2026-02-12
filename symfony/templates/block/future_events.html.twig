@@ -52,6 +52,13 @@
     {% endif %}
     <li>
         <span class="fa-li"><twig:ux:icon name="link" /></span>
-        <a href="{{ url }}">{{ event.nameByLang(app.request.locale) }} - {{ event.eventDate|date() }}</a>
+        <a href="{{ url }}">
+            <span {% if event.cancelled %}style="text-decoration: line-through;"{% endif %}>
+                {{ event.nameByLang(app.request.locale) }} - {{ event.eventDate|date() }}
+            </span>
+        </a>
+        {% if event.cancelled %}
+            <span class="badge text-bg-danger ms-1">{{ 'cancelled'|trans }}</span>
+        {% endif %}
     </li>
 {% endblock %}
