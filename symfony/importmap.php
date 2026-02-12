@@ -138,7 +138,7 @@ return [
         'version' => '1.5.0',
     ],
     'sortablejs' => [
-        'version' => '1.15.6',
+        'version' => '1.15.7',
     ],
     'howler' => [
         'version' => '2.2.4',
@@ -151,7 +151,7 @@ return [
         'type' => 'css',
     ],
     'tom-select' => [
-        'version' => '2.4.5',
+        'version' => '2.5.1',
     ],
     '@orchidjs/sifter' => [
         'version' => '1.1.0',
@@ -160,19 +160,19 @@ return [
         'version' => '1.1.2',
     ],
     'tom-select/dist/css/tom-select.default.min.css' => [
-        'version' => '2.4.5',
+        'version' => '2.5.1',
         'type' => 'css',
     ],
     'tom-select/dist/css/tom-select.default.css' => [
-        'version' => '2.4.5',
+        'version' => '2.5.1',
         'type' => 'css',
     ],
     'tom-select/dist/css/tom-select.bootstrap4.css' => [
-        'version' => '2.4.5',
+        'version' => '2.5.1',
         'type' => 'css',
     ],
     'tom-select/dist/css/tom-select.bootstrap5.css' => [
-        'version' => '2.4.5',
+        'version' => '2.5.1',
         'type' => 'css',
     ],
     '@toast-ui/editor' => [

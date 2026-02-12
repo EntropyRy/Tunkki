@@ -144,7 +144,7 @@ final class EmailAdmin extends AbstractAdmin
                 },
                 'required' => false,
                 'expanded' => false,
-                'help' => 'Main purpose determines the email template.',
+                'help' => 'Main purpose determines the main recipient group.',
             ]);
     }
 
@@ -240,7 +240,7 @@ final class EmailAdmin extends AbstractAdmin
                 },
                 'required' => false,
                 'expanded' => false,
-                'help' => 'Main purpose determines the email template.',
+                'help' => 'Main purpose determines the recipient group.',
             ]);
 
         // Only show recipientGroups if purpose is NOT TICKET_QR (automatic email)
@@ -268,7 +268,7 @@ final class EmailAdmin extends AbstractAdmin
                     'required' => false,
                     'multiple' => true,
                     'expanded' => true,
-                    'help' => 'Also send to these groups (recipients will be deduplicated).',
+                    'help' => 'Additional recipient groups. Only use if needed, these are not required usually. It means the mail will be also send to these groups (recipients will be deduplicated).',
                 ]);
         }
 
