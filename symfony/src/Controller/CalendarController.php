@@ -13,6 +13,7 @@ use DateTimeZone as PhpDateTimeZone;
 use Eluceo\iCal\Domain\Entity\Calendar;
 use Eluceo\iCal\Domain\Entity\Event as CalendarEvent;
 use Eluceo\iCal\Domain\Entity\TimeZone;
+use Eluceo\iCal\Domain\Enum\EventStatus;
 use Eluceo\iCal\Domain\ValueObject\Alarm;
 use Eluceo\iCal\Domain\ValueObject\Alarm\DisplayAction;
 use Eluceo\iCal\Domain\ValueObject\Alarm\RelativeTrigger;
@@ -23,6 +24,7 @@ use Eluceo\iCal\Domain\ValueObject\Timestamp;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
 use Eluceo\iCal\Domain\ValueObject\Uri;
 use Eluceo\iCal\Presentation\Factory\CalendarFactory;
+use League\CommonMark\GithubFlavoredMarkdownConverter;
 use Sqids\Sqids;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -220,7 +222,9 @@ class CalendarController extends AbstractController
             ->setOccurrence($timeSpan)
             ->setUrl($url);
 
-        if ($addNotification) {
+        if ($event->isCancelled()) {
+            $calendarEvent->setStatus(EventStatus::CANCELLED());
+        } elseif ($addNotification) {
             $calendarEvent->addAlarm($this->createReminderAlarm($locale));
         }
 
@@ -253,11 +257,27 @@ class CalendarController extends AbstractController
     }
 
     /**
-     * Sanitize event description by stripping HTML and decoding entities.
+     * Render markdown to HTML first, then flatten to plain text for ICS DESCRIPTION.
      */
     private function sanitizeEventDescription(?string $content): string
     {
-        return html_entity_decode(strip_tags((string) $content));
+        if (null === $content || '' === trim($content)) {
+            return '';
+        }
+
+        $markdownConverter = new GithubFlavoredMarkdownConverter([
+            'renderer' => [
+                'soft_break' => '<br>',
+            ],
+            'html_input' => 'allow',
+        ]);
+
+        $html = $markdownConverter->convert($content)->getContent();
+        $plainText = html_entity_decode(strip_tags($html));
+        $plainText = preg_replace('/[ \t]+/u', ' ', $plainText);
+        $plainText = preg_replace('/\R{3,}/u', "\n\n", (string) $plainText);
+
+        return trim((string) $plainText);
     }
 
     /**

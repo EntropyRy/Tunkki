@@ -157,6 +157,56 @@ final class CalendarFeedTest extends FixturesWebTestCase
         );
     }
 
+    public function testCalendarFeedMarksCancelledEventWithoutReminderAlarm(): void
+    {
+        EventFactory::new()->create([
+            'type' => 'event',
+            'name' => 'Cancelled Feed Event',
+            'nimi' => 'Peruttu kalenteritapahtuma',
+            'cancelled' => true,
+        ]);
+
+        $hash = $this->encodeHash([1, 1, 0, 0, 0, 0]);
+        $path = \sprintf('/%s/kalenteri.ics', $hash);
+
+        $this->seedClientHome('fi');
+        $this->client->request('GET', $path);
+        $this->assertResponseIsSuccessful();
+
+        $body = $this->client->getResponse()->getContent();
+        $this->assertNotFalse($body);
+        $this->assertMatchesRegularExpression('/STATUS:CANCELLED/', $body);
+        $this->assertDoesNotMatchRegularExpression(
+            '/BEGIN:VALARM/',
+            $body,
+            'Cancelled events should not emit reminder alarms.',
+        );
+    }
+
+    public function testCalendarFeedConvertsMarkdownToPlainTextDescription(): void
+    {
+        EventFactory::new()->create([
+            'type' => 'event',
+            'name' => 'Markdown Event',
+            'nimi' => 'Markdown tapahtuma',
+            'Content' => '**Bold** [Entropy](https://entropy.fi)',
+            'Sisallys' => '**Bold** [Entropy](https://entropy.fi)',
+        ]);
+
+        $hash = $this->encodeHash([1, 0, 0, 0, 0, 0]);
+        $path = \sprintf('/%s/kalenteri.ics', $hash);
+
+        $this->seedClientHome('fi');
+        $this->client->request('GET', $path);
+        $this->assertResponseIsSuccessful();
+
+        $body = $this->client->getResponse()->getContent();
+        $this->assertNotFalse($body);
+        $this->assertMatchesRegularExpression('/DESCRIPTION:Bold Entropy/', $body);
+        $this->assertDoesNotMatchRegularExpression('/\\*\\*Bold\\*\\*/', $body);
+        $this->assertDoesNotMatchRegularExpression('/\\[Entropy\\]\\(https:\\/\\/entropy\\.fi\\)/', $body);
+    }
+
     public static function localeProvider(): array
     {
         return [
