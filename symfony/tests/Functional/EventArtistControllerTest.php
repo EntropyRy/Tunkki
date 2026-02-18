@@ -44,7 +44,6 @@ final class EventArtistControllerTest extends FixturesWebTestCase
     {
         parent::setUp();
         $this->initSiteAwareClient();
-        $this->client = $this->client();
     }
 
     /**
@@ -83,11 +82,11 @@ final class EventArtistControllerTest extends FixturesWebTestCase
 
         // Act: Request the signup page
         $path = $this->buildArtistSignupPath($locale, $event->getEventDate()->format('Y'), $event->getUrl());
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Form is displayed
         $this->assertResponseIsSuccessful();
-        $this->client->assertSelectorExists('form[name="event_artist_info"]');
+        $this->client()->assertSelectorExists('form[name="event_artist_info"]');
     }
 
     #[DataProvider('localeProvider')]
@@ -112,7 +111,7 @@ final class EventArtistControllerTest extends FixturesWebTestCase
 
         // Act: Submit the signup form
         $path = $this->buildArtistSignupPath($locale, $event->getEventDate()->format('Y'), $event->getUrl());
-        $crawler = $this->client->request('GET', $path);
+        $crawler = $this->client()->request('GET', $path);
 
         $form = $crawler->filter('form[name="event_artist_info"]')->form([
             'event_artist_info[Artist]' => (string) $artist->getId(),
@@ -121,11 +120,11 @@ final class EventArtistControllerTest extends FixturesWebTestCase
             'event_artist_info[agreeOnRecording]' => '1',
         ]);
 
-        $this->client->submit($form);
+        $this->client()->submit($form);
 
         // Assert: Redirect to artist profile
         $this->assertResponseRedirects();
-        $response = $this->client->getResponse();
+        $response = $this->client()->getResponse();
         $location = $response->headers->get('Location') ?? '';
         $this->assertMatchesRegularExpression('#/(en/profile/)?artisti?#', $location, 'Should redirect to artist profile page');
 
@@ -171,11 +170,11 @@ final class EventArtistControllerTest extends FixturesWebTestCase
 
         // Act: Request the signup page
         $path = $this->buildArtistSignupPath($locale, $event->getEventDate()->format('Y'), $event->getUrl());
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Redirects to artist create page
         $this->assertResponseRedirects();
-        $response = $this->client->getResponse();
+        $response = $this->client()->getResponse();
         $location = $response->headers->get('Location') ?? '';
         $this->assertMatchesRegularExpression('#/(en/profile/)?artisti?/(uusi|create)#', $location, 'Should redirect to artist create page');
     }
@@ -201,11 +200,11 @@ final class EventArtistControllerTest extends FixturesWebTestCase
 
         // Act: Request the signup page
         $path = $this->buildArtistSignupPath($locale, $event->getEventDate()->format('Y'), $event->getUrl());
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Redirects to profile with warning flash
         $this->assertResponseRedirects();
-        $response = $this->client->getResponse();
+        $response = $this->client()->getResponse();
         $location = $response->headers->get('Location') ?? '';
         $this->assertMatchesRegularExpression('#/(en/)?profi(le|ili)#', $location, 'Should redirect to profile page');
     }
@@ -231,11 +230,11 @@ final class EventArtistControllerTest extends FixturesWebTestCase
 
         // Act: Request the signup page
         $path = $this->buildArtistSignupPath($locale, $event->getEventDate()->format('Y'), $event->getUrl());
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Redirects to profile with warning flash
         $this->assertResponseRedirects();
-        $response = $this->client->getResponse();
+        $response = $this->client()->getResponse();
         $location = $response->headers->get('Location') ?? '';
         $this->assertMatchesRegularExpression('#/(en/)?profi(le|ili)#', $location, 'Should redirect to profile page');
     }
@@ -261,11 +260,11 @@ final class EventArtistControllerTest extends FixturesWebTestCase
 
         // Act: Request the signup page
         $path = $this->buildArtistSignupPath($locale, $event->getEventDate()->format('Y'), $event->getUrl());
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Redirects to profile with warning flash
         $this->assertResponseRedirects();
-        $response = $this->client->getResponse();
+        $response = $this->client()->getResponse();
         $location = $response->headers->get('Location') ?? '';
         $this->assertMatchesRegularExpression('#/(en/)?profi(le|ili)#', $location, 'Should redirect to profile page');
     }
@@ -282,11 +281,11 @@ final class EventArtistControllerTest extends FixturesWebTestCase
 
         // Act: Request the signup page without authentication
         $path = $this->buildArtistSignupPath('fi', $event->getEventDate()->format('Y'), $event->getUrl());
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Redirects to login (302 for anonymous users)
         $this->assertResponseStatusCodeSame(302);
-        $response = $this->client->getResponse();
+        $response = $this->client()->getResponse();
         $location = $response->headers->get('Location') ?? '';
         $this->assertMatchesRegularExpression('#/login(/|$)#', $location);
     }
@@ -319,7 +318,7 @@ final class EventArtistControllerTest extends FixturesWebTestCase
 
         // Act: Submit another signup for the same artist
         $path = $this->buildArtistSignupPath($locale, $event->getEventDate()->format('Y'), $event->getUrl());
-        $crawler = $this->client->request('GET', $path);
+        $crawler = $this->client()->request('GET', $path);
 
         $form = $crawler->filter('form[name="event_artist_info"]')->form([
             'event_artist_info[Artist]' => (string) $artist->getId(),
@@ -328,7 +327,7 @@ final class EventArtistControllerTest extends FixturesWebTestCase
             'event_artist_info[agreeOnRecording]' => '1',
         ]);
 
-        $this->client->submit($form);
+        $this->client()->submit($form);
 
         // Assert: Redirect occurs (controller adds flash message internally)
         $this->assertResponseRedirects();
@@ -363,21 +362,21 @@ final class EventArtistControllerTest extends FixturesWebTestCase
 
         // Act: Edit the signup
         $path = '/'.$event->getEventDate()->format('Y').'/'.$event->getUrl().'/signup/'.$signup->getId().'/edit';
-        $crawler = $this->client->request('GET', $path);
+        $crawler = $this->client()->request('GET', $path);
 
         $this->assertResponseIsSuccessful();
-        $this->client->assertSelectorExists('form[name="event_artist_info"]');
+        $this->client()->assertSelectorExists('form[name="event_artist_info"]');
 
         // Submit edited data
         $form = $crawler->filter('form[name="event_artist_info"]')->form([
             'event_artist_info[SetLength]' => '90 min',
         ]);
 
-        $this->client->submit($form);
+        $this->client()->submit($form);
 
         // Assert: Redirects to artist profile
         $this->assertResponseRedirects();
-        $response = $this->client->getResponse();
+        $response = $this->client()->getResponse();
         $this->assertMatchesRegularExpression('#/artisti(/|$)#', $response->headers->get('Location') ?? '');
 
         // Verify edit was saved
@@ -411,11 +410,11 @@ final class EventArtistControllerTest extends FixturesWebTestCase
 
         // Act: Attempt to edit another member's signup
         $path = '/'.$event->getEventDate()->format('Y').'/'.$event->getUrl().'/signup/'.$signup->getId().'/edit';
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Redirects with warning
         $this->assertResponseRedirects();
-        $response = $this->client->getResponse();
+        $response = $this->client()->getResponse();
         $this->assertMatchesRegularExpression('#/artisti(/|$)#', $response->headers->get('Location') ?? '');
     }
 
@@ -438,11 +437,11 @@ final class EventArtistControllerTest extends FixturesWebTestCase
 
         // Act: Request edit without authentication
         $path = '/'.$event->getEventDate()->format('Y').'/'.$event->getUrl().'/signup/'.$signup->getId().'/edit';
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Redirects to login
         $this->assertResponseStatusCodeSame(302);
-        $response = $this->client->getResponse();
+        $response = $this->client()->getResponse();
         $location = $response->headers->get('Location') ?? '';
         $this->assertMatchesRegularExpression('#/login(/|$)#', $location);
     }
@@ -476,11 +475,11 @@ final class EventArtistControllerTest extends FixturesWebTestCase
 
         // Act: Delete the signup
         $path = '/signup/'.$signupId.'/delete';
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Redirects to artist profile
         $this->assertResponseRedirects();
-        $response = $this->client->getResponse();
+        $response = $this->client()->getResponse();
         $this->assertMatchesRegularExpression('#/artisti(/|$)#', $response->headers->get('Location') ?? '');
 
         // Verify deletion
@@ -516,11 +515,11 @@ final class EventArtistControllerTest extends FixturesWebTestCase
 
         // Act: Attempt to delete another member's signup
         $path = '/signup/'.$signupId.'/delete';
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Redirects with warning
         $this->assertResponseRedirects();
-        $response = $this->client->getResponse();
+        $response = $this->client()->getResponse();
         $this->assertMatchesRegularExpression('#/artisti(/|$)#', $response->headers->get('Location') ?? '');
 
         // Verify signup still exists
@@ -554,11 +553,11 @@ final class EventArtistControllerTest extends FixturesWebTestCase
 
         // Act: Attempt to delete signup for past event
         $path = '/signup/'.$signupId.'/delete';
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Redirects with warning (not allowed)
         $this->assertResponseRedirects();
-        $response = $this->client->getResponse();
+        $response = $this->client()->getResponse();
         $this->assertMatchesRegularExpression('#/artisti(/|$)#', $response->headers->get('Location') ?? '');
 
         // Verify signup still exists
@@ -586,11 +585,11 @@ final class EventArtistControllerTest extends FixturesWebTestCase
 
         // Act: Request delete without authentication
         $path = '/signup/'.$signup->getId().'/delete';
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Redirects to login
         $this->assertResponseStatusCodeSame(302);
-        $response = $this->client->getResponse();
+        $response = $this->client()->getResponse();
         $location = $response->headers->get('Location') ?? '';
         $this->assertMatchesRegularExpression('#/login(/|$)#', $location);
     }

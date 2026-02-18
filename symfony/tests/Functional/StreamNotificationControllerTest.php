@@ -34,12 +34,11 @@ final class StreamNotificationControllerTest extends FixturesWebTestCase
         $_SERVER['STREAM_NOTIFICATION_TOKEN'] = self::TEST_TOKEN;
 
         $this->initSiteAwareClient();
-        $this->client = $this->client();
     }
 
     public function testRejectsInvalidEventType(): void
     {
-        $client = $this->client;
+        $client = $this->client();
         $client->request(
             'POST',
             '/api/stream-notifications',
@@ -59,7 +58,7 @@ final class StreamNotificationControllerTest extends FixturesWebTestCase
 
     public function testRejectsInvalidToken(): void
     {
-        $client = $this->client;
+        $client = $this->client();
         $client->request(
             'POST',
             '/api/stream-notifications',
@@ -79,7 +78,7 @@ final class StreamNotificationControllerTest extends FixturesWebTestCase
 
     public function testStreamStartCreatesOnlineStreamAndStopUpdatesIt(): void
     {
-        $client = $this->client;
+        $client = $this->client();
 
         $initialCount = $this->em()->getRepository(Stream::class)->count([]);
 
@@ -193,7 +192,7 @@ final class StreamNotificationControllerTest extends FixturesWebTestCase
         }
         $this->em()->flush();
 
-        $client = $this->client;
+        $client = $this->client();
         $client->request(
             'POST',
             '/api/stream-notifications',
@@ -221,7 +220,7 @@ final class StreamNotificationControllerTest extends FixturesWebTestCase
 
     public function testInvalidJsonPayloadReturnsBadRequest(): void
     {
-        $client = $this->client;
+        $client = $this->client();
         $_ENV['STREAM_NOTIFICATION_TOKEN'] = self::TEST_TOKEN;
         $_SERVER['STREAM_NOTIFICATION_TOKEN'] = self::TEST_TOKEN;
 

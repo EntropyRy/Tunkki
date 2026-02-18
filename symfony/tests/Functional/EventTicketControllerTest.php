@@ -42,7 +42,6 @@ final class EventTicketControllerTest extends FixturesWebTestCase
     {
         parent::setUp();
         $this->initSiteAwareClient();
-        $this->client = $this->client();
     }
 
     /**
@@ -113,7 +112,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
 
         // Act: Request the ticket page
         $path = $this->buildTicketPath($locale, $event->getEventDate()->format('Y'), $event->getUrl(), $ticket->getReferenceNumber());
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Page displays successfully with ticket info
         $this->assertResponseIsSuccessful();
@@ -146,7 +145,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
 
         // Act: Attempt to view another member's ticket
         $path = $this->buildTicketPath($locale, $event->getEventDate()->format('Y'), $event->getUrl(), $ticket->getReferenceNumber());
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: 404 Not Found (security through obscurity - don't reveal ticket exists)
         $this->assertResponseStatusCodeSame(404);
@@ -185,7 +184,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
 
         // Act: Try to access ticket via wrong event URL
         $path = $this->buildTicketPath($locale, $event1->getEventDate()->format('Y'), $event1->getUrl(), $ticket->getReferenceNumber());
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: 404 Not Found
         $this->assertResponseStatusCodeSame(404);
@@ -211,11 +210,11 @@ final class EventTicketControllerTest extends FixturesWebTestCase
 
         // Act: Request ticket without authentication
         $path = $this->buildTicketPath('fi', $event->getEventDate()->format('Y'), $event->getUrl(), $ticket->getReferenceNumber());
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Redirects to login
         $this->assertResponseStatusCodeSame(302);
-        $response = $this->client->getResponse();
+        $response = $this->client()->getResponse();
         $location = $response->headers->get('Location') ?? '';
         $this->assertMatchesRegularExpression('#/login(/|$)#', $location);
     }
@@ -260,13 +259,13 @@ final class EventTicketControllerTest extends FixturesWebTestCase
 
         // Act: Request the tickets list page
         $path = $this->buildTicketsPath($locale, $event->getEventDate()->format('Y'), $event->getUrl());
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Page displays successfully
         $this->assertResponseIsSuccessful();
 
         // Verify both tickets are displayed (assuming template shows ticket info)
-        $content = $this->client->getResponse()->getContent();
+        $content = $this->client()->getResponse()->getContent();
         $this->assertNotFalse($content);
         // Note: Exact assertions depend on template structure
     }
@@ -289,7 +288,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
 
         // Act: Request the tickets list page
         $path = $this->buildTicketsPath($locale, $event->getEventDate()->format('Y'), $event->getUrl());
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Page displays successfully (no tickets is valid state)
         $this->assertResponseIsSuccessful();
@@ -306,11 +305,11 @@ final class EventTicketControllerTest extends FixturesWebTestCase
 
         // Act: Request tickets list without authentication
         $path = $this->buildTicketsPath('fi', $event->getEventDate()->format('Y'), $event->getUrl());
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Redirects to login
         $this->assertResponseStatusCodeSame(302);
-        $response = $this->client->getResponse();
+        $response = $this->client()->getResponse();
         $location = $response->headers->get('Location') ?? '';
         $this->assertMatchesRegularExpression('#/login(/|$)#', $location);
     }
@@ -345,7 +344,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
 
         // Act: Request the tickets list page
         $path = $this->buildTicketsPath('fi', $event->getEventDate()->format('Y'), $event->getUrl());
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Page displays successfully
         // With single product type, showShop should always be true
@@ -389,7 +388,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
 
         // Act: Request the tickets list page
         $path = $this->buildTicketsPath('fi', $event->getEventDate()->format('Y'), $event->getUrl());
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Page displays successfully
         // Member has 1 out of 2 product types, so showShop should be true
@@ -438,7 +437,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
 
         // Act: Request the tickets list page
         $path = $this->buildTicketsPath('fi', $event->getEventDate()->format('Y'), $event->getUrl());
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Page displays successfully
         // Member has all product types, so showShop should be false
@@ -465,7 +464,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
 
         // Act: Request the ticket check page
         $path = $this->buildTicketCheckPath($locale, $event->getEventDate()->format('Y'), $event->getUrl());
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Page displays successfully
         $this->assertResponseIsSuccessful();
@@ -482,11 +481,11 @@ final class EventTicketControllerTest extends FixturesWebTestCase
 
         // Act: Request ticket check page without authentication
         $path = $this->buildTicketCheckPath('fi', $event->getEventDate()->format('Y'), $event->getUrl());
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Redirects to login
         $this->assertResponseStatusCodeSame(302);
-        $response = $this->client->getResponse();
+        $response = $this->client()->getResponse();
         $location = $response->headers->get('Location') ?? '';
         $this->assertMatchesRegularExpression('#/login(/|$)#', $location);
     }
@@ -519,13 +518,13 @@ final class EventTicketControllerTest extends FixturesWebTestCase
 
         // Act: Call the API endpoint
         $path = '/api/ticket/'.$event->getId().'/'.$ticket->getReferenceNumber().'/info';
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Returns JSON with ticket info
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('Content-Type', 'application/json');
 
-        $content = $this->client->getResponse()->getContent();
+        $content = $this->client()->getResponse()->getContent();
         $this->assertNotFalse($content);
 
         // Response is wrapped in JsonResponse which double-encodes
@@ -572,11 +571,11 @@ final class EventTicketControllerTest extends FixturesWebTestCase
 
         // Act: Call API with event1 ID but ticket from event2
         $path = '/api/ticket/'.$event1->getId().'/'.$ticket->getReferenceNumber().'/info';
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         // Assert: Returns error
         $this->assertResponseIsSuccessful();
-        $content = $this->client->getResponse()->getContent();
+        $content = $this->client()->getResponse()->getContent();
         $this->assertNotFalse($content);
 
         // Response is wrapped in JsonResponse which double-encodes
@@ -619,11 +618,11 @@ final class EventTicketControllerTest extends FixturesWebTestCase
 
         // Act: Call the give API endpoint
         $path = '/api/ticket/'.$event->getId().'/'.$ticket->getReferenceNumber().'/give';
-        $this->client->request('POST', $path);
+        $this->client()->request('POST', $path);
 
         // Assert: Returns success
         $this->assertResponseIsSuccessful();
-        $content = $this->client->getResponse()->getContent();
+        $content = $this->client()->getResponse()->getContent();
         $this->assertNotFalse($content);
 
         // Response is wrapped in JsonResponse which double-encodes

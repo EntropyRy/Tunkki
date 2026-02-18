@@ -21,7 +21,6 @@ final class ContractControllerTest extends FixturesWebTestCase
         parent::setUp();
 
         $this->initSiteAwareClient();
-        $this->client = $this->client();
         $this->entityManager = $this->em();
     }
 
@@ -35,10 +34,10 @@ final class ContractControllerTest extends FixturesWebTestCase
 
         $this->seedClientHome('fi');
         $path = $this->pathForLocale('fi', 'rekisteriseloste');
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         $this->assertResponseIsSuccessful();
-        $this->client->assertSelectorExists('.contract-content strong');
+        $this->client()->assertSelectorExists('.contract-content strong');
     }
 
     public function testEnglishPrivacyNoticeRendersMarkdown(): void
@@ -51,17 +50,17 @@ final class ContractControllerTest extends FixturesWebTestCase
 
         $this->seedClientHome('en');
         $path = $this->pathForLocale('en', 'privacy-notice');
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         $this->assertResponseIsSuccessful();
-        $this->client->assertSelectorTextContains('.contract-content', 'Privacy notice');
+        $this->client()->assertSelectorTextContains('.contract-content', 'Privacy notice');
     }
 
     public function testUnknownPurposeReturnsNotFound(): void
     {
         $this->seedClientHome('fi');
         $path = $this->pathForLocale('fi', 'unknown-purpose');
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }

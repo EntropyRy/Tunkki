@@ -25,7 +25,6 @@ final class BookingContractControllerTest extends FixturesWebTestCase
         parent::setUp();
 
         $this->initSiteAwareClient();
-        $this->client = $this->client();
         $this->entityManager = $this->em();
     }
 
@@ -41,14 +40,14 @@ final class BookingContractControllerTest extends FixturesWebTestCase
 
         $this->seedClientHome('fi');
         $path = $this->path($booking, $renter, 'hash-abc');
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         $this->assertResponseIsSuccessful();
-        $this->client->assertSelectorExists('form[name="booking_consent"]');
-        $this->client->assertSelectorExists('input[name="booking_consent[renterSignature]"]');
-        $this->client->assertSelectorExists('input[name="booking_consent[renterConsent]"]');
-        $this->client->assertSelectorExists('button[name="booking_consent[Agree]"][disabled]');
-        $this->client->assertSelectorExists('button[name="booking_consent[Agree]"].btn-large.btn-primary');
+        $this->client()->assertSelectorExists('form[name="booking_consent"]');
+        $this->client()->assertSelectorExists('input[name="booking_consent[renterSignature]"]');
+        $this->client()->assertSelectorExists('input[name="booking_consent[renterConsent]"]');
+        $this->client()->assertSelectorExists('button[name="booking_consent[Agree]"][disabled]');
+        $this->client()->assertSelectorExists('button[name="booking_consent[Agree]"].btn-large.btn-primary');
     }
 
     public function testInvalidHashReturnsNotFound(): void
@@ -63,7 +62,7 @@ final class BookingContractControllerTest extends FixturesWebTestCase
 
         $this->seedClientHome('fi');
         $path = $this->path($booking, $renter, 'wrong-hash');
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
@@ -81,7 +80,7 @@ final class BookingContractControllerTest extends FixturesWebTestCase
         $this->seedClientHome('fi');
         $nonExistingBookingId = (int) $booking->getId() + 999999;
         $path = \sprintf('/booking/%d/renter/%d/%s', $nonExistingBookingId, (int) $renter->getId(), 'hash-abc');
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
@@ -99,7 +98,7 @@ final class BookingContractControllerTest extends FixturesWebTestCase
         $this->seedClientHome('fi');
         $nonExistingRenterId = (int) $renter->getId() + 999999;
         $path = \sprintf('/booking/%d/renter/%d/%s', (int) $booking->getId(), $nonExistingRenterId, 'hash-abc');
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
@@ -117,7 +116,7 @@ final class BookingContractControllerTest extends FixturesWebTestCase
 
         $this->seedClientHome('fi');
         $path = $this->path($booking, $otherRenter, 'hash-abc');
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
@@ -140,7 +139,7 @@ final class BookingContractControllerTest extends FixturesWebTestCase
 
         $this->seedClientHome('fi');
         $path = $this->path($booking, $renter, 'hash-abc');
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
@@ -157,9 +156,9 @@ final class BookingContractControllerTest extends FixturesWebTestCase
 
         $this->seedClientHome('fi');
         $path = $this->path($booking, $renter, 'hash-entropy');
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
         $this->assertResponseIsSuccessful();
-        $this->client->assertSelectorExists('form[name="booking_consent"]');
+        $this->client()->assertSelectorExists('form[name="booking_consent"]');
     }
 
     public function testPublicItemsRouteWorksForEntropyRenter(): void
@@ -173,10 +172,10 @@ final class BookingContractControllerTest extends FixturesWebTestCase
 
         $this->seedClientHome('fi');
         $path = $this->publicPath($booking, 'hash-entropy');
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         $this->assertResponseIsSuccessful();
-        $this->client->assertSelectorNotExists('form[name="booking_consent"]');
+        $this->client()->assertSelectorNotExists('form[name="booking_consent"]');
     }
 
     public function testPublicItemsRouteRejectsNonEntropyRenter(): void
@@ -190,7 +189,7 @@ final class BookingContractControllerTest extends FixturesWebTestCase
 
         $this->seedClientHome('fi');
         $path = $this->publicPath($booking, 'hash-abc');
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
@@ -380,10 +379,10 @@ final class BookingContractControllerTest extends FixturesWebTestCase
 
         $this->seedClientHome('fi');
         $path = $this->path($booking, $renter, 'hash-abc');
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
         $this->assertResponseIsSuccessful();
 
-        $form = $this->client
+        $form = $this->client()
             ->getCrawler()
             ->filter('form[name="booking_consent"]')
             ->form([
@@ -391,10 +390,10 @@ final class BookingContractControllerTest extends FixturesWebTestCase
                 'booking_consent[renterConsent]' => '1',
             ]);
 
-        $this->client->submit($form);
+        $this->client()->submit($form);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        $this->client->assertSelectorExists('.alert.alert-success');
+        $this->client()->assertSelectorExists('.alert.alert-success');
 
         $this->entityManager->clear();
         $reloaded = $this->entityManager->getRepository(Booking::class)->find($booking->getId());
@@ -415,10 +414,10 @@ final class BookingContractControllerTest extends FixturesWebTestCase
 
         $this->seedClientHome('fi');
         $path = $this->path($booking, $renter, 'hash-abc');
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
         $this->assertResponseIsSuccessful();
 
-        $form = $this->client
+        $form = $this->client()
             ->getCrawler()
             ->filter('form[name="booking_consent"]')
             ->form([
@@ -426,10 +425,10 @@ final class BookingContractControllerTest extends FixturesWebTestCase
                 'booking_consent[renterConsent]' => '1',
             ]);
 
-        $this->client->submit($form);
+        $this->client()->submit($form);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        $this->client->assertSelectorExists('.alert.alert-warning');
+        $this->client()->assertSelectorExists('.alert.alert-warning');
 
         $this->entityManager->clear();
         $reloaded = $this->entityManager->getRepository(Booking::class)->find($booking->getId());
@@ -452,11 +451,11 @@ final class BookingContractControllerTest extends FixturesWebTestCase
 
         $this->seedClientHome('fi');
         $path = $this->path($booking, $renter, 'hash-abc');
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         $this->assertResponseIsSuccessful();
-        $this->client->assertSelectorExists('button[name="booking_consent[Signed]"][disabled]');
-        $this->client->assertSelectorExists('button[name="booking_consent[Signed]"].btn-secondary.disabled');
+        $this->client()->assertSelectorExists('button[name="booking_consent[Signed]"][disabled]');
+        $this->client()->assertSelectorExists('button[name="booking_consent[Signed]"].btn-secondary.disabled');
     }
 
     public function testContractUsesSnapshotPricesAfterItemPriceChange(): void
@@ -493,11 +492,11 @@ final class BookingContractControllerTest extends FixturesWebTestCase
 
         $this->seedClientHome('fi');
         $path = $this->path($reloaded, $renter, 'hash-abc');
-        $this->client->request('GET', $path);
+        $this->client()->request('GET', $path);
 
         $this->assertResponseIsSuccessful();
-        $this->client->assertSelectorExists('.item-rent-price');
-        $priceText = $this->client->getCrawler()->filter('.item-rent-price')->text();
+        $this->client()->assertSelectorExists('.item-rent-price');
+        $priceText = $this->client()->getCrawler()->filter('.item-rent-price')->text();
         $this->assertSame('10.00 €', $priceText);
     }
 
