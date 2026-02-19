@@ -11,7 +11,7 @@
         <a class="btn w-100 btn-primary" href="{{ path('kerde_barcodes') }}">{{ 'Control barcodes'|trans }}</a>
         <hr>
         <h1>{{ 'profile.door.opener'|trans|capitalize }}</h1>
-        <p>{{ 'profile.door.last'|trans|capitalize }}: {{ status }}</p>
+        <p class="kerde-door-status">{{ 'profile.door.last'|trans|capitalize }}: {{ status }}</p>
         {% if member.isActiveMember and not member.denyKerdeAccess|default(false) %}
             {{ form_start(form) }}
                 {{ form_widget(form) }}

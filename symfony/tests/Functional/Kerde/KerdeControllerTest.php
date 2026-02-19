@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Kerde;
 
+use App\DTO\ZmqStatus;
 use App\Factory\DoorLogFactory;
 use App\Factory\MemberFactory;
 use App\Tests\_Base\FixturesWebTestCase;
@@ -146,10 +147,40 @@ final class KerdeControllerTest extends FixturesWebTestCase
         $this->client->request('GET', '/kerde/ovi');
 
         $this->assertResponseIsSuccessful();
-        $content = $this->client->getResponse()->getContent();
-        $this->assertNotFalse($content);
-        // FakeZMQService returns 'connected' for sendInit
-        $this->assertMatchesRegularExpression('/connected/', $content);
+        // FakeZMQService returns "connected" for sendInit.
+        $this->client->assertSelectorTextContains('.kerde-door-status', 'connected');
+    }
+
+    public function testDoorPageDisplaysErrorStatusFromZMQ(): void
+    {
+        $member = MemberFactory::new()->active()->create();
+        /** @var FakeZMQService $fakeZmq */
+        $fakeZmq = static::getContainer()->get('App\Service\ZMQService');
+        $fakeZmq->setInitResponse('connect failed', ZmqStatus::ERROR);
+
+        $this->loginAsActiveMember($member->getEmail());
+        $this->seedClientHome('fi');
+
+        $this->client->request('GET', '/kerde/ovi');
+
+        $this->assertResponseIsSuccessful();
+        $this->client->assertSelectorTextContains('.kerde-door-status', 'connect failed');
+    }
+
+    public function testDoorPageDisplaysTimeoutStatusFromZMQ(): void
+    {
+        $member = MemberFactory::new()->active()->create();
+        /** @var FakeZMQService $fakeZmq */
+        $fakeZmq = static::getContainer()->get('App\Service\ZMQService');
+        $fakeZmq->setInitResponse('broken', ZmqStatus::TIMEOUT);
+
+        $this->loginAsActiveMember($member->getEmail());
+        $this->seedClientHome('fi');
+
+        $this->client->request('GET', '/kerde/ovi');
+
+        $this->assertResponseIsSuccessful();
+        $this->client->assertSelectorTextContains('.kerde-door-status', 'broken');
     }
 
     public function testDoorPageDisplaysBarcode(): void
