@@ -34,6 +34,12 @@ final class KerdeControllerTest extends FixturesWebTestCase
         $this->initSiteAwareClient();
         $this->client->setServerParameter('REMOTE_ADDR', '127.0.0.1');
         $this->seedClientHome('fi');
+
+        /** @var FakeZMQService $fakeZmq */
+        $fakeZmq = static::getContainer()->get('App\Service\ZMQService');
+        $fakeZmq->setSendResponse('ok');
+        $fakeZmq->setInitResponse('connected');
+        $fakeZmq->setOpenResponse('door opened');
     }
 
     // =========================================================================
