@@ -19,8 +19,12 @@ final class Control
 
     public function mount(): void
     {
-        // Check stream status when component is mounted
-        $this->streamStatus = $this->ssh->checkStatus();
+        // Never block page rendering on SSH connectivity problems.
+        try {
+            $this->streamStatus = $this->ssh->checkStatus();
+        } catch (\Throwable) {
+            $this->streamStatus = false;
+        }
     }
 
     public function getStreamStatus(): bool

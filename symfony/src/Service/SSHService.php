@@ -156,24 +156,44 @@ class SSHService implements SSHServiceInterface
         if (!$this->parameterBag->has($paramKey)) {
             return false;
         }
-        $command = (string) $this->parameterBag->get($paramKey);
-
         try {
+            $host = (string) $this->parameterBag->get('recording.host');
+            $port = (int) $this->parameterBag->get('recording.port');
+            // Keep status checks non-blocking for page renders.
+            if (!$this->isTcpPortReachable($host, $port, 0.5)) {
+                return false;
+            }
+
+            $command = (string) $this->parameterBag->get($paramKey);
             $connection = $this->getConnectionOrFail();
+
+            $stream = @ssh2_exec($connection, $command);
+            if (false === $stream) {
+                return false;
+            }
+
+            stream_set_blocking($stream, true);
+            $output = stream_get_contents($stream);
+            fclose($stream);
+
+            return '1' === trim((string) $output);
         } catch (\Throwable) {
             return false;
         }
+    }
 
-        $stream = @ssh2_exec($connection, $command);
-        if (false === $stream) {
+    private function isTcpPortReachable(string $host, int $port, float $timeoutSeconds): bool
+    {
+        $errno = 0;
+        $errstr = '';
+        $socket = @fsockopen($host, $port, $errno, $errstr, $timeoutSeconds);
+        if (false === $socket) {
             return false;
         }
 
-        stream_set_blocking($stream, true);
-        $output = stream_get_contents($stream);
-        fclose($stream);
+        fclose($socket);
 
-        return '1' === trim((string) $output);
+        return true;
     }
 
     /**
