@@ -23,6 +23,7 @@ class ItemRepository extends ServiceEntityRepository
         $queryBuilder = $this->createQueryBuilder('i')
             ->leftJoin('i.packages', 'p')
             ->andWhere('p IS NULL')
+            ->andWhere('i.decommissioned = false')
             ->orderBy('i.name', 'ASC');
 
         return $queryBuilder->getQuery()->getResult();
@@ -35,6 +36,7 @@ class ItemRepository extends ServiceEntityRepository
             ->andWhere('i.rent IS NOT NULL')
             ->andWhere('i.toSpareParts = false')
             ->andWhere('i.forSale = false')
+            ->andWhere('i.decommissioned = false')
             ->leftJoin('i.packages', 'p')
             ->andWhere('p IS NULL')
             ->leftJoin('i.whoCanRent', 'r')

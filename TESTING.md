@@ -16,6 +16,7 @@ This document provides detailed guidance for writing, maintaining, and understan
 - [How to Write a New Test](#5-how-to-write-a-new-test-step-by-step)
 - [Test Smells & Anti-Patterns](#6-test-smells--anti-patterns)
 - [Factory State Catalog](#7-factory-state-catalog)
+- [Rental Status Policy](#8-rental-inventory-status-policy)
 
 ---
 
@@ -441,6 +442,26 @@ $this->assertMatchesRegularExpression(
 2. Add corresponding row to this catalog
 3. Add at least one test using it (prevents unused drift)
 4. Document in commit message
+
+---
+
+## 8. Rental Inventory Status Policy
+
+### 8.1 Status Changes Are Event-Driven
+- Treat rental item status fields as operational history, not free-form metadata.
+- Change item status only through `StatusEvent` admin workflow.
+- Do not change status flags directly in general item edit forms.
+
+### 8.2 Status Fields Covered by This Rule
+- `needsFixing`
+- `cannotBeRented`
+- `toSpareParts`
+- `forSale`
+- decommissioned/inactive inventory flag (preferred term below)
+
+### 8.3 Naming Recommendation
+- Prefer **`decommissioned`** over `retired`.
+- Rationale: "decommissioned" is explicit that the item has been removed from active inventory/rental circulation while preserving history.
 
 ---
 

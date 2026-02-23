@@ -103,6 +103,9 @@ class StatusEventAdmin extends AbstractRentalAdmin
                 ->add('item.toSpareParts', CheckboxType::class, [
                     'required' => false,
                 ])
+                ->add('item.decommissioned', CheckboxType::class, [
+                    'required' => false,
+                ])
                 ->end()
                 ->with('Message', ['class' => 'col-md-8'])
                 ->add('description', TextareaType::class, [
@@ -212,10 +215,12 @@ class StatusEventAdmin extends AbstractRentalAdmin
         );
         $fix = null;
         $rent = null;
+        $decommissioned = null;
         if (!empty($Event->getItem())) {
             $thing = $Event->getItem();
             $fix = $thing->getNeedsFixing();
             $rent = $thing->getCannotBeRented();
+            $decommissioned = $thing->getDecommissioned();
             $text = 'EVENT: ['.$thing->getName().']('.$url.') ';
             if (true === $fix) {
                 $text .= '**_NEEDS FIXING_** ';
@@ -226,6 +231,9 @@ class StatusEventAdmin extends AbstractRentalAdmin
                 $text .= 'cannot be rented ';
             } elseif (false === $fix) {
                 $text .= 'can be rented ';
+            }
+            if (true === $decommissioned) {
+                $text .= 'decommissioned ';
             }
         } else {
             $thing = $Event->getBooking();

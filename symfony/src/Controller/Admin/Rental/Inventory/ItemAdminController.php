@@ -41,6 +41,7 @@ class ItemAdminController extends Controller
         $clonedObject->setForSale($object->getForSale());
         $clonedObject->setToSpareParts($object->getToSpareParts());
         $clonedObject->setNeedsFixing($object->getNeedsFixing());
+        $clonedObject->setDecommissioned($object->getDecommissioned());
         $clonedObject->setCategory($object->getCategory());
 
         $this->admin->create($clonedObject);

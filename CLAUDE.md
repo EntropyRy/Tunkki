@@ -17,6 +17,7 @@ This document defines how an automated assistant (and humans) should interact wi
 6. Locale strategy: Finnish has no prefix; English uses `/en`. Admin area AND public routes follow this rule (except OAuth endpoints, which remain canonical `/oauth*` -- see section 5.4).
 7. All quality tooling (PHPStan, Infection) runs inside the Docker FPM container (PHP 8.4).
 8. No unit tests for entities; functional tests must cover entity behavior.
+9. Rental inventory status changes are event-driven: update item status only through `StatusEvent` flows (admin status action), not by directly editing status flags in item forms.
 
 ---
 
@@ -251,6 +252,7 @@ Never:
 - Hardcode secrets or environment credentials.
 - Use `<object>` generic permanently without raising a follow-up task.
 - Replace with null/fake transport without documenting the override.
+- Change rental item status flags (`needsFixing`, `cannotBeRented`, `toSpareParts`, `forSale`, decommissioned/inactive) outside `StatusEvent` workflows.
 
 ---
 

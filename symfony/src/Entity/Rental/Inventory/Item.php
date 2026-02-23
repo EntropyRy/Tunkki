@@ -87,6 +87,9 @@ class Item implements \Stringable
     #[ORM\Column(name: 'CannotBeRented', type: Types::BOOLEAN)]
     private bool $cannotBeRented = false;
 
+    #[ORM\Column(name: 'Decommissioned', type: Types::BOOLEAN)]
+    private bool $decommissioned = false;
+
     /**
      * @var Collection<int, StatusEvent>
      */
@@ -534,6 +537,18 @@ class Item implements \Stringable
     public function getCannotBeRented(): bool
     {
         return $this->cannotBeRented;
+    }
+
+    public function setDecommissioned(mixed $decommissioned): self
+    {
+        $this->decommissioned = $decommissioned;
+
+        return $this;
+    }
+
+    public function getDecommissioned(): bool
+    {
+        return $this->decommissioned;
     }
 
     public function setCompensationPrice(mixed $compensationPrice = null): self

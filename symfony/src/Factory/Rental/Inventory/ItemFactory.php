@@ -63,6 +63,7 @@ final class ItemFactory extends PersistentObjectFactory
                 'toSpareParts' => false,
                 'cannotBeRented' => false,
                 'forSale' => false,
+                'decommissioned' => false,
             ];
         };
     }
@@ -138,6 +139,17 @@ final class ItemFactory extends PersistentObjectFactory
     public function cannotBeRented(): static
     {
         return $this->with([
+            'cannotBeRented' => true,
+        ]);
+    }
+
+    /**
+     * Mark item as removed from active inventory.
+     */
+    public function decommissioned(): static
+    {
+        return $this->with([
+            'decommissioned' => true,
             'cannotBeRented' => true,
         ]);
     }

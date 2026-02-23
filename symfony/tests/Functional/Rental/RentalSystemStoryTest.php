@@ -1178,6 +1178,57 @@ final class RentalSystemStoryTest extends FixturesWebTestCase
         self::assertNotNull($item->getId());
     }
 
+    public function testBookingEditFormDoesNotRenderDecommissionedItemChoices(): void
+    {
+        $category = $this->ensureClassificationFixtures();
+
+        $renter = RenterFactory::new()->create();
+
+        $visibleItem = ItemFactory::new()
+            ->withName('Visible Active Choice Item')
+            ->withRent('45.00')
+            ->withCategory($category)
+            ->rentable()
+            ->create();
+
+        $decommissionedItem = ItemFactory::new()
+            ->withName('Decommissioned Hidden Choice Item')
+            ->withRent('45.00')
+            ->withCategory($category)
+            ->rentable()
+            ->create();
+        $decommissionedItem->setDecommissioned(true);
+        $this->em()->flush();
+
+        $booking = BookingFactory::new()
+            ->forRenter($renter)
+            ->withName('Decommissioned Choice Filter Test')
+            ->create();
+
+        $this->loginAsRole('ROLE_SUPER_ADMIN');
+
+        $crawler = $this->client->request('GET', '/admin/booking/'.$booking->getId().'/edit');
+        self::assertResponseIsSuccessful();
+
+        self::assertGreaterThan(
+            0,
+            $crawler
+                ->filterXPath('//*[contains(normalize-space(.), "Visible Active Choice Item")]')
+                ->count(),
+            'Expected active item to appear as an option in the form.',
+        );
+        self::assertSame(
+            0,
+            $crawler
+                ->filterXPath('//*[contains(normalize-space(.), "Decommissioned Hidden Choice Item")]')
+                ->count(),
+            'Expected decommissioned item to be hidden from booking item choices.',
+        );
+
+        self::assertNotNull($visibleItem->getId());
+        self::assertNotNull($decommissionedItem->getId());
+    }
+
     public function testBookingEditFormRendersPackagesTypeChoices(): void
     {
         // Ensure required classification fixtures exist
@@ -1432,6 +1483,98 @@ final class RentalSystemStoryTest extends FixturesWebTestCase
         $latestEvent = $events->last();
         self::assertSame('Item requires fixing', $latestEvent->getDescription());
         self::assertSame($updatedItem, $latestEvent->getItem());
+    }
+
+    public function testStatusEventSubmitMarksItemDecommissioned(): void
+    {
+        $item = ItemFactory::new()->cloneable()->create();
+        $itemId = $item->getId();
+
+        self::assertFalse($item->getDecommissioned());
+
+        $this->loginAsRole('ROLE_SUPER_ADMIN');
+
+        $createUrl = '/admin/item/'.$itemId.'/status-event/create';
+        $crawler = $this->client->request('GET', $createUrl);
+        self::assertResponseIsSuccessful();
+
+        $formNode = null;
+        foreach ($crawler->filter('form')->each(static fn ($n) => $n) as $candidate) {
+            if ($candidate->filter('textarea[name*="[description]"]')->count() > 0) {
+                $formNode = $candidate;
+                break;
+            }
+        }
+        self::assertNotNull($formNode, 'Form with description field not found');
+
+        $form = $formNode->form();
+        $formValues = $form->getPhpValues();
+
+        $descriptionName = $formNode
+            ->filter('textarea[name*="[description]"]')
+            ->attr('name');
+        self::assertNotNull($descriptionName, 'Description field name not found');
+
+        $decommissionedName = $formNode
+            ->filter('input[name*="decommissioned"]')
+            ->attr('name');
+        self::assertNotNull($decommissionedName, 'Decommissioned field name not found');
+
+        $this->setFormFieldValueByName(
+            $formValues,
+            $descriptionName,
+            'Item removed from active inventory',
+        );
+        $this->setFormFieldValueByName($formValues, $decommissionedName, '1');
+
+        $this->client->request($form->getMethod(), $form->getUri(), $formValues);
+
+        $response = $this->client->getResponse();
+        if (!$response->isRedirect()) {
+            $errorCrawler = $this->client->getCrawler();
+            $errors = $errorCrawler->filter('.sonata-ba-field-error, .help-block, .invalid-feedback, .form-error-message, .alert-danger, .has-error');
+            $errorMessages = [];
+            foreach ($errors as $err) {
+                $text = trim($err->textContent);
+                if (!empty($text)) {
+                    $errorMessages[] = $text;
+                }
+            }
+            self::fail(
+                'Expected redirect after status event creation, got status: '.$response->getStatusCode().
+                '. Form errors: '.implode('; ', $errorMessages).
+                '. Form values submitted: '.json_encode($formValues)
+            );
+        }
+
+        $this->em()->clear();
+        $updatedItem = $this->em()->getRepository(\App\Entity\Rental\Inventory\Item::class)
+            ->find($itemId);
+        self::assertNotNull($updatedItem);
+
+        self::assertTrue($updatedItem->getDecommissioned(), 'Item should be marked as decommissioned');
+
+        $events = $updatedItem->getFixingHistory();
+        self::assertGreaterThan(0, $events->count(), 'StatusEvent should be created for item');
+        $latestEvent = $events->last();
+        self::assertSame('Item removed from active inventory', $latestEvent->getDescription());
+        self::assertSame($updatedItem, $latestEvent->getItem());
+    }
+
+    public function testItemEditFormDoesNotExposeItemStatusFlags(): void
+    {
+        $item = ItemFactory::new()->cloneable()->create();
+
+        $this->loginAsRole('ROLE_SUPER_ADMIN');
+
+        $crawler = $this->client->request('GET', '/admin/item/'.$item->getId().'/edit');
+        self::assertResponseIsSuccessful();
+
+        self::assertSame(0, $crawler->filter('input[name*="needsFixing"]')->count());
+        self::assertSame(0, $crawler->filter('input[name*="cannotBeRented"]')->count());
+        self::assertSame(0, $crawler->filter('input[name*="toSpareParts"]')->count());
+        self::assertSame(0, $crawler->filter('input[name*="forSale"]')->count());
+        self::assertSame(0, $crawler->filter('input[name*="decommissioned"]')->count());
     }
 
     public function testStatusEventSubmitMarkBookingCancelled(): void

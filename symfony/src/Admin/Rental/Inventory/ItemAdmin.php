@@ -59,6 +59,7 @@ class ItemAdmin extends AbstractRentalAdmin
             ->add('needsFixing')
             ->add('cannotBeRented')
             ->add('forSale')
+            ->add('decommissioned')
             ->add('category', CategoryFilter::class, [
                 // 'context' => $context,
             ]);
@@ -193,6 +194,7 @@ class ItemAdmin extends AbstractRentalAdmin
             ->add('cannotBeRented')
             ->add('rentHistory')
             ->add('forSale')
+            ->add('decommissioned')
             ->add('files')
             ->add('createdAt')
             ->add('updatedAt')
