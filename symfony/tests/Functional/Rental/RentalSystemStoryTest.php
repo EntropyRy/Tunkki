@@ -1561,6 +1561,87 @@ final class RentalSystemStoryTest extends FixturesWebTestCase
         self::assertSame($updatedItem, $latestEvent->getItem());
     }
 
+    public function testStatusEventFormLocksOtherItemFlagsWhenItemAlreadyDecommissioned(): void
+    {
+        $item = ItemFactory::new()
+            ->cloneable()
+            ->decommissioned()
+            ->needsFixing()
+            ->cannotBeRented()
+            ->forSale()
+            ->spareParts()
+            ->create();
+
+        $this->loginAsRole('ROLE_SUPER_ADMIN');
+
+        $crawler = $this->client->request('GET', '/admin/item/'.$item->getId().'/status-event/create');
+        self::assertResponseIsSuccessful();
+
+        self::assertGreaterThan(0, $crawler->filter('input[name*="decommissioned"]')->count());
+        self::assertSame(0, $crawler->filter('input[name*="needsFixing"]')->count());
+        self::assertSame(0, $crawler->filter('input[name*="cannotBeRented"]')->count());
+        self::assertSame(0, $crawler->filter('input[name*="toSpareParts"]')->count());
+        self::assertSame(0, $crawler->filter('input[name*="forSale"]')->count());
+    }
+
+    public function testStatusEventSubmitAllowsUndecommissioningWithoutEditingOtherFlags(): void
+    {
+        $item = ItemFactory::new()
+            ->cloneable()
+            ->decommissioned()
+            ->create();
+        $itemId = $item->getId();
+
+        self::assertTrue($item->getDecommissioned());
+        self::assertFalse($item->getNeedsFixing());
+        self::assertTrue($item->getCannotBeRented());
+        self::assertFalse((bool) $item->getForSale());
+        self::assertFalse($item->getToSpareParts());
+
+        $this->loginAsRole('ROLE_SUPER_ADMIN');
+
+        $createUrl = '/admin/item/'.$itemId.'/status-event/create';
+        $crawler = $this->client->request('GET', $createUrl);
+        self::assertResponseIsSuccessful();
+
+        $formNode = null;
+        foreach ($crawler->filter('form')->each(static fn ($n) => $n) as $candidate) {
+            if ($candidate->filter('textarea[name*="[description]"]')->count() > 0) {
+                $formNode = $candidate;
+                break;
+            }
+        }
+        self::assertNotNull($formNode, 'Form with description field not found');
+
+        $form = $formNode->form();
+        $descriptionName = $formNode
+            ->filter('textarea[name*="[description]"]')
+            ->attr('name');
+        self::assertNotNull($descriptionName, 'Description field name not found');
+
+        $decommissionedName = $formNode
+            ->filter('input[name*="decommissioned"]')
+            ->attr('name');
+        self::assertNotNull($decommissionedName, 'Decommissioned field name not found');
+
+        $form[$descriptionName] = 'Re-activating item from decommissioned state';
+        $form[$decommissionedName]->untick();
+
+        $this->client->submit($form);
+        self::assertTrue($this->client->getResponse()->isRedirect(), 'Expected redirect after status event creation');
+
+        $this->em()->clear();
+        $updatedItem = $this->em()->getRepository(\App\Entity\Rental\Inventory\Item::class)
+            ->find($itemId);
+        self::assertNotNull($updatedItem);
+
+        self::assertFalse($updatedItem->getDecommissioned(), 'Item can be un-decommissioned');
+        self::assertFalse($updatedItem->getNeedsFixing(), 'Needs fixing must remain unchanged');
+        self::assertTrue($updatedItem->getCannotBeRented(), 'Cannot be rented must remain unchanged');
+        self::assertFalse((bool) $updatedItem->getForSale(), 'For sale must remain unchanged');
+        self::assertFalse($updatedItem->getToSpareParts(), 'To spare parts must remain unchanged');
+    }
+
     public function testItemEditFormDoesNotExposeItemStatusFlags(): void
     {
         $item = ItemFactory::new()->cloneable()->create();
