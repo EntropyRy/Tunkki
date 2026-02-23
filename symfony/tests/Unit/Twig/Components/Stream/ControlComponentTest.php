@@ -26,7 +26,7 @@ final class ControlComponentTest extends TestCase
 
     public function testMountDoesNotThrowWhenSshStatusCheckFails(): void
     {
-        $ssh = $this->createMock(SSHServiceInterface::class);
+        $ssh = $this->createStub(SSHServiceInterface::class);
         $ssh
             ->method('checkStatus')
             ->willThrowException(new \RuntimeException('connection timeout'));
