@@ -628,6 +628,23 @@ shop:
       label: Email in which we will send your receipt
       help: We recommend that you <a href="/login">login</a> so that we can connect your account to your purchases.
     empty: Your cart is empty
+rental_request:
+  button: Request a rental
+  event_name: Event name
+  booking_date: Rental date
+  message: Message
+  renter_name: Name
+  email: Email
+  phone: Phone
+  streetadress: Street address
+  zipcode: Zip code
+  city: City
+  organization: Organization
+  default_name: Rental request
+  submit: Submit
+  cancel: Cancel
+  success: Rental request submitted successfully!
+  error: An error occurred while submitting the request. Please try again.
 icons:
   brand_icons_label: Brand Icons
   common_icons_label: Common Icons

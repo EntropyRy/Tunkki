@@ -839,6 +839,23 @@ e30v:
     email:
       label: Sähköposti, johon ostoksesi lähetetään
       help: Kannattaa kirjautua <a href="/login">sisään</a>, niin liitämme lipun tiliisi.
+rental_request:
+  button: Tee vuokrauspyyntö
+  event_name: Tapahtuman nimi
+  booking_date: Vuokrauspäivä
+  message: Viesti
+  renter_name: Nimi
+  email: Sähköposti
+  phone: Puhelin
+  streetadress: Katuosoite
+  zipcode: Postinumero
+  city: Kaupunki
+  organization: Organisaatio
+  default_name: Vuokrauspyyntö
+  submit: Lähetä
+  cancel: Peruuta
+  success: Vuokrauspyyntö lähetetty onnistuneesti!
+  error: Vuokrauspyynnön lähetyksessä tapahtui virhe. Yritä uudelleen.
 icons:
   brand_icons_label: Brändi-ikonit
   common_icons_label: Yleiset ikonit

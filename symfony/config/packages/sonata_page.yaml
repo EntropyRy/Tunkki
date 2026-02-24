@@ -91,6 +91,7 @@ sonata_page:
         - entropy_booking_hash
         - contract_show
         - path_test
+        - rental_request_submit
     ignore_uri_patterns:
         - ^/admin\/
         - ^/api\/

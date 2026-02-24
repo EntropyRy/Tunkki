@@ -1,0 +1,72 @@
+<div {{ attributes }}>
+    <style>
+        .rental-request-form label.required::after {
+            content: " *";
+            color: var(--bs-danger, #dc3545);
+        }
+    </style>
+    {% if this.notice %}
+        <div class="alert alert-success" role="status">{{ this.notice }}</div>
+    {% endif %}
+    {% if this.error %}
+        <div class="alert alert-warning" role="alert">{{ this.error }}</div>
+    {% endif %}
+
+    {% if not this.formOpen %}
+        <button data-action="live#action" data-live-action-param="openForm"
+                class="btn btn-primary">{{ 'rental_request.button'|trans }}</button>
+    {% else %}
+        {{ form_start(form, {
+            action: path('rental_request_submit'),
+            attr: {
+                class: 'rental-request-form',
+                'data-action': 'live#action:prevent',
+                'data-live-action-param': 'submit',
+            }
+        }) }}
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(form.eventName) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.bookingDate) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(form.renterName) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.organization) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(form.email) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.phone) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(form.streetadress) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_row(form.zipcode) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_row(form.city) }}
+                </div>
+            </div>
+            {{ form_row(form.message) }}
+            <div class="d-flex gap-2 mt-3">
+                <button type="submit" class="btn btn-primary"
+                        data-loading="addAttribute(disabled)">{{ 'rental_request.submit'|trans }}</button>
+                <button type="button" class="btn btn-secondary"
+                        data-action="live#action"
+                        data-live-action-param="closeForm">{{ 'rental_request.cancel'|trans }}</button>
+            </div>
+        {{ form_end(form) }}
+    {% endif %}
+</div>

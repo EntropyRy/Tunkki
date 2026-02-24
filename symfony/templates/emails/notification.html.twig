@@ -12,6 +12,11 @@
     </div>
     <div>Renter: {{ booking.renter }}</div>
     <div>Creator: {{ booking.creator }}</div>
+    {% if message is defined and message %}
+        <div style="margin: 10px 0; padding: 10px; background: #f5f5f5;">
+            <strong>Message:</strong><br>{{ message|nl2br }}
+        </div>
+    {% endif %}
 </td>
 </tr>
 <tr>

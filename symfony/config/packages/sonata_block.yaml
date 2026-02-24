@@ -8,5 +8,6 @@ sonata_block:
     entropy.block.artist_info: ~
     entropy.block.compensations:
       context: [frontend]
+    entropy.block.rental_form: ~
     sonata.media.block.media:
       settings: { template: 'block\media.html.twig' }
