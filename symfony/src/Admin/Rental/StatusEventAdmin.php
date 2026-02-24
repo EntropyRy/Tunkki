@@ -253,12 +253,12 @@ class StatusEventAdmin extends AbstractRentalAdmin
             ['id' => $Event->getId()],
             UrlGeneratorInterface::ABSOLUTE_URL,
         );
-        if (!empty($Event->getItem())) {
+        if ($Event->getItem() instanceof Item) {
             $thing = $Event->getItem();
             \assert($thing instanceof Item);
             $text = 'EVENT: ['.$thing->getName().']('.$url.') item status';
 
-            $before = $this->itemBeforeStates[\spl_object_id($Event)] ?? $this->snapshotItemStatus($thing);
+            $before = $this->itemBeforeStates[spl_object_id($Event)] ?? $this->snapshotItemStatus($thing);
             $after = $this->snapshotItemStatus($thing);
             $changes = $this->formatChanges($before, $after, $this->itemStatusLabels());
 
@@ -272,7 +272,7 @@ class StatusEventAdmin extends AbstractRentalAdmin
             \assert($thing instanceof Booking);
             $text = 'EVENT: ['.$thing->getName().']('.$url.') booking status';
 
-            $before = $this->bookingBeforeStates[\spl_object_id($Event)] ?? $this->snapshotBookingStatus($thing);
+            $before = $this->bookingBeforeStates[spl_object_id($Event)] ?? $this->snapshotBookingStatus($thing);
             $after = $this->snapshotBookingStatus($thing);
             $changes = $this->formatChanges($before, $after, $this->bookingStatusLabels());
 
@@ -291,7 +291,7 @@ class StatusEventAdmin extends AbstractRentalAdmin
 
     private function captureBeforeStates(StatusEvent $event): void
     {
-        $key = \spl_object_id($event);
+        $key = spl_object_id($event);
         $uow = $this->em->getUnitOfWork();
 
         $item = $event->getItem();
@@ -334,7 +334,7 @@ class StatusEventAdmin extends AbstractRentalAdmin
             return;
         }
 
-        $key = \spl_object_id($event);
+        $key = spl_object_id($event);
         $before = $this->itemBeforeStates[$key] ?? $this->snapshotItemStatus($item);
         $after = $this->snapshotItemStatus($item);
 
@@ -432,7 +432,7 @@ class StatusEventAdmin extends AbstractRentalAdmin
 
     private function clearTrackedStates(StatusEvent $event): void
     {
-        $key = \spl_object_id($event);
+        $key = spl_object_id($event);
         unset($this->itemBeforeStates[$key], $this->bookingBeforeStates[$key]);
     }
 

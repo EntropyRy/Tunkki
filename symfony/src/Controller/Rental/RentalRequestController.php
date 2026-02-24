@@ -59,9 +59,9 @@ class RentalRequestController extends AbstractController
         $entityManager->persist($renter);
 
         $booking = new Booking();
-        $bookingName = !empty($data['eventName'])
-            ? $data['eventName']
-            : $translator->trans('rental_request.default_name').' - '.$data['bookingDate']->format('d.m.Y');
+        $bookingName = empty($data['eventName'])
+            ? $translator->trans('rental_request.default_name').' - '.$data['bookingDate']->format('d.m.Y')
+            : $data['eventName'];
         $booking->setName($bookingName);
         $booking->setBookingDate($data['bookingDate']);
         $booking->setRenter($renter);
@@ -71,7 +71,7 @@ class RentalRequestController extends AbstractController
         $bookingReferenceService->assignReferenceAndHash($booking);
         $entityManager->flush();
 
-        $email = (new TemplatedEmail())
+        $email = new TemplatedEmail()
             ->from(new Address($bookingNotificationFromEmail, 'Tunkki'))
             ->to($bookingNotificationEmail)
             ->subject('New Rental Request: '.$bookingName)

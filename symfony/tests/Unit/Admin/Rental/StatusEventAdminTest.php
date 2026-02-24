@@ -43,7 +43,7 @@ final class StatusEventAdminTest extends TestCase
             user: $this->createUserStub(),
             mm: $this->createStub(MattermostNotifierService::class),
             originals: [
-                \spl_object_id($item) => [
+                spl_object_id($item) => [
                     'cannotBeRented' => false,
                     'needsFixing' => false,
                     'forSale' => false,
@@ -87,7 +87,7 @@ final class StatusEventAdminTest extends TestCase
             user: $this->createUserStub(),
             mm: $this->createStub(MattermostNotifierService::class),
             originals: [
-                \spl_object_id($item) => [
+                spl_object_id($item) => [
                     'cannotBeRented' => true,
                     'needsFixing' => false,
                     'forSale' => false,
@@ -195,7 +195,7 @@ final class StatusEventAdminTest extends TestCase
         $uow = $this->createStub(UnitOfWork::class);
         $uow
             ->method('getOriginalEntityData')
-            ->willReturnCallback(static fn (object $entity): array => $originals[\spl_object_id($entity)] ?? []);
+            ->willReturnCallback(static fn (object $entity): array => $originals[spl_object_id($entity)] ?? []);
 
         $em = $this->createStub(EntityManagerInterface::class);
         $em

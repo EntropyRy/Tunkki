@@ -96,9 +96,9 @@ final class RentalRequestForm
             }
 
             $booking = new Booking();
-            $bookingName = !empty($data['eventName'])
-                ? $data['eventName']
-                : $this->translator->trans('rental_request.default_name').' - '.$bookingDate->format('d.m.Y');
+            $bookingName = empty($data['eventName'])
+                ? $this->translator->trans('rental_request.default_name').' - '.$bookingDate->format('d.m.Y')
+                : $data['eventName'];
             $booking->setName($bookingName);
             $booking->setBookingDate($bookingDate);
             $booking->setRenter($renter);
@@ -108,7 +108,7 @@ final class RentalRequestForm
             $this->bookingReferenceService->assignReferenceAndHash($booking);
             $this->entityManager->flush();
 
-            $email = (new TemplatedEmail())
+            $email = new TemplatedEmail()
                 ->from(new Address($this->bookingNotificationFromEmail, 'Tunkki'))
                 ->to($this->bookingNotificationEmail)
                 ->subject('New Rental Request: '.$bookingName)
