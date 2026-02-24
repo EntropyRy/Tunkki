@@ -255,7 +255,6 @@ class StatusEventAdmin extends AbstractRentalAdmin
         );
         if ($Event->getItem() instanceof Item) {
             $thing = $Event->getItem();
-            \assert($thing instanceof Item);
             $text = 'EVENT: ['.$thing->getName().']('.$url.') item status';
 
             $before = $this->itemBeforeStates[spl_object_id($Event)] ?? $this->snapshotItemStatus($thing);
@@ -269,7 +268,6 @@ class StatusEventAdmin extends AbstractRentalAdmin
             }
         } else {
             $thing = $Event->getBooking();
-            \assert($thing instanceof Booking);
             $text = 'EVENT: ['.$thing->getName().']('.$url.') booking status';
 
             $before = $this->bookingBeforeStates[spl_object_id($Event)] ?? $this->snapshotBookingStatus($thing);
