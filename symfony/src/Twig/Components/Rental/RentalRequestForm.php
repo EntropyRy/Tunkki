@@ -7,6 +7,7 @@ namespace App\Twig\Components\Rental;
 use App\Entity\Rental\Booking\Booking;
 use App\Entity\Rental\Booking\Renter;
 use App\Form\Rental\Booking\RentalRequestType;
+use App\Service\MattermostNotifierService;
 use App\Service\Rental\Booking\BookingReferenceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -40,6 +41,7 @@ final class RentalRequestForm
         private readonly FormFactoryInterface $formFactory,
         private readonly EntityManagerInterface $entityManager,
         private readonly MailerInterface $mailer,
+        private readonly MattermostNotifierService $mattermostNotifier,
         private readonly BookingReferenceService $bookingReferenceService,
         private readonly TranslatorInterface $translator,
         private readonly string $bookingNotificationEmail,
@@ -107,6 +109,13 @@ final class RentalRequestForm
 
             $this->bookingReferenceService->assignReferenceAndHash($booking);
             $this->entityManager->flush();
+
+            $text = \sprintf(
+                '#### BOOKING REQUEST: %s on %s from the website',
+                $bookingName,
+                $booking->getBookingDate()->format('d.m.Y'),
+            );
+            $this->mattermostNotifier->sendToMattermost($text, 'vuokraus');
 
             $email = new TemplatedEmail()
                 ->from(new Address($this->bookingNotificationFromEmail, 'Tunkki'))

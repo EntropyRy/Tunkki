@@ -7,11 +7,22 @@ namespace App\Tests\Twig\Components\Rental;
 use App\Entity\Rental\Booking\Booking;
 use App\Entity\Rental\Booking\Renter;
 use App\Tests\Twig\Components\LiveComponentTestCase;
+use App\Tests\Support\Notifier\TestChatter;
 use App\Twig\Components\Rental\RentalRequestForm;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Symfony\Component\Notifier\ChatterInterface;
 
 final class RentalRequestFormTest extends LiveComponentTestCase
 {
+    private function getTestChatter(): TestChatter
+    {
+        $chatter = static::getContainer()->get(ChatterInterface::class);
+        self::assertInstanceOf(TestChatter::class, $chatter);
+        $chatter->reset();
+
+        return $chatter;
+    }
+
     public function testFormHiddenOnInitialRender(): void
     {
         $component = $this->mountComponent(RentalRequestForm::class);
@@ -52,6 +63,7 @@ final class RentalRequestFormTest extends LiveComponentTestCase
     public function testValidSubmissionCreatesBookingAndRenter(): void
     {
         $component = $this->mountComponent(RentalRequestForm::class, [], 'en');
+        $chatter = $this->getTestChatter();
 
         $component->call('openForm');
 
@@ -92,6 +104,9 @@ final class RentalRequestFormTest extends LiveComponentTestCase
         self::assertSame('2026-06-15', $booking->getBookingDate()->format('Y-m-d'));
         self::assertNotEmpty($booking->getReferenceNumber());
         self::assertNotEmpty($booking->getRenterHash());
+
+        self::assertCount(1, $chatter->messages);
+        self::assertSame('#### BOOKING REQUEST: Test Event on 15.06.2026 from the website', $chatter->messages[0]->getSubject());
     }
 
     public function testValidSubmissionAutoGeneratesBookingName(): void
