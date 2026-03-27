@@ -137,9 +137,9 @@ class Package implements \Stringable
         return $this->items;
     }
 
-    public function getRentFromItems(): int
+    public function getRentFromItems(): float
     {
-        $price = 0;
+        $price = 0.0;
         foreach ($this->getItems() as $item) {
             $price += $item->getRent();
         }
