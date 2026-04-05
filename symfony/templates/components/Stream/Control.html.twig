@@ -12,6 +12,7 @@
             </div>
         {% endif %}
         {% if this.streamStatus %}
+            <a href="{{ app.request.locale == 'fi' ? '/stream' : '/en/stream' }}" class="me-4 btn btn-success">{{ 'stream.add_your_artist'|trans }}</a>
             <a href="{{ path('recording_stop') }}" class="btn btn-danger" data-turbo="false">
                 <twig:ux:icon name="stop" />
                 {{ 'stream.control.stop'|trans }}
