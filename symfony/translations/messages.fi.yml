@@ -251,6 +251,7 @@ stream:
   recommended_quality: Paras laatu
   better_compatibility: Parempi yhteensopivuus
   listeners: kuuntelijoita
+  add_your_artist: Laita artistisi streamiin
   command:
     successful: Stream käsky OK
   control:

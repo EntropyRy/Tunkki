@@ -6,8 +6,8 @@ namespace App\Tests\Twig\Components\Rental;
 
 use App\Entity\Rental\Booking\Booking;
 use App\Entity\Rental\Booking\Renter;
-use App\Tests\Twig\Components\LiveComponentTestCase;
 use App\Tests\Support\Notifier\TestChatter;
+use App\Tests\Twig\Components\LiveComponentTestCase;
 use App\Twig\Components\Rental\RentalRequestForm;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Notifier\ChatterInterface;

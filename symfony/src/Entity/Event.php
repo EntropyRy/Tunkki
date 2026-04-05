@@ -329,7 +329,7 @@ class Event implements \Stringable
     public function setUpdatedAtValue(): void
     {
         $this->updatedAt = new \DateTimeImmutable();
-        $this->version = ($this->version ?? 0) + 1;
+        ++$this->version;
     }
 
     public function getId(): ?int

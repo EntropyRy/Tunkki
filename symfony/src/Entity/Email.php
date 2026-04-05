@@ -123,7 +123,7 @@ class Email implements \Stringable
      */
     public function getRecipientGroups(): array
     {
-        $recipientGroups = $this->recipientGroups ?? [];
+        $recipientGroups = $this->recipientGroups;
 
         // Convert strings to enum instances if needed (from JSON deserialization)
         return array_map(

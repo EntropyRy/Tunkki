@@ -162,6 +162,7 @@ stream:
     flac: Download Flac
     opus: Download Opus
   recommended_quality: Recommended quality
+  add_your_artist: Set your artist to the stream
   better_compatibility: Better compatibility
   listeners: Listeners
   command:
