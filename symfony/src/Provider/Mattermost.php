@@ -62,12 +62,10 @@ class Mattermost extends AbstractProvider
      *
      * @param array|string $data Parsed response data
      *
-     * @return void
-     *
      * @throws IdentityProviderException
      */
     #[\Override]
-    protected function checkResponse(ResponseInterface $response, $data)
+    protected function checkResponse(ResponseInterface $response, $data): void
     {
         if (!empty($data['error'])) {
             $error = $data['error']['message'] ?? '';
