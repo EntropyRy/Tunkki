@@ -2776,34 +2776,34 @@
         },
         {
             "name": "lcobucci/clock",
-            "version": "3.5.0",
+            "version": "3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lcobucci/clock.git",
-                "reference": "a3139d9e97d47826f27e6a17bb63f13621f86058"
+                "reference": "4cdd88f761e9be9095ccbedf3e08d61ae216c643"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/clock/zipball/a3139d9e97d47826f27e6a17bb63f13621f86058",
-                "reference": "a3139d9e97d47826f27e6a17bb63f13621f86058",
+                "url": "https://api.github.com/repos/lcobucci/clock/zipball/4cdd88f761e9be9095ccbedf3e08d61ae216c643",
+                "reference": "4cdd88f761e9be9095ccbedf3e08d61ae216c643",
                 "shasum": ""
             },
             "require": {
-                "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
+                "php": "~8.4.0 || ~8.5.0",
                 "psr/clock": "^1.0"
             },
             "provide": {
                 "psr/clock-implementation": "1.0"
             },
             "require-dev": {
-                "infection/infection": "^0.31",
-                "lcobucci/coding-standard": "^11.2.0",
+                "infection/infection": "^0.32",
+                "lcobucci/coding-standard": "^12.0",
                 "phpstan/extension-installer": "^1.3.1",
-                "phpstan/phpstan": "^2.0.0",
-                "phpstan/phpstan-deprecation-rules": "^2.0.0",
-                "phpstan/phpstan-phpunit": "^2.0.0",
-                "phpstan/phpstan-strict-rules": "^2.0.0",
-                "phpunit/phpunit": "^12.0.0"
+                "phpstan/phpstan": "^2.1",
+                "phpstan/phpstan-deprecation-rules": "^2.0",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "phpstan/phpstan-strict-rules": "^2.0",
+                "phpunit/phpunit": "^13.0"
             },
             "type": "library",
             "autoload": {
@@ -2824,7 +2824,7 @@
             "description": "Yet another clock abstraction",
             "support": {
                 "issues": "https://github.com/lcobucci/clock/issues",
-                "source": "https://github.com/lcobucci/clock/tree/3.5.0"
+                "source": "https://github.com/lcobucci/clock/tree/3.6.0"
             },
             "funding": [
                 {
@@ -2836,7 +2836,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2025-10-27T09:03:17+00:00"
+            "time": "2026-04-13T21:30:16+00:00"
         },
         {
             "name": "lcobucci/jwt",
@@ -9604,7 +9604,7 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.34.0",
+            "version": "v1.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
@@ -9663,7 +9663,7 @@
                 "portable"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.34.0"
+                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.35.0"
             },
             "funding": [
                 {
@@ -9687,7 +9687,7 @@
         },
         {
             "name": "symfony/polyfill-intl-grapheme",
-            "version": "v1.34.0",
+            "version": "v1.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-grapheme.git",
@@ -9745,7 +9745,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-intl-grapheme/tree/v1.34.0"
+                "source": "https://github.com/symfony/polyfill-intl-grapheme/tree/v1.35.0"
             },
             "funding": [
                 {
@@ -9769,7 +9769,7 @@
         },
         {
             "name": "symfony/polyfill-intl-icu",
-            "version": "v1.34.0",
+            "version": "v1.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-icu.git",
@@ -9833,7 +9833,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-intl-icu/tree/v1.34.0"
+                "source": "https://github.com/symfony/polyfill-intl-icu/tree/v1.35.0"
             },
             "funding": [
                 {
@@ -9857,7 +9857,7 @@
         },
         {
             "name": "symfony/polyfill-intl-idn",
-            "version": "v1.34.0",
+            "version": "v1.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-idn.git",
@@ -9920,7 +9920,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-intl-idn/tree/v1.34.0"
+                "source": "https://github.com/symfony/polyfill-intl-idn/tree/v1.35.0"
             },
             "funding": [
                 {
@@ -9944,7 +9944,7 @@
         },
         {
             "name": "symfony/polyfill-intl-normalizer",
-            "version": "v1.34.0",
+            "version": "v1.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-normalizer.git",
@@ -10005,7 +10005,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.34.0"
+                "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.35.0"
             },
             "funding": [
                 {
@@ -10029,7 +10029,7 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.34.0",
+            "version": "v1.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
@@ -10090,7 +10090,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.34.0"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.35.0"
             },
             "funding": [
                 {
@@ -10114,7 +10114,7 @@
         },
         {
             "name": "symfony/polyfill-php80",
-            "version": "v1.34.0",
+            "version": "v1.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php80.git",
@@ -10174,7 +10174,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php80/tree/v1.34.0"
+                "source": "https://github.com/symfony/polyfill-php80/tree/v1.35.0"
             },
             "funding": [
                 {
@@ -10198,7 +10198,7 @@
         },
         {
             "name": "symfony/polyfill-php83",
-            "version": "v1.34.0",
+            "version": "v1.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php83.git",
@@ -10254,7 +10254,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php83/tree/v1.34.0"
+                "source": "https://github.com/symfony/polyfill-php83/tree/v1.35.0"
             },
             "funding": [
                 {
@@ -10278,7 +10278,7 @@
         },
         {
             "name": "symfony/polyfill-php84",
-            "version": "v1.34.0",
+            "version": "v1.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php84.git",
@@ -10334,7 +10334,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php84/tree/v1.34.0"
+                "source": "https://github.com/symfony/polyfill-php84/tree/v1.35.0"
             },
             "funding": [
                 {
@@ -10358,7 +10358,7 @@
         },
         {
             "name": "symfony/polyfill-php85",
-            "version": "v1.34.0",
+            "version": "v1.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php85.git",
@@ -10414,7 +10414,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php85/tree/v1.34.0"
+                "source": "https://github.com/symfony/polyfill-php85/tree/v1.35.0"
             },
             "funding": [
                 {
@@ -11490,16 +11490,16 @@
         },
         {
             "name": "symfony/stimulus-bundle",
-            "version": "v2.34.0",
+            "version": "v2.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/stimulus-bundle.git",
-                "reference": "d610a2e021cf63f955838b4bfe40da7e4cafe850"
+                "reference": "05af0259f201dbbd15c103bea289989a4b483b5b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/stimulus-bundle/zipball/d610a2e021cf63f955838b4bfe40da7e4cafe850",
-                "reference": "d610a2e021cf63f955838b4bfe40da7e4cafe850",
+                "url": "https://api.github.com/repos/symfony/stimulus-bundle/zipball/05af0259f201dbbd15c103bea289989a4b483b5b",
+                "reference": "05af0259f201dbbd15c103bea289989a4b483b5b",
                 "shasum": ""
             },
             "require": {
@@ -11539,7 +11539,7 @@
                 "symfony-ux"
             ],
             "support": {
-                "source": "https://github.com/symfony/stimulus-bundle/tree/v2.34.0"
+                "source": "https://github.com/symfony/stimulus-bundle/tree/v2.35.0"
             },
             "funding": [
                 {
@@ -11559,7 +11559,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-03-21T22:29:11+00:00"
+            "time": "2026-03-22T22:21:50+00:00"
         },
         {
             "name": "symfony/stopwatch",
@@ -12262,16 +12262,16 @@
         },
         {
             "name": "symfony/ux-autocomplete",
-            "version": "v2.34.0",
+            "version": "v2.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-autocomplete.git",
-                "reference": "64983e630e687ae086e09d5fc0a7b5271a7747d7"
+                "reference": "3c75ece172d426553dc60a59222833e6194f645c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-autocomplete/zipball/64983e630e687ae086e09d5fc0a7b5271a7747d7",
-                "reference": "64983e630e687ae086e09d5fc0a7b5271a7747d7",
+                "url": "https://api.github.com/repos/symfony/ux-autocomplete/zipball/3c75ece172d426553dc60a59222833e6194f645c",
+                "reference": "3c75ece172d426553dc60a59222833e6194f645c",
                 "shasum": ""
             },
             "require": {
@@ -12332,7 +12332,7 @@
                 "symfony-ux"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-autocomplete/tree/v2.34.0"
+                "source": "https://github.com/symfony/ux-autocomplete/tree/v2.35.0"
             },
             "funding": [
                 {
@@ -12352,20 +12352,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-03-21T22:29:11+00:00"
+            "time": "2026-04-05T05:11:34+00:00"
         },
         {
             "name": "symfony/ux-icons",
-            "version": "v2.34.0",
+            "version": "v2.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-icons.git",
-                "reference": "b587495ec81bda7779ebef092dd0d3558767a254"
+                "reference": "f413a434caeaab4b237d6970d424f125e2bc41cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-icons/zipball/b587495ec81bda7779ebef092dd0d3558767a254",
-                "reference": "b587495ec81bda7779ebef092dd0d3558767a254",
+                "url": "https://api.github.com/repos/symfony/ux-icons/zipball/f413a434caeaab4b237d6970d424f125e2bc41cf",
+                "reference": "f413a434caeaab4b237d6970d424f125e2bc41cf",
                 "shasum": ""
             },
             "require": {
@@ -12383,7 +12383,7 @@
                 "symfony/console": "^6.4|^7.0|^8.0",
                 "symfony/http-client": "^6.4|^7.0|^8.0",
                 "symfony/phpunit-bridge": "^6.3|^7.0|^8.0",
-                "symfony/ux-twig-component": "^2.14",
+                "symfony/ux-twig-component": "^2.14|^3.0",
                 "zenstruck/console-test": "^1.5"
             },
             "type": "symfony-bundle",
@@ -12425,7 +12425,7 @@
                 "twig"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-icons/tree/v2.34.0"
+                "source": "https://github.com/symfony/ux-icons/tree/v2.35.0"
             },
             "funding": [
                 {
@@ -12445,32 +12445,32 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-02-26T12:39:55+00:00"
+            "time": "2026-04-03T05:13:59+00:00"
         },
         {
             "name": "symfony/ux-leaflet-map",
-            "version": "v2.34.0",
+            "version": "v2.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-leaflet-map.git",
-                "reference": "89e5ed2dfe932b99cd492404a42bb1dc0d18bbff"
+                "reference": "cd0aad8c53fb7e27665a21251a68a7a00ddf0a6b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-leaflet-map/zipball/89e5ed2dfe932b99cd492404a42bb1dc0d18bbff",
-                "reference": "89e5ed2dfe932b99cd492404a42bb1dc0d18bbff",
+                "url": "https://api.github.com/repos/symfony/ux-leaflet-map/zipball/cd0aad8c53fb7e27665a21251a68a7a00ddf0a6b",
+                "reference": "cd0aad8c53fb7e27665a21251a68a7a00ddf0a6b",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1",
-                "symfony/stimulus-bundle": "^2.18.1",
-                "symfony/ux-map": "^2.19"
+                "symfony/stimulus-bundle": "^2.18.1|^3.0",
+                "symfony/ux-map": "^2.19|^3.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.6.22",
                 "spatie/phpunit-snapshot-assertions": "^4.2.17|^5.2.3",
                 "symfony/phpunit-bridge": "^7.2|^8.0",
-                "symfony/ux-icons": "^2.18"
+                "symfony/ux-icons": "^2.18|^3.0"
             },
             "type": "symfony-ux-map-bridge",
             "autoload": {
@@ -12501,7 +12501,7 @@
                 "symfony-ux"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-leaflet-map/tree/v2.34.0"
+                "source": "https://github.com/symfony/ux-leaflet-map/tree/v2.35.0"
             },
             "funding": [
                 {
@@ -12521,20 +12521,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-03-21T22:29:11+00:00"
+            "time": "2026-04-03T05:13:59+00:00"
         },
         {
             "name": "symfony/ux-live-component",
-            "version": "v2.34.0",
+            "version": "v2.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-live-component.git",
-                "reference": "f246c189192121781c267e26a64ff6942ef61ab6"
+                "reference": "6d8ee60793415ce57806f0618e575afe67dab8e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-live-component/zipball/f246c189192121781c267e26a64ff6942ef61ab6",
-                "reference": "f246c189192121781c267e26a64ff6942ef61ab6",
+                "url": "https://api.github.com/repos/symfony/ux-live-component/zipball/6d8ee60793415ce57806f0618e575afe67dab8e1",
+                "reference": "6d8ee60793415ce57806f0618e575afe67dab8e1",
                 "shasum": ""
             },
             "require": {
@@ -12542,8 +12542,8 @@
                 "symfony/deprecation-contracts": "^2.5|^3.0",
                 "symfony/property-access": "^5.4.5|^6.0|^7.0|^8.0",
                 "symfony/property-info": "^5.4|^6.0|^7.0|^8.0",
-                "symfony/stimulus-bundle": "^2.9",
-                "symfony/ux-twig-component": "^2.33.0",
+                "symfony/stimulus-bundle": "^2.9|^3.0",
+                "symfony/ux-twig-component": "^2.33.0|^3.0",
                 "twig/twig": "^3.10.3"
             },
             "conflict": {
@@ -12604,7 +12604,7 @@
                 "twig"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-live-component/tree/v2.34.0"
+                "source": "https://github.com/symfony/ux-live-component/tree/v2.35.0"
             },
             "funding": [
                 {
@@ -12624,25 +12624,25 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-03-21T22:29:11+00:00"
+            "time": "2026-04-04T16:24:09+00:00"
         },
         {
             "name": "symfony/ux-map",
-            "version": "v2.34.0",
+            "version": "v2.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-map.git",
-                "reference": "e6163d034a101822cf5ed8a88766f3eef4492d2c"
+                "reference": "052e2ba83206bae096f25015f3354b4eb776f4fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-map/zipball/e6163d034a101822cf5ed8a88766f3eef4492d2c",
-                "reference": "e6163d034a101822cf5ed8a88766f3eef4492d2c",
+                "url": "https://api.github.com/repos/symfony/ux-map/zipball/052e2ba83206bae096f25015f3354b4eb776f4fa",
+                "reference": "052e2ba83206bae096f25015f3354b4eb776f4fa",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1",
-                "symfony/stimulus-bundle": "^2.18.1"
+                "symfony/stimulus-bundle": "^2.18.1|^3.0"
             },
             "conflict": {
                 "symfony/ux-twig-component": "<2.21"
@@ -12654,8 +12654,8 @@
                 "symfony/framework-bundle": "^6.4|^7.0|^8.0",
                 "symfony/phpunit-bridge": "^7.2|^8.0",
                 "symfony/twig-bundle": "^6.4|^7.0|^8.0",
-                "symfony/ux-icons": "^2.18",
-                "symfony/ux-twig-component": "^2.18|^8.0"
+                "symfony/ux-icons": "^2.18|^3.0",
+                "symfony/ux-twig-component": "^2.18|^3.0"
             },
             "type": "symfony-bundle",
             "extra": {
@@ -12693,7 +12693,7 @@
                 "symfony-ux"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-map/tree/v2.34.0"
+                "source": "https://github.com/symfony/ux-map/tree/v2.35.0"
             },
             "funding": [
                 {
@@ -12713,25 +12713,25 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-03-21T22:29:11+00:00"
+            "time": "2026-04-03T05:13:59+00:00"
         },
         {
             "name": "symfony/ux-turbo",
-            "version": "v2.34.0",
+            "version": "v2.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-turbo.git",
-                "reference": "87511f621db238302a3bb819958a72feda27fc45"
+                "reference": "4309a4299f5f1b9b7ce4c13ed6d1b77a5472c216"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-turbo/zipball/87511f621db238302a3bb819958a72feda27fc45",
-                "reference": "87511f621db238302a3bb819958a72feda27fc45",
+                "url": "https://api.github.com/repos/symfony/ux-turbo/zipball/4309a4299f5f1b9b7ce4c13ed6d1b77a5472c216",
+                "reference": "4309a4299f5f1b9b7ce4c13ed6d1b77a5472c216",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1",
-                "symfony/stimulus-bundle": "^2.9.1"
+                "symfony/stimulus-bundle": "^2.9.1|^3.0"
             },
             "conflict": {
                 "symfony/flex": "<1.13"
@@ -12756,7 +12756,7 @@
                 "symfony/security-core": "^5.4|^6.0|^7.0|^8.0",
                 "symfony/stopwatch": "^5.4|^6.0|^7.0|^8.0",
                 "symfony/twig-bundle": "^6.4|^7.0|^8.0",
-                "symfony/ux-twig-component": "^2.21",
+                "symfony/ux-twig-component": "^2.21|^3.0",
                 "symfony/web-profiler-bundle": "^5.4|^6.0|^7.0|^8.0"
             },
             "type": "symfony-bundle",
@@ -12796,7 +12796,7 @@
                 "turbo-stream"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-turbo/tree/v2.34.0"
+                "source": "https://github.com/symfony/ux-turbo/tree/v2.35.0"
             },
             "funding": [
                 {
@@ -12816,20 +12816,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-03-21T22:29:11+00:00"
+            "time": "2026-04-03T05:13:59+00:00"
         },
         {
             "name": "symfony/ux-twig-component",
-            "version": "v2.34.0",
+            "version": "v2.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-twig-component.git",
-                "reference": "f9942e32246fe3fa9d31f60cffc1ada4d274830a"
+                "reference": "d64b068d8339e905cd48974bdd6e9ba54dc8f247"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-twig-component/zipball/f9942e32246fe3fa9d31f60cffc1ada4d274830a",
-                "reference": "f9942e32246fe3fa9d31f60cffc1ada4d274830a",
+                "url": "https://api.github.com/repos/symfony/ux-twig-component/zipball/d64b068d8339e905cd48974bdd6e9ba54dc8f247",
+                "reference": "d64b068d8339e905cd48974bdd6e9ba54dc8f247",
                 "shasum": ""
             },
             "require": {
@@ -12849,9 +12849,11 @@
                 "symfony/dom-crawler": "^5.4|^6.0|^7.0|^8.0",
                 "symfony/framework-bundle": "^5.4|^6.0|^7.0|^8.0",
                 "symfony/phpunit-bridge": "^6.0|^7.0|^8.0",
-                "symfony/stimulus-bundle": "^2.9.1",
+                "symfony/stimulus-bundle": "^2.9.1|^3.0",
                 "symfony/twig-bundle": "^5.4|^6.0|^7.0|^8.0",
-                "symfony/webpack-encore-bundle": "^1.15|^2.3.0"
+                "symfony/webpack-encore-bundle": "^1.15|^2.3.0",
+                "twig/extra-bundle": "^3.10.3",
+                "twig/html-extra": "^3.10.3"
             },
             "type": "symfony-bundle",
             "extra": {
@@ -12883,7 +12885,7 @@
                 "twig"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-twig-component/tree/v2.34.0"
+                "source": "https://github.com/symfony/ux-twig-component/tree/v2.35.0"
             },
             "funding": [
                 {
@@ -12903,7 +12905,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-03-15T18:48:53+00:00"
+            "time": "2026-04-03T05:13:59+00:00"
         },
         {
             "name": "symfony/validator",
@@ -15805,11 +15807,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.46",
+            "version": "2.1.47",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/a193923fc2d6325ef4e741cf3af8c3e8f54dbf25",
-                "reference": "a193923fc2d6325ef4e741cf3af8c3e8f54dbf25",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/79015445d8bd79e62b29140f12e5bfced1dcca65",
+                "reference": "79015445d8bd79e62b29140f12e5bfced1dcca65",
                 "shasum": ""
             },
             "require": {
@@ -15854,7 +15856,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-04-01T09:25:14+00:00"
+            "time": "2026-04-13T15:49:08+00:00"
         },
         {
             "name": "phpstan/phpstan-doctrine",
@@ -16008,16 +16010,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "12.5.4",
+            "version": "12.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "e70f9f8870918ec31991d69133385964834f9c5a"
+                "reference": "a25bde1f8f83849f441ef5713c6466e470872a71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/e70f9f8870918ec31991d69133385964834f9c5a",
-                "reference": "e70f9f8870918ec31991d69133385964834f9c5a",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/a25bde1f8f83849f441ef5713c6466e470872a71",
+                "reference": "a25bde1f8f83849f441ef5713c6466e470872a71",
                 "shasum": ""
             },
             "require": {
@@ -16072,7 +16074,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
                 "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/12.5.4"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/12.5.5"
             },
             "funding": [
                 {
@@ -16092,7 +16094,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-04-12T05:05:15+00:00"
+            "time": "2026-04-13T04:53:32+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -16353,16 +16355,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "12.5.17",
+            "version": "12.5.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "85b62adab1a340982df64e66daa4a4435eb5723b"
+                "reference": "92f7744ca5f5701c9e4b4a60d9e143f2d84956da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/85b62adab1a340982df64e66daa4a4435eb5723b",
-                "reference": "85b62adab1a340982df64e66daa4a4435eb5723b",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/92f7744ca5f5701c9e4b4a60d9e143f2d84956da",
+                "reference": "92f7744ca5f5701c9e4b4a60d9e143f2d84956da",
                 "shasum": ""
             },
             "require": {
@@ -16376,13 +16378,13 @@
                 "phar-io/manifest": "^2.0.4",
                 "phar-io/version": "^3.2.1",
                 "php": ">=8.3",
-                "phpunit/php-code-coverage": "^12.5.3",
+                "phpunit/php-code-coverage": "^12.5.5",
                 "phpunit/php-file-iterator": "^6.0.1",
                 "phpunit/php-invoker": "^6.0.0",
                 "phpunit/php-text-template": "^5.0.0",
                 "phpunit/php-timer": "^8.0.0",
                 "sebastian/cli-parser": "^4.2.0",
-                "sebastian/comparator": "^7.1.4",
+                "sebastian/comparator": "^7.1.5",
                 "sebastian/diff": "^7.0.0",
                 "sebastian/environment": "^8.0.4",
                 "sebastian/exporter": "^7.0.2",
@@ -16431,7 +16433,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.17"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.19"
             },
             "funding": [
                 {
@@ -16439,7 +16441,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2026-04-08T03:04:19+00:00"
+            "time": "2026-04-13T05:38:19+00:00"
         },
         {
             "name": "react/cache",
@@ -17230,16 +17232,16 @@
         },
         {
             "name": "sebastian/comparator",
-            "version": "7.1.5",
+            "version": "7.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/comparator.git",
-                "reference": "c284f55811f43d555e51e8e5c166ac40d3e33c63"
+                "reference": "c769009dee98f494e0edc3fd4f4087501688f11e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/c284f55811f43d555e51e8e5c166ac40d3e33c63",
-                "reference": "c284f55811f43d555e51e8e5c166ac40d3e33c63",
+                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/c769009dee98f494e0edc3fd4f4087501688f11e",
+                "reference": "c769009dee98f494e0edc3fd4f4087501688f11e",
                 "shasum": ""
             },
             "require": {
@@ -17298,7 +17300,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/comparator/issues",
                 "security": "https://github.com/sebastianbergmann/comparator/security/policy",
-                "source": "https://github.com/sebastianbergmann/comparator/tree/7.1.5"
+                "source": "https://github.com/sebastianbergmann/comparator/tree/7.1.6"
             },
             "funding": [
                 {
@@ -17318,7 +17320,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-04-08T04:43:00+00:00"
+            "time": "2026-04-14T08:23:15+00:00"
         },
         {
             "name": "sebastian/complexity",
@@ -18587,7 +18589,7 @@
         },
         {
             "name": "symfony/polyfill-php81",
-            "version": "v1.34.0",
+            "version": "v1.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php81.git",
@@ -18643,7 +18645,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php81/tree/v1.34.0"
+                "source": "https://github.com/symfony/polyfill-php81/tree/v1.35.0"
             },
             "funding": [
                 {
