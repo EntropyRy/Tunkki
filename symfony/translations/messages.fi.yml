@@ -857,6 +857,7 @@ rental_request:
   cancel: Peruuta
   success: Vuokrauspyyntö lähetetty onnistuneesti!
   error: Vuokrauspyynnön lähetyksessä tapahtui virhe. Yritä uudelleen.
+  message_template: "Voit täyttää alla olevat kohdat tai kirjoittaa viestisi vapaasti.\n\nKuinka monta henkilöä tapahtumassanne on?\nMissä tapahtuma järjestetään?\nTarvitsetteko valotekniikkaa?\nTarvitsetteko äänentoistoa? Jos kyllä, millaista kalustoa tarvitsette (esim. kaiuttimet, mikrofoni, mikseri)?\nTarvitsetteko DJ-kaluston (esim. levysoittimet, DJ-mikseri)? Jos kyllä, mitä?"
 icons:
   brand_icons_label: Brändi-ikonit
   common_icons_label: Yleiset ikonit

@@ -646,6 +646,7 @@ rental_request:
   cancel: Cancel
   success: Rental request submitted successfully!
   error: An error occurred while submitting the request. Please try again.
+  message_template: "You can fill in the fields below or write your message freely.\n\nHow many people are expected at your event?\nWhere will the event take place?\nDo you need lighting equipment?\nDo you need a sound system? If yes, what kind of equipment (e.g. speakers, microphone, mixer)?\nDo you need DJ equipment (e.g. turntables, DJ mixer)? If yes, what?"
 icons:
   brand_icons_label: Brand Icons
   common_icons_label: Common Icons

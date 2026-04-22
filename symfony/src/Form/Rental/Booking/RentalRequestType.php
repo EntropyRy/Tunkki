@@ -14,10 +14,15 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /** @extends AbstractType<array<string, mixed>> */
 class RentalRequestType extends AbstractType
 {
+    public function __construct(private readonly TranslatorInterface $translator)
+    {
+    }
+
     #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -79,6 +84,8 @@ class RentalRequestType extends AbstractType
             ->add('message', TextareaType::class, [
                 'required' => false,
                 'label' => 'rental_request.message',
+                'data' => $this->translator->trans('rental_request.message_template'),
+                'attr' => ['rows' => 8],
             ])
         ;
     }
