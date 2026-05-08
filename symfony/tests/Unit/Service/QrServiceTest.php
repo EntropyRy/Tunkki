@@ -172,10 +172,8 @@ final class QrServiceTest extends TestCase
 
     public function testGetQrThrowsExceptionForEmptyString(): void
     {
-        $this->assetMapper->expects($this->once())
-            ->method('getPublicPath')
-            ->with('images/golden-logo.png')
-            ->willReturn('/assets/images/golden-logo.png');
+        $this->assetMapper->expects($this->never())
+            ->method('getPublicPath');
 
         $this->expectException(\BaconQrCode\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Found empty contents');
