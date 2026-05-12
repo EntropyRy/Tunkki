@@ -107,7 +107,7 @@ return [
         'version' => '2.30.1',
     ],
     'es-module-shims' => [
-        'version' => '2.8.0',
+        'version' => '2.8.1',
     ],
     'bootstrap/dist/css/bootstrap.min.css' => [
         'version' => '5.3.8',
@@ -151,7 +151,7 @@ return [
         'type' => 'css',
     ],
     'tom-select' => [
-        'version' => '2.6.0',
+        'version' => '2.6.1',
     ],
     '@orchidjs/sifter' => [
         'version' => '1.1.0',
@@ -160,19 +160,19 @@ return [
         'version' => '1.1.2',
     ],
     'tom-select/dist/css/tom-select.default.min.css' => [
-        'version' => '2.6.0',
+        'version' => '2.6.1',
         'type' => 'css',
     ],
     'tom-select/dist/css/tom-select.default.css' => [
-        'version' => '2.6.0',
+        'version' => '2.6.1',
         'type' => 'css',
     ],
     'tom-select/dist/css/tom-select.bootstrap4.css' => [
-        'version' => '2.6.0',
+        'version' => '2.6.1',
         'type' => 'css',
     ],
     'tom-select/dist/css/tom-select.bootstrap5.css' => [
-        'version' => '2.6.0',
+        'version' => '2.6.1',
         'type' => 'css',
     ],
     '@toast-ui/editor' => [
