@@ -18,6 +18,8 @@ parameters:
   router.request_context.scheme: "%env(SCHEME)%"
   stripe_public_key: "%env(STRIPE_PUBLISHABLE_KEY)%"
   stripe_secret_key: "%env(STRIPE_SECRET_KEY)%"
+  stripe_webhook_signature_key: "%env(STRIPE_WEBHOOK_SIGNATURE_KEY)%"
+  stripe_check_signature: true
 
   mattermost_channels:
     yhdistys: "us4g1ifbn7df7b3ds373y94uow"
@@ -495,6 +497,9 @@ services:
         }
 
 when@dev:
+  parameters:
+    stripe_check_signature: false
+    stripe_webhook_signature_key: "dummy"
   services:
     # Register Factory and Story classes for dev environment
     App\Factory\:
@@ -531,6 +536,8 @@ when@test:
     test.fixed_datetime: "2025-01-01T12:00:00+02:00"
     stripe_public_key: "pk_test_dummy"
     stripe_secret_key: "sk_test_dummy"
+    stripe_webhook_signature_key: "dummy"
+    stripe_check_signature: false
   services:
     # Register Factory and Story classes for test environment
     App\Factory\:

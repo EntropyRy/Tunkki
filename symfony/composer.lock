@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3c13182d467149e0831b2cc226840384",
+    "content-hash": "bd66ec07de2ffa1b03176bdc392e12cc",
     "packages": [
         {
             "name": "arkounay/ux-collection",
@@ -1839,70 +1839,6 @@
                 "source": "https://github.com/markuspoerschke/iCal"
             },
             "time": "2026-01-07T21:34:08+00:00"
-        },
-        {
-            "name": "fpt/stripe-bundle",
-            "version": "0.13",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/FabienPapet/stripe-bundle.git",
-                "reference": "ca228044472679a52a1404855c34e500ce808039"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/FabienPapet/stripe-bundle/zipball/ca228044472679a52a1404855c34e500ce808039",
-                "reference": "ca228044472679a52a1404855c34e500ce808039",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "php": "^8.0",
-                "stripe/stripe-php": ">=7",
-                "symfony/framework-bundle": "^5.4|^6.0|^7.0",
-                "symfony/http-client": "^5.4|^6.0|^7.0"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.9",
-                "phpstan/phpstan": "^1.8",
-                "phpunit/phpunit": "^9.5",
-                "symfony/browser-kit": "^5.4|^6.0|^7.0",
-                "twig/twig": "^v3.4.1"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-4": {
-                    "Fpt\\StripeBundle\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Papet",
-                    "email": "fabien.papet@gmail.com"
-                }
-            ],
-            "description": "Stripe bundle for Symfony 5.4 / 6 / 7",
-            "keywords": [
-                "bundle",
-                "php",
-                "stripe",
-                "symfony",
-                "webhook"
-            ],
-            "support": {
-                "issues": "https://github.com/FabienPapet/stripe-bundle/issues",
-                "source": "https://github.com/FabienPapet/stripe-bundle/tree/0.13"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/FabienPapet",
-                    "type": "github"
-                }
-            ],
-            "time": "2024-10-01T21:38:23+00:00"
         },
         {
             "name": "friendsofsymfony/ckeditor-bundle",

@@ -1,17 +1,7 @@
-fpt_stripe:
-  credentials:
-    publishable_key: "%env(STRIPE_PUBLISHABLE_KEY)%"
-    secret_key: "%env(STRIPE_SECRET_KEY)%"
-  webhook:
-    check_signature: true
-    signature_key: "%env(STRIPE_WEBHOOK_SIGNATURE_KEY)%"
+services:
+    stripe.client:
+        class: 'Stripe\StripeClient'
+        arguments:
+            - '%env(STRIPE_SECRET_KEY)%'
 
-when@dev:
-  fpt_stripe:
-    webhook:
-      check_signature: false
-
-when@test:
-  fpt_stripe:
-    webhook:
-      check_signature: false
+    Stripe\StripeClient: '@stripe.client'

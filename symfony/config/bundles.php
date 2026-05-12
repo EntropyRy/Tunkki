@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 return [
     Doctrine\Bundle\DoctrineBundle\DoctrineBundle::class => ['all' => true],
     FOS\CKEditorBundle\FOSCKEditorBundle::class => ['all' => true],
@@ -36,7 +34,6 @@ return [
     League\Bundle\OAuth2ServerBundle\LeagueOAuth2ServerBundle::class => ['all' => true],
     Symfony\UX\StimulusBundle\StimulusBundle::class => ['all' => true],
     Arkounay\Bundle\UxCollectionBundle\ArkounayUxCollectionBundle::class => ['all' => true],
-    Fpt\StripeBundle\FptStripeBundle::class => ['all' => true],
     Symfony\UX\Icons\UXIconsBundle::class => ['all' => true],
     Symfony\UX\TwigComponent\TwigComponentBundle::class => ['all' => true],
     Symfony\UX\LiveComponent\LiveComponentBundle::class => ['all' => true],

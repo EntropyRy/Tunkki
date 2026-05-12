@@ -89,19 +89,6 @@
     "egulias/email-validator": {
         "version": "2.1.11"
     },
-    "fpt/stripe-bundle": {
-        "version": "0.11",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "main",
-            "version": "0.5",
-            "ref": "b08d10161bfafa6dfa58f73d5151cc021187038f"
-        },
-        "files": [
-            "config/packages/stripe.yaml",
-            "config/routes/stripe.yaml"
-        ]
-    },
     "friendsofphp/php-cs-fixer": {
         "version": "3.88",
         "recipe": {
@@ -347,7 +334,7 @@
         ]
     },
     "stripe/stripe-php": {
-        "version": "19.0",
+        "version": "20.1",
         "recipe": {
             "repo": "github.com/symfony/recipes-contrib",
             "branch": "main",

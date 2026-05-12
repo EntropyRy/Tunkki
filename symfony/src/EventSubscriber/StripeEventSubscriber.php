@@ -18,8 +18,8 @@ use App\Service\MattermostNotifierService;
 use App\Service\QrService;
 use App\Service\Rental\Booking\BookingReferenceService;
 use App\Service\StripeServiceInterface;
-use Fpt\StripeBundle\Event\StripeEvents;
-use Fpt\StripeBundle\Event\StripeWebhook;
+use App\Webhook\StripeEventNames;
+use App\Webhook\StripeWebhookEvent;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -43,16 +43,16 @@ class StripeEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            StripeEvents::PRICE_CREATED => 'onPriceCreated',
-            StripeEvents::PRICE_UPDATED => 'onPriceUpdated',
-            StripeEvents::PRICE_DELETED => 'onPriceDeleted',
-            StripeEvents::PRODUCT_UPDATED => 'onProductUpdated',
-            StripeEvents::CHECKOUT_SESSION_EXPIRED => 'onCheckoutExpired',
-            StripeEvents::CHECKOUT_SESSION_COMPLETED => 'onCheckoutCompleted',
+            StripeEventNames::PRICE_CREATED => 'onPriceCreated',
+            StripeEventNames::PRICE_UPDATED => 'onPriceUpdated',
+            StripeEventNames::PRICE_DELETED => 'onPriceDeleted',
+            StripeEventNames::PRODUCT_UPDATED => 'onProductUpdated',
+            StripeEventNames::CHECKOUT_SESSION_EXPIRED => 'onCheckoutExpired',
+            StripeEventNames::CHECKOUT_SESSION_COMPLETED => 'onCheckoutCompleted',
         ];
     }
 
-    public function onProductUpdated(StripeWebhook $webhook): void
+    public function onProductUpdated(StripeWebhookEvent $webhook): void
     {
         $stripeEvent = $webhook->getStripeObject();
         $stripeProduct = $stripeEvent->data->object;
@@ -75,7 +75,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onPriceCreated(StripeWebhook $webhook): void
+    public function onPriceCreated(StripeWebhookEvent $webhook): void
     {
         $stripeEvent = $webhook->getStripeObject();
         $stripePrice = $stripeEvent->data->object;
@@ -95,7 +95,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onPriceUpdated(StripeWebhook $webhook): void
+    public function onPriceUpdated(StripeWebhookEvent $webhook): void
     {
         $stripeEvent = $webhook->getStripeObject();
         $stripePrice = $stripeEvent->data->object;
@@ -116,7 +116,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onPriceDeleted(StripeWebhook $webhook): void
+    public function onPriceDeleted(StripeWebhookEvent $webhook): void
     {
         $stripeEvent = $webhook->getStripeObject();
         $stripePrice = $stripeEvent->data->object;
@@ -134,7 +134,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onCheckoutExpired(StripeWebhook $webhook): void
+    public function onCheckoutExpired(StripeWebhookEvent $webhook): void
     {
         $stripeEvent = $webhook->getStripeObject();
         $session = $stripeEvent->data->object;
@@ -155,7 +155,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onCheckoutCompleted(StripeWebhook $webhook): void
+    public function onCheckoutCompleted(StripeWebhookEvent $webhook): void
     {
         $stripeEvent = $webhook->getStripeObject();
         $session = $stripeEvent->data->object;

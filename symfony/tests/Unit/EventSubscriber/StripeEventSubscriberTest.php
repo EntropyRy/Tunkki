@@ -18,8 +18,8 @@ use App\Service\MattermostNotifierService;
 use App\Service\QrService;
 use App\Service\Rental\Booking\BookingReferenceService;
 use App\Service\StripeServiceInterface;
-use Fpt\StripeBundle\Event\StripeEvents;
-use Fpt\StripeBundle\Event\StripeWebhook;
+use App\Webhook\StripeEventNames;
+use App\Webhook\StripeWebhookEvent;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Stripe\Event as StripeEvent;
@@ -33,12 +33,12 @@ final class StripeEventSubscriberTest extends TestCase
 
         self::assertSame(
             [
-                StripeEvents::PRICE_CREATED => 'onPriceCreated',
-                StripeEvents::PRICE_UPDATED => 'onPriceUpdated',
-                StripeEvents::PRICE_DELETED => 'onPriceDeleted',
-                StripeEvents::PRODUCT_UPDATED => 'onProductUpdated',
-                StripeEvents::CHECKOUT_SESSION_EXPIRED => 'onCheckoutExpired',
-                StripeEvents::CHECKOUT_SESSION_COMPLETED => 'onCheckoutCompleted',
+                StripeEventNames::PRICE_CREATED => 'onPriceCreated',
+                StripeEventNames::PRICE_UPDATED => 'onPriceUpdated',
+                StripeEventNames::PRICE_DELETED => 'onPriceDeleted',
+                StripeEventNames::PRODUCT_UPDATED => 'onProductUpdated',
+                StripeEventNames::CHECKOUT_SESSION_EXPIRED => 'onCheckoutExpired',
+                StripeEventNames::CHECKOUT_SESSION_COMPLETED => 'onCheckoutCompleted',
             ],
             $events,
         );
@@ -209,7 +209,7 @@ final class StripeEventSubscriberTest extends TestCase
         );
     }
 
-    private function createWebhook(object|array $stripeObject): StripeWebhook
+    private function createWebhook(object|array $stripeObject): StripeWebhookEvent
     {
         $event = StripeEvent::constructFrom([
             'id' => 'evt_test_'.bin2hex(random_bytes(4)),
@@ -219,10 +219,7 @@ final class StripeEventSubscriberTest extends TestCase
             ],
         ]);
 
-        $webhook = $this->createStub(StripeWebhook::class);
-        $webhook->method('getStripeObject')->willReturn($event);
-
-        return $webhook;
+        return new StripeWebhookEvent($event);
     }
 }
 

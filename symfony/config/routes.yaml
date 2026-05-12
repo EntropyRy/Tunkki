@@ -2,6 +2,7 @@ controllers:
     resource:
         path: ../src/Controller/
         namespace: App\Controller
+        exclude: '../src/Controller/StripeWebhookController.php'
     type: attribute
     prefix:
         fi: ""

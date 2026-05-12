@@ -2253,16 +2253,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     controller_paths?: list<scalar|Param|null>,
  *     controllers_json?: scalar|Param|null, // Default: "%kernel.project_dir%/assets/controllers.json"
  * }
- * @psalm-type FptStripeConfig = array{
- *     credentials?: array{
- *         publishable_key?: scalar|Param|null,
- *         secret_key?: scalar|Param|null,
- *     },
- *     webhook?: array{
- *         check_signature?: bool|Param, // Default: true
- *         signature_key?: scalar|Param|null,
- *     },
- * }
  * @psalm-type UxIconsConfig = array{
  *     icon_dir?: scalar|Param|null, // The local directory where icons are stored. // Default: "%kernel.project_dir%/assets/icons"
  *     default_icon_attributes?: array<string, scalar|Param|null>,
@@ -2388,7 +2378,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     turbo?: TurboConfig,
  *     league_oauth2_server?: LeagueOauth2ServerConfig,
  *     stimulus?: StimulusConfig,
- *     fpt_stripe?: FptStripeConfig,
  *     ux_icons?: UxIconsConfig,
  *     twig_component?: TwigComponentConfig,
  *     live_component?: LiveComponentConfig,
@@ -2429,7 +2418,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         turbo?: TurboConfig,
  *         league_oauth2_server?: LeagueOauth2ServerConfig,
  *         stimulus?: StimulusConfig,
- *         fpt_stripe?: FptStripeConfig,
  *         ux_icons?: UxIconsConfig,
  *         twig_component?: TwigComponentConfig,
  *         live_component?: LiveComponentConfig,
@@ -2469,7 +2457,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         turbo?: TurboConfig,
  *         league_oauth2_server?: LeagueOauth2ServerConfig,
  *         stimulus?: StimulusConfig,
- *         fpt_stripe?: FptStripeConfig,
  *         ux_icons?: UxIconsConfig,
  *         twig_component?: TwigComponentConfig,
  *         live_component?: LiveComponentConfig,
@@ -2509,7 +2496,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         turbo?: TurboConfig,
  *         league_oauth2_server?: LeagueOauth2ServerConfig,
  *         stimulus?: StimulusConfig,
- *         fpt_stripe?: FptStripeConfig,
  *         ux_icons?: UxIconsConfig,
  *         twig_component?: TwigComponentConfig,
  *         live_component?: LiveComponentConfig,
@@ -2550,7 +2536,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         turbo?: TurboConfig,
  *         league_oauth2_server?: LeagueOauth2ServerConfig,
  *         stimulus?: StimulusConfig,
- *         fpt_stripe?: FptStripeConfig,
  *         ux_icons?: UxIconsConfig,
  *         twig_component?: TwigComponentConfig,
  *         live_component?: LiveComponentConfig,
