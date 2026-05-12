@@ -98,16 +98,7 @@ readonly class StripeService implements StripeServiceInterface
                 return null;
             }
 
-            $paymentIntent = $stripe->paymentIntents->retrieve(
-                $paymentIntentId,
-                ['expand' => ['charges.data']],
-            );
-            $charges = $paymentIntent->charges->data ?? [];
-
-            if ([] !== $charges && isset($charges[0]->receipt_url)) {
-                return (string) $charges[0]->receipt_url;
-            }
-
+            $paymentIntent = $stripe->paymentIntents->retrieve($paymentIntentId);
             $latestChargeId = $paymentIntent->latest_charge ?? null;
             if (\is_string($latestChargeId) && '' !== $latestChargeId) {
                 $charge = $stripe->charges->retrieve($latestChargeId);
