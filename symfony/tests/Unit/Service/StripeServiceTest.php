@@ -259,21 +259,17 @@ final class StripeServiceTest extends TestCase
         $this->assertNull($service->getReceiptUrlForSessionId('cs_test_no_pi'));
     }
 
-    public function testGetReceiptUrlUsesExpandedCharges(): void
+    public function testGetReceiptUrlUsesLatestCharge(): void
     {
         $paymentIntent = new \stdClass();
-        $paymentIntent->charges = new \stdClass();
-        $paymentIntent->charges->data = [
-            (object) ['receipt_url' => 'https://stripe.test/receipt/expanded'],
-        ];
-        $paymentIntent->latest_charge = null;
+        $paymentIntent->latest_charge = 'ch_test_123';
 
         $fakePaymentIntents = new class($paymentIntent) {
             public function __construct(private object $paymentIntent)
             {
             }
 
-            public function retrieve(string $id, array $options = []): object
+            public function retrieve(string $id): object
             {
                 return $this->paymentIntent;
             }
@@ -282,7 +278,7 @@ final class StripeServiceTest extends TestCase
         $fakeCharges = new class {
             public function retrieve(string $id): object
             {
-                return (object) ['receipt_url' => null];
+                return (object) ['receipt_url' => 'https://stripe.test/receipt/ch_test_123'];
             }
         };
 
@@ -328,45 +324,34 @@ final class StripeServiceTest extends TestCase
         };
 
         $this->assertSame(
-            'https://stripe.test/receipt/expanded',
+            'https://stripe.test/receipt/ch_test_123',
             $service->getReceiptUrlForSessionId('cs_test_receipt'),
         );
     }
 
-    public function testGetReceiptUrlFallsBackToLatestCharge(): void
+    public function testGetReceiptUrlReturnsNullWhenNoLatestCharge(): void
     {
         $paymentIntent = new \stdClass();
-        $paymentIntent->charges = new \stdClass();
-        $paymentIntent->charges->data = [];
-        $paymentIntent->latest_charge = 'ch_test_123';
+        $paymentIntent->latest_charge = null;
 
         $fakePaymentIntents = new class($paymentIntent) {
             public function __construct(private object $paymentIntent)
             {
             }
 
-            public function retrieve(string $id, array $options = []): object
+            public function retrieve(string $id): object
             {
                 return $this->paymentIntent;
             }
         };
 
-        $fakeCharges = new class {
-            public function retrieve(string $id): object
-            {
-                return (object) ['receipt_url' => 'https://stripe.test/receipt/latest'];
-            }
-        };
-
-        $fakeClient = new class($fakePaymentIntents, $fakeCharges) extends StripeClient {
+        $fakeClient = new class($fakePaymentIntents) extends StripeClient {
             public object $paymentIntents;
-            public object $charges;
 
-            public function __construct(object $paymentIntents, object $charges)
+            public function __construct(object $paymentIntents)
             {
                 parent::__construct('sk_test_fake');
                 $this->paymentIntents = $paymentIntents;
-                $this->charges = $charges;
             }
         };
 
@@ -399,10 +384,7 @@ final class StripeServiceTest extends TestCase
             }
         };
 
-        $this->assertSame(
-            'https://stripe.test/receipt/latest',
-            $service->getReceiptUrlForSessionId('cs_test_receipt_latest'),
-        );
+        $this->assertNull($service->getReceiptUrlForSessionId('cs_test_receipt_no_charge'));
     }
 
     public function testGetReceiptUrlReturnsNullOnError(): void
