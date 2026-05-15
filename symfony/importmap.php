@@ -114,7 +114,7 @@ return [
         'type' => 'css',
     ],
     'prosemirror-model' => [
-        'version' => '1.25.4',
+        'version' => '1.25.5',
     ],
     'prosemirror-view' => [
         'version' => '1.41.8',
@@ -183,7 +183,7 @@ return [
         'type' => 'css',
     ],
     'typo-js' => [
-        'version' => '1.3.1',
+        'version' => '1.3.2',
     ],
     'orderedmap' => [
         'version' => '2.1.1',
