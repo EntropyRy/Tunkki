@@ -114,7 +114,7 @@ return [
         'type' => 'css',
     ],
     'prosemirror-model' => [
-        'version' => '1.25.6',
+        'version' => '1.25.7',
     ],
     'prosemirror-view' => [
         'version' => '1.41.8',
