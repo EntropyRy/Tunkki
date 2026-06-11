@@ -17,9 +17,12 @@ export default class extends Controller {
 
     this.checkout.on('change', (session) => {
       this.submitTarget.disabled = !session.canConfirm;
-      if (session.total?.total != null) {
+      const amount = typeof session.total === 'number'
+        ? session.total
+        : session.total?.total;
+      if (Number.isFinite(amount) && amount > 0) {
         this.totalTarget.textContent =
-          (session.total.total / 100).toLocaleString(document.documentElement.lang, {
+          (amount / 100).toLocaleString(document.documentElement.lang, {
             style: 'currency',
             currency: session.currency,
           });
@@ -28,9 +31,10 @@ export default class extends Controller {
 
     const expressElement = this.checkout.createExpressCheckoutElement();
     expressElement.on('ready', ({ availablePaymentMethods }) => {
-      if (!availablePaymentMethods) {
+      if (availablePaymentMethods) {
+        this.dividerTarget.classList.remove('d-none');
+      } else {
         this.expressTarget.remove();
-        this.dividerTarget.remove();
       }
     });
     expressElement.on('confirm', async () => {
