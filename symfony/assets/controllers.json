@@ -48,7 +48,7 @@
                 "enabled": true,
                 "fetch": "eager",
                 "autoimport": {
-                    "@symfony/ux-turbo/dist/mercure_stream_source_element.js": false 
+                    "@symfony/ux-turbo/dist/mercure_stream_source_element.js": false
                 }
             },
             "mercure-turbo-stream": {
