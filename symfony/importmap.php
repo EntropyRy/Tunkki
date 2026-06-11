@@ -198,4 +198,7 @@ return [
         'version' => '1.41.9',
         'type' => 'css',
     ],
+    '@stripe/stripe-js' => [
+        'version' => '9.8.0',
+    ],
 ];

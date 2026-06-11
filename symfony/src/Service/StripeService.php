@@ -154,7 +154,7 @@ readonly class StripeService implements StripeServiceInterface
 
         // Create Stripe checkout session
         $stripeSession = $client->checkout->sessions->create([
-            'ui_mode' => 'embedded_page',
+            'ui_mode' => 'elements',
             'line_items' => $lineItems,
             'mode' => 'payment',
             'return_url' => $returnUrl,

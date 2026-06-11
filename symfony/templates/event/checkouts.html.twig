@@ -1,11 +1,5 @@
 {% extends event.template %}
 {% block title %}{{ 'page.title.checkout'|trans }} | Entropy ry{% endblock %}
-{% block javascripts %}
-    <script src="https://js.stripe.com/v3/"
-            data-turbo-track="reload"
-            crossorigin="anonymous"></script>
-    {{ parent() }}
-{% endblock %}
 {% block content %}
     <h1 class="event-heading mb-4">
         <a href="{{ block('event_path') }}">{{ block('event_name') }}</a>
@@ -22,6 +16,15 @@
             </a>
         </p>
     {% endif %}
-    <div {{ stimulus_controller('stripe', {publicKey: publicKey, clientSecret: stripeSession.client_secret, time: time}) }}>
-    </div>
+    <form {{ stimulus_controller('stripe', {publicKey: publicKey, clientSecret: stripeSession.client_secret, time: time}) }}
+          data-action="submit->stripe#pay">
+        <div data-stripe-target="payment" class="mb-3"></div>
+        <div data-stripe-target="error" class="text-danger mb-2"></div>
+        <button type="submit"
+                data-stripe-target="submit"
+                class="btn btn-primary btn-lg w-100"
+                disabled>
+            {{ 'checkout.pay_now'|trans|default('Pay now') }}
+        </button>
+    </form>
 {% endblock %}
