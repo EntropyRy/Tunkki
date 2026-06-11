@@ -4,7 +4,7 @@ import { loadStripe } from '@stripe/stripe-js';
 
 export default class extends Controller {
   static values  = { publicKey: String, clientSecret: String, time: Number };
-  static targets = ['payment', 'submit', 'error'];
+  static targets = ['payment', 'submit', 'error', 'total', 'express', 'divider'];
 
   async connect() {
     this.stripe = await loadStripe(this.publicKeyValue);
@@ -17,7 +17,30 @@ export default class extends Controller {
 
     this.checkout.on('change', (session) => {
       this.submitTarget.disabled = !session.canConfirm;
+      if (session.total?.total != null) {
+        this.totalTarget.textContent =
+          (session.total.total / 100).toLocaleString(document.documentElement.lang, {
+            style: 'currency',
+            currency: session.currency,
+          });
+      }
     });
+
+    const expressElement = this.checkout.createExpressCheckoutElement();
+    expressElement.on('ready', ({ availablePaymentMethods }) => {
+      if (!availablePaymentMethods) {
+        this.expressTarget.remove();
+        this.dividerTarget.remove();
+      }
+    });
+    expressElement.on('confirm', async () => {
+      const { actions } = await this.checkout.loadActions();
+      const { error }   = await actions.confirm();
+      if (error) {
+        this.errorTarget.textContent = error.message;
+      }
+    });
+    expressElement.mount(this.expressTarget);
 
     this.checkout.createPaymentElement().mount(this.paymentTarget);
 

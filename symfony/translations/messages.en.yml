@@ -32,6 +32,7 @@ checkout:
     empty: Your cart is empty.
   try_again: Try again
   pay_now: Pay now
+  total: Total
 
 packages: packages
 items: items

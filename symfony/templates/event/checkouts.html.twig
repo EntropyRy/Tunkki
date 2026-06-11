@@ -14,16 +14,26 @@
             </a>
         </p>
     {% endif %}
+    {% set total = 0 %}
     <ul class="list-group mb-3">
         {% for item in cart.products %}
+            {% set total = total + item.product.amount * item.quantity %}
             <li class="list-group-item d-flex justify-content-between">
                 <span>{{ item.product.getName(app.request.locale) }}{% if item.quantity > 1 %} &times; {{ item.quantity }}{% endif %}</span>
                 <span>{{ (item.product.amount * item.quantity / 100)|number_format(2, ',', '\u{00a0}') }} €</span>
             </li>
         {% endfor %}
+        <li class="list-group-item d-flex justify-content-between fw-bold">
+            <span>{{ 'checkout.total'|trans }}</span>
+            <span data-stripe-target="total">{{ (total / 100)|number_format(2, ',', '\u{00a0}') }} €</span>
+        </li>
     </ul>
     <form {{ stimulus_controller('stripe', {publicKey: publicKey, clientSecret: stripeSession.client_secret, time: time}) }}
           data-action="submit->stripe#pay">
+        <div data-stripe-target="express" class="mb-3"></div>
+        <div data-stripe-target="divider" class="linetext">
+            <span>{{ 'OR'|trans }}</span>
+        </div>
         <div data-stripe-target="payment" class="mb-3"></div>
         <div data-stripe-target="error" class="text-danger mb-2"></div>
         <button type="submit"
