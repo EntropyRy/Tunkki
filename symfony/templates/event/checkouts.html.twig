@@ -7,15 +7,21 @@
     </h1>
     {% if email %}
         <p class="text-muted mb-2">{{ email }}</p>
-    {% endif %}
-    {% if email %}
         <p class="text-muted mb-4">
-            {{ 'checkout.email.confirmation'|trans|default('We will use this email for your purchases.') }}
+            {{ 'checkout.email.confirmation'|trans }}
             <a class="ms-2" href="{{ path('entropy_event_shop', {year: event.eventDate|date('Y'), slug: event.url}) }}">
-                {{ 'checkout.email.change'|trans|default('Change email') }}
+                {{ 'checkout.email.change'|trans }}
             </a>
         </p>
     {% endif %}
+    <ul class="list-group mb-3">
+        {% for item in cart.products %}
+            <li class="list-group-item d-flex justify-content-between">
+                <span>{{ item.product.getName(app.request.locale) }}{% if item.quantity > 1 %} &times; {{ item.quantity }}{% endif %}</span>
+                <span>{{ (item.product.amount * item.quantity / 100)|number_format(2, ',', '\u{00a0}') }} €</span>
+            </li>
+        {% endfor %}
+    </ul>
     <form {{ stimulus_controller('stripe', {publicKey: publicKey, clientSecret: stripeSession.client_secret, time: time}) }}
           data-action="submit->stripe#pay">
         <div data-stripe-target="payment" class="mb-3"></div>
@@ -24,7 +30,7 @@
                 data-stripe-target="submit"
                 class="btn btn-primary btn-lg w-100"
                 disabled>
-            {{ 'checkout.pay_now'|trans|default('Pay now') }}
+            {{ 'checkout.pay_now'|trans }}
         </button>
     </form>
 {% endblock %}

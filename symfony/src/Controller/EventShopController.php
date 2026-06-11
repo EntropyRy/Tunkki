@@ -19,7 +19,7 @@ use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
@@ -225,6 +225,7 @@ class EventShopController extends AbstractController
             'publicKey' => $this->getParameter('stripe_public_key'),
             'time' => $result['checkout']->getUpdatedAt()->format('U'),
             'email' => $cart->getEmail(),
+            'cart' => $cart,
         ]);
     }
 

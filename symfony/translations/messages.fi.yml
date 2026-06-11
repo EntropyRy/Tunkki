@@ -40,6 +40,7 @@ checkout:
   cart:
     empty: Ostoskorisi on tyhjä.
   try_again: Yritä uudelleen
+  pay_now: Maksa
 Control barcodes: Kontrollikoodit
 Bank Account: Pankkitili
 # name_attribute removed (was: nimi)

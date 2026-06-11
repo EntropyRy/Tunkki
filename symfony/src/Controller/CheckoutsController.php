@@ -10,7 +10,7 @@ use App\Service\StripeServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * CheckoutsController - Handles checkout for the general store only.
@@ -66,6 +66,7 @@ class CheckoutsController extends AbstractController
             'stripeSession' => $result['stripeSession'],
             'publicKey' => $this->getParameter('stripe_public_key'),
             'time' => $result['checkout']->getUpdatedAt()->format('U'),
+            'cart' => $cart,
         ]);
     }
 
