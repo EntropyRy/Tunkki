@@ -323,6 +323,7 @@
         {{- event.nameByLang(app.request.locale) -}}
         {% if event.cancelled %}*{{ 'cancelled'|trans }}*{% endif %}
     {%- endblock -%}
+    {% block event_heading %}{% endblock %}
     {% block event_back_to_link %}{% endblock %}
     {%- block bios %}
         <div id="bios">
