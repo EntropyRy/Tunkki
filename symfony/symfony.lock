@@ -140,9 +140,6 @@
             "config/packages/knpu_oauth2_client.yaml"
         ]
     },
-    "lcobucci/clock": {
-        "version": "2.1.0"
-    },
     "lcobucci/jwt": {
         "version": "3.3.3"
     },
