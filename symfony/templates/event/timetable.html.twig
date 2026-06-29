@@ -15,5 +15,5 @@
         <h2>VJ</h2>
         {{ block('vj_timetable_to_page') }}
     </div>
-    {% if block('event_back_to_link') is defined %}{{ block('event_back_to_link') }}{% endif %}
+    {{ block('event_back_to_link') }}
 {% endblock %}
