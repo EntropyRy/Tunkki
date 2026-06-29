@@ -323,6 +323,11 @@
         {{- event.nameByLang(app.request.locale) -}}
         {% if event.cancelled %}*{{ 'cancelled'|trans }}*{% endif %}
     {%- endblock -%}
+    {% block event_back_to_link -%}
+        <p class="text-muted">
+            {{ 'event.back_to'|trans }} <a href="{{ block('event_path') }}">{{ block('event_name') }}</a>
+        </p>
+    {%- endblock %}
     {%- block bios %}
         <div id="bios">
         {% for stage, infos in event.MusicArtistInfos %}
