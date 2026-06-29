@@ -170,6 +170,13 @@
     {{- event.nameByLang(app.request.locale) -}}
     {% if event.cancelled %}*{{ 'cancelled'|trans }}*{% endif %}
 {%- endblock -%}
+{% block event_section_name %}{% endblock %}
+{% block event_heading %}
+<h1 class="event-heading">
+    <a href="{{ block('event_path') }}">{{ block('event_name') }}</a>
+    {%- if block('event_section_name') is not empty %} — {{ block('event_section_name') }}{% endif %}
+</h1>
+{% endblock %}
 {% block event_back_to_link -%}
     <p class="text-muted">
         {{ 'event.back_to'|trans }} <a href="{{ block('event_path') }}">{{ block('event_name') }}</a>

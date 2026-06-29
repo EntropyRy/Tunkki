@@ -1,11 +1,7 @@
 {% extends event.template %}
+{% block event_section_name %}{{ 'event.section.info'|trans }}{% endblock %}
 {% block content %}
-    {% block event_heading %}
-    <h1 class="event-heading">
-        <a href="{{ block('event_path') }}">{{ block('event_name') }}</a>
-        — {{ 'event.section.info'|trans }}
-    </h1>
-    {% endblock %}
+    {{ block('event_heading') }}
     {% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
     <div class="content">
         {{ block('content_info', input) ?? '' }}

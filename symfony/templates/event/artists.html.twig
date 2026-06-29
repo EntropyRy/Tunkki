@@ -44,9 +44,7 @@
                         {% endif %}
                         {{ block('art_bios') }}
                     {% endif %}
-                    {% if event.template == 'event.html.twig' %}
-                        {{ block('event_back_to_link') }}
-                    {% endif %}
+                    {{ block('event_back_to_link') }}
                 {% else %}
                     <h1>{{ 'event.no_artists'|trans }}</h1>
                 {% endif %}

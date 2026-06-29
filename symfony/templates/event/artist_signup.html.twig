@@ -1,10 +1,8 @@
 {% extends event.template %}
+{% block event_section_name %}{{ 'event.section.artist_signup'|trans }}{% endblock %}
 {% block content %}
     <div class="col-12">
-        <h1 class="event-heading">
-            <a href="{{ block('event_path') }}">{{ block('event_name') }}</a>
-            — {{ 'event.section.artist_signup'|trans }}
-        </h1>
+        {{ block('event_heading') }}
         <p class="text-muted">
             {{ 'event.section.event_time'|trans }}:
             {{ event.eventdate|date('d.m.Y, H:i') }}

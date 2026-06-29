@@ -1,10 +1,8 @@
 {% extends event.template %}
 {% block title %}{{ 'page.title.checkout'|trans }} | Entropy ry{% endblock %}
+{% block event_section_name %}{{ 'page.title.checkout'|trans }}{% endblock %}
 {% block content %}
-    <h1 class="event-heading mb-4">
-        <a href="{{ block('event_path') }}">{{ block('event_name') }}</a>
-        — {{ 'page.title.checkout'|trans }}
-    </h1>
+    {{ block('event_heading') }}
     {% if email %}
         <p class="text-muted mb-2">{{ email }}</p>
         <p class="text-muted mb-4">

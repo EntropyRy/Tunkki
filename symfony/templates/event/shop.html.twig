@@ -2,11 +2,9 @@
 {% use 'pieces/event.html.twig' %}
 {% use 'pieces/nakkikone.html.twig' %}
 {% use 'pieces/product.html.twig' %}
+{% block event_section_name %}{{ 'event.ticket.shop'|trans }}{% endblock %}
 {% block content %}
-    <h1 class="event-heading">
-        <a href="{{ block('event_path') }}">{{ block('event_name') }}</a>
-        — {{ 'event.ticket.shop'|trans }}
-    </h1>
+    {{ block('event_heading') }}
     {% set ticket_info = event.ticketInfo(app.request.locale) %}
     {% if ticket_info %}
         {{ ticket_info|markdown_to_html|raw }}
