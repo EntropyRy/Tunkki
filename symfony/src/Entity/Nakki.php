@@ -107,9 +107,6 @@ class Nakki implements \Stringable
         return $this;
     }
 
-    /**
-     * @return Collection|NakkiBooking[]
-     */
     public function getNakkiBookings(): Collection
     {
         return $this->nakkiBookings;

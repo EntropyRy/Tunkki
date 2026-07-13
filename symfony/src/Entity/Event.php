@@ -721,9 +721,6 @@ class Event implements \Stringable
         return $this->Name.' - '.$this->EventDate->format('j.n.Y, H:i');
     }
 
-    /**
-     * @return Collection|EventArtistInfo[]
-     */
     public function getEventArtistInfos(): Collection
     {
         return $this->eventArtistInfos;
@@ -790,9 +787,6 @@ class Event implements \Stringable
         return $this;
     }
 
-    /**
-     * @return Collection|RSVP[]
-     */
     public function getRSVPs(): Collection
     {
         return $this->RSVPs;

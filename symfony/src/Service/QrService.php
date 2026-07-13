@@ -63,6 +63,6 @@ final readonly class QrService
         imagepng($qr);
         imagedestroy($qr);
 
-        return (string) ob_get_clean();
+        return ob_get_clean();
     }
 }

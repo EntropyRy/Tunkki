@@ -107,17 +107,17 @@ return [
         'version' => '2.30.1',
     ],
     'es-module-shims' => [
-        'version' => '2.8.1',
+        'version' => '2.8.2',
     ],
     'bootstrap/dist/css/bootstrap.min.css' => [
         'version' => '5.3.8',
         'type' => 'css',
     ],
     'prosemirror-model' => [
-        'version' => '1.25.9',
+        'version' => '1.25.11',
     ],
     'prosemirror-view' => [
-        'version' => '1.41.9',
+        'version' => '1.42.1',
     ],
     'prosemirror-transform' => [
         'version' => '1.12.0',
@@ -151,7 +151,7 @@ return [
         'type' => 'css',
     ],
     'tom-select' => [
-        'version' => '2.6.1',
+        'version' => '2.6.2',
     ],
     '@orchidjs/sifter' => [
         'version' => '1.1.0',
@@ -160,19 +160,19 @@ return [
         'version' => '1.1.2',
     ],
     'tom-select/dist/css/tom-select.default.min.css' => [
-        'version' => '2.6.1',
+        'version' => '2.6.2',
         'type' => 'css',
     ],
     'tom-select/dist/css/tom-select.default.css' => [
-        'version' => '2.6.1',
+        'version' => '2.6.2',
         'type' => 'css',
     ],
     'tom-select/dist/css/tom-select.bootstrap4.css' => [
-        'version' => '2.6.1',
+        'version' => '2.6.2',
         'type' => 'css',
     ],
     'tom-select/dist/css/tom-select.bootstrap5.css' => [
-        'version' => '2.6.1',
+        'version' => '2.6.2',
         'type' => 'css',
     ],
     '@toast-ui/editor' => [
@@ -195,10 +195,10 @@ return [
         'version' => '1.3.4',
     ],
     'prosemirror-view/style/prosemirror.min.css' => [
-        'version' => '1.41.9',
+        'version' => '1.42.1',
         'type' => 'css',
     ],
     '@stripe/stripe-js' => [
-        'version' => '9.8.0',
+        'version' => '9.9.0',
     ],
 ];

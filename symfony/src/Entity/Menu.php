@@ -204,9 +204,6 @@ class Menu implements \Stringable
         return $this;
     }
 
-    /**
-     * @return Collection|Menu[]
-     */
     public function getChildren(): Collection
     {
         return $this->children;

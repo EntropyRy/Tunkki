@@ -503,9 +503,6 @@ class Member implements \Stringable
         return $this;
     }
 
-    /**
-     * @return Collection|Artist[]
-     */
     public function getArtist(): Collection
     {
         return $this->artist;
@@ -530,9 +527,6 @@ class Member implements \Stringable
         return $this;
     }
 
-    /**
-     * @return Collection|DoorLog[]
-     */
     public function getDoorLogs(): Collection
     {
         return $this->doorLogs;
@@ -567,9 +561,6 @@ class Member implements \Stringable
         return $this;
     }
 
-    /**
-     * @return Collection|RSVP[]
-     */
     public function getRSVPs(): Collection
     {
         return $this->RSVPs;
@@ -592,9 +583,6 @@ class Member implements \Stringable
         return $this;
     }
 
-    /**
-     * @return Collection|NakkiBooking[]
-     */
     public function getNakkiBookings(): Collection
     {
         return $this->nakkiBookings;
