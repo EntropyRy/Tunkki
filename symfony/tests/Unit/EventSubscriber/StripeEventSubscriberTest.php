@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\EventSubscriber;
 
+use App\Entity\Cart;
+use App\Entity\CartItem;
 use App\Entity\Checkout;
 use App\Entity\Event;
 use App\Entity\Member;
@@ -143,6 +145,78 @@ final class StripeEventSubscriberTest extends TestCase
             'buyer@example.test',
             [['qr' => 'qr-data', 'name' => 'Ticket']],
             null,
+        );
+    }
+
+    public function testOnCheckoutCompletedSetsStatusToTwoEvenWhenEmailSendingFails(): void
+    {
+        $event = new Event();
+        $event->setName('Test Event');
+        $event->setNimi('Testitapahtuma');
+
+        $product = (new Product())
+            ->setStripeId('prod_test_email_fail')
+            ->setAmount(1000)
+            ->setTicket(true)
+            ->setNameEn('Ticket EN')
+            ->setNameFi('Ticket FI')
+            ->setEvent($event);
+
+        $cartItem = (new CartItem())
+            ->setProduct($product)
+            ->setQuantity(1);
+
+        $cart = new Cart();
+        $cart->setEmail('buyer@example.test');
+        $cart->addProduct($cartItem);
+
+        $checkout = new Checkout();
+        $checkout->setStripeSessionId('cs_test_email_fail');
+        $checkout->setCart($cart);
+        // Pre-set so the Stripe API isn't consulted for a receipt URL.
+        $checkout->setReceiptUrl('https://stripe.example/receipt');
+
+        $checkoutRepo = $this->createStub(CheckoutRepository::class);
+        $checkoutRepo->method('findOneBy')->willReturn($checkout);
+
+        $emailService = $this->createStub(EmailService::class);
+        $emailService->method('sendTicketQrEmails')->willThrowException(
+            new \RuntimeException('smtp down'),
+        );
+
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects($this->once())
+            ->method('error')
+            ->with($this->stringContains('Failed to send ticket QR email'));
+
+        $mm = $this->createMock(MattermostNotifierService::class);
+        $mm->expects($this->once())->method('sendToMattermost');
+
+        $assetMapper = $this->createStub(AssetMapperInterface::class);
+        // Force QrService's public-path lookup to miss, so it falls back
+        // to the real logo file under assets/.
+        $assetMapper->method('getPublicPath')->willReturn('/missing-logo.png');
+        $qr = new QrService($assetMapper, \dirname(__DIR__, 3));
+
+        $subscriber = $this->createSubscriber([
+            'checkoutRepo' => $checkoutRepo,
+            'emailService' => $emailService,
+            'logger' => $logger,
+            'mm' => $mm,
+            'qr' => $qr,
+        ]);
+
+        $webhook = $this->createWebhook([
+            'id' => 'cs_test_email_fail',
+            'locale' => 'en',
+        ]);
+
+        $subscriber->onCheckoutCompleted($webhook);
+
+        self::assertSame(
+            2,
+            $checkout->getStatus(),
+            'Checkout must be marked processed (status 2) even when the confirmation email fails to send',
         );
     }
 
