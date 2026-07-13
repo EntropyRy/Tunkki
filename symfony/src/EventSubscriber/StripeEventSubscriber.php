@@ -198,6 +198,8 @@ class StripeEventSubscriber implements EventSubscriberInterface
                         $tickets = [...$tickets, ...$given];
                     }
                 }
+                $checkout->setStatus(2);
+                $this->checkoutRepo->save($checkout, true);
                 if ([] !== $tickets && $event) {
                     $qrGenerator = $this->qrGenerator;
                     foreach ($tickets as $ticket) {
@@ -208,16 +210,21 @@ class StripeEventSubscriber implements EventSubscriberInterface
                             'name' => $ticket->getName() ?? 'Ticket',
                         ];
                     }
-                    $this->sendTicketQrEmail(
-                        $event,
-                        $event->getNameByLang($locale),
-                        $email,
-                        $qrs,
-                        $event->getPicture(),
-                    );
+                    try {
+                        $this->sendTicketQrEmail(
+                            $event,
+                            $event->getNameByLang($locale),
+                            $email,
+                            $qrs,
+                            $event->getPicture(),
+                        );
+                    } catch (\Exception $e) {
+                        $this->logger->error(
+                            'Failed to send ticket QR email: '.
+                                $e->getMessage(),
+                        );
+                    }
                 }
-                $checkout->setStatus(2);
-                $this->checkoutRepo->save($checkout, true);
                 foreach ($products as $cartItem) {
                     $product = $cartItem->getProduct();
                     if ($product->isTicket()) {
