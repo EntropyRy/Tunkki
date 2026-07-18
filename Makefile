@@ -272,7 +272,7 @@ stan-fast: _ensure-vendor prepare-test-db
 .PHONY: stan-delta
 stan-delta: _ensure-vendor prepare-test-db
 	@printf "%b\n" "$(CYAN)==> PHPStan (delta) base=$(GIT_DIFF_BASE) level=$(PHPSTAN_LEVEL)$(RESET)"
-	@files=$$(git diff --name-only $(GIT_DIFF_BASE) -- 'src' | grep '\.php$$' || true); \
+	@files=$$(git diff --name-only --diff-filter=d $(GIT_DIFF_BASE) -- 'symfony/src' | sed 's|^symfony/||' | grep '\.php$$' || true); \
 	if [ -z "$$files" ]; then \
 		printf "%b\n" "$(YELLOW)No changed PHP files under src/ relative to $(GIT_DIFF_BASE).$(RESET)"; \
 	else \
