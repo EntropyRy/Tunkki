@@ -2222,7 +2222,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         persist_access_token?: bool|Param, // Whether to enable access token saving to persistence layer // Default: true
  *         response_type_class?: scalar|Param|null, // Define a custom ResponseType // Default: null
  *         revoke_refresh_tokens?: bool|Param, // Whether to revoke refresh tokens after they were used for all grant types // Default: true
- *         enable_device_code_grant?: bool|Param, // Whether to enable the device code grant // Default: true
+ *         enable_device_code_grant?: bool|Param, // Whether to enable the device code grant // Default: false
  *         device_code_verification_uri?: scalar|Param|null, // The full URI the user will need to visit to enter the user code // Default: ""
  *         enable_device_code_verification_uri_complete_generation?: bool|Param, // Whether to enable the generation of verification_uri_complete // Default: true
  *         device_code_polling_interval?: scalar|Param|null, // How soon (in seconds) can the device code be used to poll for the access token without being throttled // Default: 5

@@ -97,7 +97,7 @@ return [
         'version' => '8.0.23',
     ],
     '@fontsource-variable/space-grotesk/index.css' => [
-        'version' => '5.2.10',
+        'version' => '5.3.0',
         'type' => 'css',
     ],
     'signature_pad' => [
@@ -199,6 +199,6 @@ return [
         'type' => 'css',
     ],
     '@stripe/stripe-js' => [
-        'version' => '9.10.0',
+        'version' => '9.12.0',
     ],
 ];
