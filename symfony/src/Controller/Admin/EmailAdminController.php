@@ -34,7 +34,6 @@ final class EmailAdminController extends CRUDController
         // If editing from standalone admin and email has an event, redirect to child admin
         if (!$this->admin->isChild()) {
             $email = $this->admin->getSubject();
-            \assert($email instanceof Email);
 
             if ($email->getEvent() instanceof Event) {
                 // Redirect to the event child admin edit route

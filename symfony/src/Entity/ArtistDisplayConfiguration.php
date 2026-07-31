@@ -53,7 +53,7 @@ final class ArtistDisplayConfiguration
     ];
 
     #[ORM\Column(name: 'artist_display_config', type: Types::JSON, nullable: true)]
-    private ?array $config = null;
+    private ?array $config;
 
     public function __construct(?array $config = null)
     {

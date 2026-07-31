@@ -68,7 +68,6 @@ final class Definition
 
         $result = [];
         foreach ($definitions as $definition) {
-            \assert($definition instanceof NakkiDefinition);
             $id = $definition->getId();
             $result[] = [
                 'definition' => $definition,

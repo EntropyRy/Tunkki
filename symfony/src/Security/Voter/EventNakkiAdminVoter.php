@@ -36,8 +36,6 @@ final class EventNakkiAdminVoter extends Voter
         TokenInterface $token,
         ?Vote $vote = null,
     ): bool {
-        \assert($subject instanceof Event);
-
         $user = $token->getUser();
         if (!$user instanceof User) {
             return false;

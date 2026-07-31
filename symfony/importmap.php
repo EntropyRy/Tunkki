@@ -101,13 +101,13 @@ return [
         'type' => 'css',
     ],
     'signature_pad' => [
-        'version' => '5.1.3',
+        'version' => '5.1.4',
     ],
     'moment/min/moment-with-locales.min.js' => [
         'version' => '2.30.1',
     ],
     'es-module-shims' => [
-        'version' => '2.8.2',
+        'version' => '2.8.4',
     ],
     'bootstrap/dist/css/bootstrap.min.css' => [
         'version' => '5.3.8',
@@ -117,7 +117,7 @@ return [
         'version' => '1.25.11',
     ],
     'prosemirror-view' => [
-        'version' => '1.42.1',
+        'version' => '1.42.2',
     ],
     'prosemirror-transform' => [
         'version' => '1.12.0',
@@ -195,10 +195,10 @@ return [
         'version' => '1.3.4',
     ],
     'prosemirror-view/style/prosemirror.min.css' => [
-        'version' => '1.42.1',
+        'version' => '1.42.2',
         'type' => 'css',
     ],
     '@stripe/stripe-js' => [
-        'version' => '9.12.0',
+        'version' => '9.12.1',
     ],
 ];

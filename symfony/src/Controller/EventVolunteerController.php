@@ -127,7 +127,7 @@ class EventVolunteerController extends AbstractController
                 $em->persist($booking);
                 $em->flush();
                 $count = $NakkiBookingR->findEventNakkiCount($booking, $event);
-                $text = $text =
+                $text =
                     '**Nakki reservation** '.$booking.' ('.$count.')';
                 $mm->sendToMattermost($text, 'nakkikone');
                 $this->addFlash('success', 'Nakki reserved');

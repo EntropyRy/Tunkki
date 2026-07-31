@@ -200,7 +200,6 @@ final class HappeningFactory extends PersistentObjectFactory
     {
         // Resolve the Event instance outside the closure to satisfy PHPStan's type narrowing
         $resolvedEvent = $event instanceof EventFactory ? $event->create() : $event;
-        \assert($resolvedEvent instanceof Event);
 
         return $this->afterInstantiate(static function (Happening $happening) use ($resolvedEvent): void {
             $happening->setEvent($resolvedEvent);

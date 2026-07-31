@@ -89,7 +89,6 @@ class StatusEventAdmin extends AbstractRentalAdmin
         }
         if (null != $this->getSubject()->getItem()) {
             $item = $this->getSubject()->getItem();
-            \assert($item instanceof Item);
 
             $events = array_reverse(
                 $item->getFixingHistory()->slice(0, 5),
@@ -206,7 +205,6 @@ class StatusEventAdmin extends AbstractRentalAdmin
     #[\Override]
     public function prePersist($Event): void
     {
-        \assert($Event instanceof StatusEvent);
         $user = $this->ts->getToken()->getUser();
         \assert($user instanceof User);
         $Event->setCreator($user);
@@ -218,7 +216,6 @@ class StatusEventAdmin extends AbstractRentalAdmin
     #[\Override]
     public function postPersist($Event): void
     {
-        \assert($Event instanceof StatusEvent);
         $user = $Event->getCreator();
         $text = $this->getMMtext($Event, $user);
         $this->mm->sendToMattermost($text, 'vuokraus');
@@ -228,7 +225,6 @@ class StatusEventAdmin extends AbstractRentalAdmin
     #[\Override]
     public function preUpdate($Event): void
     {
-        \assert($Event instanceof StatusEvent);
         $user = $this->ts->getToken()->getUser();
         \assert($user instanceof User);
         $Event->setModifier($user);
@@ -239,7 +235,6 @@ class StatusEventAdmin extends AbstractRentalAdmin
     #[\Override]
     public function postUpdate($Event): void
     {
-        \assert($Event instanceof StatusEvent);
         $user = $Event->getModifier();
         $text = $this->getMMtext($Event, $user);
         $this->mm->sendToMattermost($text, 'vuokraus');
