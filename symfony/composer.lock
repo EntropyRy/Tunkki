@@ -1926,16 +1926,16 @@
         },
         {
             "name": "gedmo/doctrine-extensions",
-            "version": "v3.22.0",
+            "version": "v3.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine-extensions/DoctrineExtensions.git",
-                "reference": "e4350ee2daa7f34aa5806f2e1ea11fa4b5800e57"
+                "reference": "a973a68a990392b96f5ccbd4d713ae33e4bde95f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine-extensions/DoctrineExtensions/zipball/e4350ee2daa7f34aa5806f2e1ea11fa4b5800e57",
-                "reference": "e4350ee2daa7f34aa5806f2e1ea11fa4b5800e57",
+                "url": "https://api.github.com/repos/doctrine-extensions/DoctrineExtensions/zipball/a973a68a990392b96f5ccbd4d713ae33e4bde95f",
+                "reference": "a973a68a990392b96f5ccbd4d713ae33e4bde95f",
                 "shasum": ""
             },
             "require": {
@@ -2034,7 +2034,7 @@
             "support": {
                 "docs": "https://github.com/doctrine-extensions/DoctrineExtensions/tree/main/doc",
                 "issues": "https://github.com/doctrine-extensions/DoctrineExtensions/issues",
-                "source": "https://github.com/doctrine-extensions/DoctrineExtensions/tree/v3.22.0"
+                "source": "https://github.com/doctrine-extensions/DoctrineExtensions/tree/v3.22.1"
             },
             "funding": [
                 {
@@ -2054,7 +2054,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-13T19:37:35+00:00"
+            "time": "2026-08-01T13:57:40+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -5841,12 +5841,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/haivala/SonataPageBundle.git",
-                "reference": "9f605d17b7930faf08d6587144999089872c9bbf"
+                "reference": "a30ea2f9213e62f81ca7c6bdbd41c4a895f8f217"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/haivala/SonataPageBundle/zipball/9f605d17b7930faf08d6587144999089872c9bbf",
-                "reference": "9f605d17b7930faf08d6587144999089872c9bbf",
+                "url": "https://api.github.com/repos/haivala/SonataPageBundle/zipball/a30ea2f9213e62f81ca7c6bdbd41c4a895f8f217",
+                "reference": "a30ea2f9213e62f81ca7c6bdbd41c4a895f8f217",
                 "shasum": ""
             },
             "require": {
@@ -5965,7 +5965,7 @@
                     "url": "https://github.com/VincentLanglet"
                 }
             ],
-            "time": "2026-04-08T19:36:53+00:00"
+            "time": "2026-08-03T07:24:58+00:00"
         },
         {
             "name": "sonata-project/seo-bundle",
@@ -18997,16 +18997,16 @@
         },
         {
             "name": "zenstruck/foundry",
-            "version": "v2.11.0",
+            "version": "v2.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zenstruck/foundry.git",
-                "reference": "3063be3c941e1cdf74144a1a5e1f1c97abf4b8d9"
+                "reference": "df5790819d0228e3c48e575e79f280822200c270"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zenstruck/foundry/zipball/3063be3c941e1cdf74144a1a5e1f1c97abf4b8d9",
-                "reference": "3063be3c941e1cdf74144a1a5e1f1c97abf4b8d9",
+                "url": "https://api.github.com/repos/zenstruck/foundry/zipball/df5790819d0228e3c48e575e79f280822200c270",
+                "reference": "df5790819d0228e3c48e575e79f280822200c270",
                 "shasum": ""
             },
             "require": {
@@ -19108,7 +19108,7 @@
             ],
             "support": {
                 "issues": "https://github.com/zenstruck/foundry/issues",
-                "source": "https://github.com/zenstruck/foundry/tree/v2.11.0"
+                "source": "https://github.com/zenstruck/foundry/tree/v2.11.1"
             },
             "funding": [
                 {
@@ -19120,7 +19120,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-07-27T20:25:22+00:00"
+            "time": "2026-08-01T21:34:09+00:00"
         }
     ],
     "aliases": [
