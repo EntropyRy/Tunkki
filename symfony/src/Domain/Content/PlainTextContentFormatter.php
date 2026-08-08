@@ -8,9 +8,9 @@ use League\CommonMark\GithubFlavoredMarkdownConverter;
 
 use function Symfony\Component\String\u;
 
-final class PlainTextContentFormatter
+final readonly class PlainTextContentFormatter
 {
-    private readonly GithubFlavoredMarkdownConverter $markdownConverter;
+    private GithubFlavoredMarkdownConverter $markdownConverter;
 
     public function __construct()
     {

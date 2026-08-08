@@ -68,7 +68,7 @@ final class EventPageTest extends FixturesWebTestCase
 
         $this->assertResponseIsSuccessful();
         $content = $client->getResponse()->getContent() ?? '';
-        $crawler = new \Symfony\Component\DomCrawler\Crawler($content);
+        $crawler = new Crawler($content);
         $this->assertGreaterThan(
             0,
             $crawler->filter('html')->count(),
