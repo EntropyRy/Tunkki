@@ -129,7 +129,7 @@ return [
         'version' => '1.2.3',
     ],
     'prosemirror-commands' => [
-        'version' => '1.7.1',
+        'version' => '1.7.2',
     ],
     'prosemirror-inputrules' => [
         'version' => '1.5.1',
@@ -199,6 +199,6 @@ return [
         'type' => 'css',
     ],
     '@stripe/stripe-js' => [
-        'version' => '9.12.1',
+        'version' => '9.13.0',
     ],
 ];
