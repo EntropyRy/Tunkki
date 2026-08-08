@@ -6,9 +6,13 @@ namespace App\Tests\Functional;
 
 use App\Factory\EventFactory;
 use App\Tests\_Base\FixturesWebTestCase;
+use App\Tests\Support\MetaAssertionTrait;
+use Symfony\Component\DomCrawler\Crawler;
 
 final class EventPageTest extends FixturesWebTestCase
 {
+    use MetaAssertionTrait;
+
     private const TEST_SLUG = 'test-event';
 
     protected function setUp(): void
@@ -97,5 +101,39 @@ final class EventPageTest extends FixturesWebTestCase
                 $crawler->filter(\sprintf('html[lang="%s"]', $expectedLang))->count()
             );
         }
+    }
+
+    public function testEventMetaDescriptionUsesPlainTextExcerptFromMarkdownContent(): void
+    {
+        $client = $this->client;
+        $slug = 'markdown-meta-'.bin2hex(random_bytes(6));
+        $event = EventFactory::new()
+            ->published()
+            ->create([
+                'url' => $slug,
+                'name' => 'Markdown Meta Event',
+                'nimi' => 'Markdown metatapahtuma',
+                'Content' => '#### OPEN AIR | Helsinki {{ dj_timetable }} {{ unknown_token }} **Bold** [Entropy](https://entropy.fi)',
+                'Sisallys' => '#### OPEN AIR | Helsinki {{ dj_timetable }} {{ unknown_token }} **Bold** [Entropy](https://entropy.fi)',
+                'abstractFi' => null,
+                'abstractEn' => null,
+            ]);
+
+        $client->request('GET', \sprintf('/%d/%s', (int) $event->getEventDate()->format('Y'), $slug));
+
+        $this->assertResponseIsSuccessful();
+
+        $crawler = new Crawler((string) $client->getResponse()->getContent());
+        $description = $this->assertMetaTagContentNotEmpty($crawler, 'property', 'og:description');
+
+        $this->assertSame('OPEN AIR | Helsinki Bold Entropy', $description);
+        $this->assertMetaTagContentSame($crawler, 'property', 'twitter:description', $description);
+        $this->assertMetaTagContentSame($crawler, 'name', 'description', $description);
+        $this->assertSame(0, $crawler->filter('meta[property="twitter:desctiption"]')->count());
+        $this->assertMetaTagContentNotContains($crawler, 'property', 'og:description', '####');
+        $this->assertMetaTagContentNotContains($crawler, 'property', 'og:description', '{{');
+        $this->assertMetaTagContentNotContains($crawler, 'property', 'og:description', 'dj_timetable');
+        $this->assertMetaTagContentNotContains($crawler, 'property', 'og:description', 'unknown_token');
+        $this->assertMetaTagContentNotContains($crawler, 'property', 'og:description', '[Entropy]');
     }
 }

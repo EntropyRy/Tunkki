@@ -183,14 +183,14 @@ final class CalendarFeedTest extends FixturesWebTestCase
         );
     }
 
-    public function testCalendarFeedConvertsMarkdownToPlainTextDescription(): void
+    public function testCalendarFeedConvertsMarkdownAndPlaceholdersToPlainTextDescription(): void
     {
         EventFactory::new()->create([
             'type' => 'event',
             'name' => 'Markdown Event',
             'nimi' => 'Markdown tapahtuma',
-            'Content' => '**Bold** [Entropy](https://entropy.fi)',
-            'Sisallys' => '**Bold** [Entropy](https://entropy.fi)',
+            'Content' => '#### OPEN AIR | Helsinki {{ links }} {{ unknown_token }} **Bold** [Entropy](https://entropy.fi)',
+            'Sisallys' => '#### OPEN AIR | Helsinki {{ links }} {{ unknown_token }} **Bold** [Entropy](https://entropy.fi)',
         ]);
 
         $hash = $this->encodeHash([1, 0, 0, 0, 0, 0]);
@@ -202,7 +202,11 @@ final class CalendarFeedTest extends FixturesWebTestCase
 
         $body = $this->client->getResponse()->getContent();
         $this->assertNotFalse($body);
-        $this->assertMatchesRegularExpression('/DESCRIPTION:Bold Entropy/', $body);
+        $this->assertMatchesRegularExpression('/DESCRIPTION:OPEN AIR \\| Helsinki Bold Entropy/', $body);
+        $this->assertDoesNotMatchRegularExpression('/####/', $body);
+        $this->assertDoesNotMatchRegularExpression('/\\{\\{/', $body);
+        $this->assertDoesNotMatchRegularExpression('/unknown_token/', $body);
+        $this->assertDoesNotMatchRegularExpression('/links/', $body);
         $this->assertDoesNotMatchRegularExpression('/\\*\\*Bold\\*\\*/', $body);
         $this->assertDoesNotMatchRegularExpression('/\\[Entropy\\]\\(https:\\/\\/entropy\\.fi\\)/', $body);
     }

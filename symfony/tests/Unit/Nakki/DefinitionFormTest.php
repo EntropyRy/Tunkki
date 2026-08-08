@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Nakki;
 
 use App\Factory\NakkiDefinitionFactory;
+use App\Form\NakkiDefinitionType;
 use App\Repository\NakkiDefinitionRepository;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Twig\Components\Nakki\DefinitionForm;
@@ -64,6 +65,28 @@ final class DefinitionFormTest extends FixturesWebTestCase
 
         $repository = self::getContainer()->get(NakkiDefinitionRepository::class);
         self::assertNotNull($repository->find($component->definitionId));
+    }
+
+    public function testDefinitionFieldsAreOptionalForPartialInput(): void
+    {
+        $form = Forms::createFormFactoryBuilder()
+            ->getFormFactory()
+            ->create(NakkiDefinitionType::class);
+        $view = $form->createView();
+
+        foreach (['nameFi', 'nameEn', 'descriptionFi', 'descriptionEn'] as $field) {
+            self::assertFalse($view->children[$field]->vars['required'], \sprintf('%s should not render as required.', $field));
+        }
+
+        $form->submit([
+            'nameFi' => '',
+            'nameEn' => '',
+            'descriptionFi' => 'Only Finnish description',
+            'descriptionEn' => '',
+            'onlyForActiveMembers' => false,
+        ]);
+
+        self::assertTrue($form->isValid());
     }
 
     public function testResolveDefinitionBranches(): void

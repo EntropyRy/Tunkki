@@ -2,9 +2,9 @@
     {# ei näytetä dataa linkki previewissä ellei tapahtuma ole julkaistu #}
     {# Replaced deprecated event.isPublished with domain service call #}
     {% if eventTemporalState.isPublished(event) %}
-        {% set abstract = event.abstract(app.request.locale) %}
+        {% set abstract = event.abstract(app.request.locale)|content_excerpt %}
         {% if abstract is empty %}
-            {% set abstract = event.abstractFromContent(app.request.locale) %}
+            {% set abstract = event.contentForTwig(app.request.locale)|content_excerpt %}
         {% endif %}
         {# { parent() } #}
         {% set height = 1920 %}
@@ -30,7 +30,7 @@
         <meta property="og:description" content="{{ abstract }}">
         <meta property="twitter:title"
               content="{{ event.nameAndDateByLang(app.request.locale) }}">
-        <meta property="twitter:desctiption" content="{{ abstract }}">
+        <meta property="twitter:description" content="{{ abstract }}">
         <meta property="twitter:card" content="summary_large_image">
         <meta name="keywords"
               content="{{ 'event.meta.keywords'|trans }},{{ event.name(app.request.locale) }}{% if event.url %},{{ event.url }}{% endif %}">

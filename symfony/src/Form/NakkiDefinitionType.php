@@ -22,21 +22,27 @@ final class NakkiDefinitionType extends AbstractType
         $builder
             ->add('nameFi', TextType::class, [
                 'label' => 'nakkikone.definition.name_fi',
+                'required' => false,
+                'empty_data' => '',
                 'translation_domain' => 'messages',
             ])
             ->add('nameEn', TextType::class, [
                 'label' => 'nakkikone.definition.name_en',
+                'required' => false,
+                'empty_data' => '',
                 'translation_domain' => 'messages',
             ])
             ->add('descriptionFi', TextareaType::class, [
                 'label' => 'nakkikone.definition.description_fi',
                 'required' => false,
+                'empty_data' => '',
                 'attr' => ['rows' => 4],
                 'translation_domain' => 'messages',
             ])
             ->add('descriptionEn', TextareaType::class, [
                 'label' => 'nakkikone.definition.description_en',
                 'required' => false,
+                'empty_data' => '',
                 'attr' => ['rows' => 4],
                 'translation_domain' => 'messages',
             ])

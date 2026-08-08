@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Domain\Content\PlainTextContentFormatter;
 use App\Entity\Event;
 use App\Entity\Location as PhysicalLocation;
 use App\Entity\User;
@@ -24,7 +25,6 @@ use Eluceo\iCal\Domain\ValueObject\Timestamp;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
 use Eluceo\iCal\Domain\ValueObject\Uri;
 use Eluceo\iCal\Presentation\Factory\CalendarFactory;
-use League\CommonMark\GithubFlavoredMarkdownConverter;
 use Sqids\Sqids;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,6 +56,11 @@ class CalendarController extends AbstractController
     private const int CFG_NOTIFY_CLUBROOM = 3;
     private const int CFG_ADD_MEETINGS = 4;
     private const int CFG_NOTIFY_MEETINGS = 5;
+
+    public function __construct(
+        private readonly PlainTextContentFormatter $plainTextContentFormatter,
+    ) {
+    }
 
     #[Route(
         path: [
@@ -257,27 +262,11 @@ class CalendarController extends AbstractController
     }
 
     /**
-     * Render markdown to HTML first, then flatten to plain text for ICS DESCRIPTION.
+     * Strip content placeholders and markdown for ICS DESCRIPTION.
      */
     private function sanitizeEventDescription(?string $content): string
     {
-        if (null === $content || '' === trim($content)) {
-            return '';
-        }
-
-        $markdownConverter = new GithubFlavoredMarkdownConverter([
-            'renderer' => [
-                'soft_break' => '<br>',
-            ],
-            'html_input' => 'allow',
-        ]);
-
-        $html = $markdownConverter->convert($content)->getContent();
-        $plainText = html_entity_decode(strip_tags($html));
-        $plainText = preg_replace('/[ \t]+/u', ' ', $plainText);
-        $plainText = preg_replace('/\R{3,}/u', "\n\n", (string) $plainText);
-
-        return trim((string) $plainText);
+        return $this->plainTextContentFormatter->toPlainText($content);
     }
 
     /**
