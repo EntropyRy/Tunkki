@@ -48,10 +48,8 @@ class EventController extends Controller
             if ($event->getExternalUrl()) {
                 return new RedirectResponse($event->getUrl());
             }
-
             $preferred = $request->getPreferredLanguage(['fi', 'en']);
             $targetLocale = 'fi' === $preferred ? 'fi' : 'en';
-
             $url = $urlGenerator->generate(
                 'entropy_event_slug',
                 [
@@ -61,9 +59,9 @@ class EventController extends Controller
                 ],
                 UrlGeneratorInterface::ABSOLUTE_PATH,
             );
-
             return new RedirectResponse($url);
-        } elseif ($event->getExternalUrl()) {
+        }
+        if ($event->getExternalUrl()) {
             // if there is no advert for the event redirect to events listing
             return new RedirectResponse($this->generateUrl('_page_alias_events_'.$request->getLocale()));
         }
