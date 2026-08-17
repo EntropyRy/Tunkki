@@ -81,6 +81,9 @@ class ArtistType extends AbstractType
                     'context' => 'artist',
                     'translation_domain' => 'messages',
                     'new_on_update' => true,
+                    // Show the "required" error inline next to the widget instead
+                    // of bubbling it up to a generic top-of-form message.
+                    'error_bubbling' => false,
                 ]
                 /*            ->add('eventArtistInfos', CollectionType::class, [
                 'entry_type' => EventArtistInfoType::class,

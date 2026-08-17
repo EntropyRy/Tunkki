@@ -66,6 +66,7 @@ export default class extends Controller {
         previewStyle: "vertical",
         usageStatistics: false,
         initialValue: this.textarea.value || "",
+        placeholder: this.textarea.getAttribute("placeholder") || "",
         toolbarItems: this.toolbarItems(),
         customHTMLRenderer: this.customHTMLRenderer(),
         events: {

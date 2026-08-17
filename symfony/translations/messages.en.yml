@@ -394,7 +394,6 @@ artist:
     hardware_help: What hardware are you using so we can prepare? (Vinyl, CDJs, controllers, modular, live rigs, VJ gear…)
 
     name: Artist name
-    pic_missing: Picture is missing!
     type: Type
     bio: Bio in Finnish
     bio_en: Bio in English
@@ -529,12 +528,11 @@ happening:
   paymentInfo: Payment Info
   bookings_for_admin: (You can see these because you organize this event)
   no_reservations: No reservations
-  description_fi: Tell about the happening. When does sign-up close? For a restaurant, list options and allergens.
   price_fi: Text so that you can have many prices. (tapas 10€, tapas + wine 15€)
-  payment_info_fi: Let us know how to pay if needed.
   show_payment_info: Show payment info to the user
   sign_ups_have_ended: Sign-ups have ended
-  markdown_allowed: Markdown <a href="https://www.markdownguide.org/cheat-sheet/">formatting</a> allowed
+  description_fi_help: Tell about the happening. Where is it going to happen? When does sign-up close? For a restaurant, list options and allergens.
+  payment_info_fi_help: Let us know how to pay if needed.
   you_have_signed_up: You have signed up successfully!
   reservation_cancelled: Reservation cancelled
   created: Happening Created!

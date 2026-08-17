@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Profile;
 
+use App\Entity\Sonata\SonataMediaMedia;
 use App\Factory\ArtistFactory;
 use App\Factory\EventArtistInfoFactory;
 use App\Factory\EventFactory;
@@ -31,6 +32,23 @@ final class ArtistSignupSyncTest extends FixturesWebTestCase
         parent::setUp();
         $this->initSiteAwareClient();
         $this->seedClientHome('en');
+    }
+
+    /**
+     * Build an unpersisted promo picture; the Picture field is required
+     * (Assert\NotNull), so any artist whose edit form gets submitted needs one.
+     */
+    private function createTestPicture(string $reference): SonataMediaMedia
+    {
+        $picture = new SonataMediaMedia();
+        $picture->setProviderName('sonata.media.provider.image');
+        $picture->setContext('artist');
+        $picture->setName($reference);
+        $picture->setEnabled(true);
+        $picture->setProviderStatus(1);
+        $picture->setProviderReference($reference);
+
+        return $picture;
     }
 
     public function testEditFormHidesSyncSectionForSingleSignup(): void
@@ -127,6 +145,7 @@ final class ArtistSignupSyncTest extends FixturesWebTestCase
             'bio' => 'Original bio',
             'bioEn' => 'Original bio EN',
             'genre' => 'Techno',
+            'Picture' => $this->createTestPicture('auto-sync-picture'),
         ]);
 
         // Create a single future event with artist signup (will auto-sync)
@@ -180,6 +199,7 @@ final class ArtistSignupSyncTest extends FixturesWebTestCase
             'bio' => 'Original bio',
             'bioEn' => 'Original bio EN',
             'genre' => 'Techno',
+            'Picture' => $this->createTestPicture('checkbox-sync-picture'),
         ]);
 
         // Create TWO future events (multiple = checkbox mode)
@@ -239,6 +259,7 @@ final class ArtistSignupSyncTest extends FixturesWebTestCase
             'hardware' => 'Original Hardware',
             'bio' => 'Original bio',
             'bioEn' => 'Original bio EN',
+            'Picture' => $this->createTestPicture('nosync-picture'),
         ]);
 
         // Create TWO future events (multiple = checkbox mode, won't auto-sync)
@@ -355,6 +376,7 @@ final class ArtistSignupSyncTest extends FixturesWebTestCase
             'hardware' => 'My Hardware',
             'bio' => 'My bio',
             'bioEn' => 'My bio EN',
+            'Picture' => $this->createTestPicture('cross-sync-picture'),
         ]);
 
         // Create another artist belonging to same member (but different artist entity)

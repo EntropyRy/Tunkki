@@ -31,10 +31,7 @@ class Artist implements \Stringable
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $type = null;
 
-    #[Assert\Expression(
-        '!(!value or !this.getBioEn())',
-        message: 'artist.form.error',
-    ),]
+    #[Assert\NotBlank(message: 'artist.form.bio_required')]
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $bio = null;
 
@@ -61,12 +58,14 @@ class Artist implements \Stringable
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'artist')]
     private ?Member $member = null;
 
+    #[Assert\NotBlank(message: 'artist.form.bio_en_required')]
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $bioEn = null;
 
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $links = [];
 
+    #[Assert\NotNull(message: 'artist.form.picture_required')]
     #[ORM\ManyToOne(
         targetEntity: SonataMediaMedia::class,
         cascade: ['persist', 'detach'],

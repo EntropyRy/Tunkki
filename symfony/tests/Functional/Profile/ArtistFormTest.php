@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Functional\Profile;
 
 use App\Entity\Artist;
+use App\Entity\Sonata\SonataMediaMedia;
 use App\Factory\ArtistFactory;
 use App\Factory\EventArtistInfoFactory;
 use App\Factory\EventFactory;
@@ -318,7 +319,7 @@ final class ArtistFormTest extends FixturesWebTestCase
         ];
     }
 
-    public function testCreateFormSubmissionWithPictureMissingShowsWarning(): void
+    public function testCreateFormSubmissionWithPictureMissingShowsInlineFieldError(): void
     {
         $member = MemberFactory::new()->active()->create([
             'emailVerified' => true,
@@ -338,25 +339,43 @@ final class ArtistFormTest extends FixturesWebTestCase
 
         $this->client->submit($form);
 
-        // Expect: form is re-rendered (no redirect) so user can add a picture
-        $this->assertResponseIsSuccessful();
+        // Expect: form is re-rendered (no redirect) so user can add a picture.
+        // Symfony's AbstractController::render() auto-sets 422 for an invalid
+        // form found among the render parameters.
+        $this->assertResponseStatusCodeSame(422);
 
         // Assert we are still on the create page and the artist form is visible again
         $this->client->assertSelectorExists('form');
         $this->client->assertSelectorExists('input[name="artist[name]"]');
         $this->client->assertSelectorExists('input[name="artist[type]"]');
         $this->client->assertSelectorExists('input[name="artist[hardware]"]');
+
+        // The missing picture is now surfaced as an inline field error (via the
+        // entity's Assert\NotNull constraint, with error_bubbling disabled on
+        // the Picture field), not a generic flash message.
+        $this->client->assertSelectorExists('#artist_Picture[aria-describedby="artist_Picture_error1"]');
+        $this->client->assertSelectorExists('#artist_Picture_error1.invalid-feedback');
     }
 
     public function testEditFormSubmissionSuccess(): void
     {
         $member = MemberFactory::new()->active()->create();
+
+        $picture = new SonataMediaMedia();
+        $picture->setProviderName('sonata.media.provider.image');
+        $picture->setContext('artist');
+        $picture->setName('edit-test-picture');
+        $picture->setEnabled(true);
+        $picture->setProviderStatus(1);
+        $picture->setProviderReference('edit-test-picture-ref');
+
         $artist = ArtistFactory::new()->withMember($member)->create([
             'name' => 'Original Name',
             'type' => 'DJ',
             'hardware' => 'Original Hardware',
             'bio' => 'Original bio',
             'bioEn' => 'Original bio EN',
+            'Picture' => $picture,
         ]);
 
         $this->loginAsMember($member->getEmail());

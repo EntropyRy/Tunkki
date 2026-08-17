@@ -466,7 +466,6 @@ artist:
     type: Tyyppi
     bio: Bio suomeksi
     bio_en: Bio englanniksi
-    pic_missing: Kuva puuttuu!
     genre_help: Vj voi merkitä minkälaista materiaalia. Tätä kenttää ei käännetä. ÄLÄ LAITA BPM TÄHÄN.
     bio_help:
       Kerro lyhyesti itsestäsi artistina. Voit esimerkiksi kertoa taustastasi
@@ -626,12 +625,11 @@ happening:
   paymentInfo: Maksutiedot
   bookings_for_admin: (Näet nämä koska olet tapahtuman järjestäjä)
   no_reservations: Ei varauksia
-  description_fi: Kerro tapahtumasta. Milloin mahdollinen ennakko ilmoittautuminen? Ravintolan tapauksessa ruokavaihtoehdot ja allergeenit.
   price_fi: Vaihtoehtoisten hintojen takia tekstikenttä. (tapas 10€, tapas + wine 15€)
-  payment_info_fi: Jos tapahtuma maksaa jotain niin kerro miten maksu suoritetaan
   show_payment_info: Näytä maksutiedot tapahtumassa
   sign_ups_have_ended: Ilmoittautuminen suljettu
-  markdown_allowed: Markdown <a href="https://www.markdownguide.org/cheat-sheet/">formatointi</a> sallittu
+  description_fi_help: Kerro tapahtumasta. Missä se järjestetään? Milloin mahdollinen ennakko ilmoittautuminen? Ravintolan tapauksessa ruokavaihtoehdot ja allergeenit.
+  payment_info_fi_help: Jos tapahtuma maksaa jotain niin kerro miten maksu suoritetaan
   you_have_signed_up: Ilmoittauduttu onnistuneesti!
   reservation_cancelled: Ilmoittautuminen poistettu!
   created: Tapahtuma luotu

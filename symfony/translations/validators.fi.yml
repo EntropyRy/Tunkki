@@ -2,7 +2,9 @@ under_password_limit: "Salasanasi pitää olla vähintään {{ limit }} merkkiä
 passwords_need_to_match: Salasanojen on oltava samat.
 artist:
     form:
-        error: Käytämme molempia bio-tekstejä sivuston kaksikielisyyden vuoksi. Ole hyvä ja käännä teksti molemmille kielille.
+        picture_required: Promokuva on pakollinen.
+        bio_required: Bio suomeksi on pakollinen.
+        bio_en_required: Bio englanniksi on pakollinen.
 stream:
     artist:
         notnull: Sinun täytyy valita artisti

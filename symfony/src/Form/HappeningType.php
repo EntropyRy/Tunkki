@@ -63,28 +63,26 @@ class HappeningType extends AbstractType
                     ),
                 ],
             ])
-            ->add('descriptionFi', null, [
+            ->add('descriptionFi', MarkdownEditorType::class, [
                 'label' => 'happening.field.description_fi',
+                'format' => 'simple',
                 'attr' => [
-                    'placeholder' => 'happening.description_fi',
                     'rows' => 3,
                 ],
-                'help' => 'happening.markdown_allowed',
-                'help_html' => true,
+                'help' => 'happening.description_fi_help',
                 'constraints' => [
                     new NotBlank(
                         message: 'happening.validation.description_fi_required',
                     ),
                 ],
             ])
-            ->add('paymentInfoFi', null, [
+            ->add('paymentInfoFi', MarkdownEditorType::class, [
                 'label' => 'happening.field.payment_info_fi',
+                'format' => 'simple',
                 'attr' => [
-                    'placeholder' => 'happening.payment_info_fi',
                     'rows' => 3,
                 ],
-                'help' => 'happening.markdown_allowed',
-                'help_html' => true,
+                'help' => 'happening.payment_info_fi_help',
             ])
             ->add('priceFi', null, [
                 'label' => 'happening.field.price_fi',
@@ -98,22 +96,24 @@ class HappeningType extends AbstractType
                     ),
                 ],
             ])
-            ->add('descriptionEn', null, [
+            ->add('descriptionEn', MarkdownEditorType::class, [
                 'label' => 'happening.field.description_en',
-                'attr' => ['rows' => 3],
-                'help' => 'happening.markdown_allowed',
-                'help_html' => true,
+                'format' => 'simple',
+                'attr' => [
+                    'rows' => 3,
+                ],
                 'constraints' => [
                     new NotBlank(
                         message: 'happening.validation.description_en_required',
                     ),
                 ],
             ])
-            ->add('paymentInfoEn', null, [
+            ->add('paymentInfoEn', MarkdownEditorType::class, [
                 'label' => 'happening.field.payment_info_en',
-                'attr' => ['rows' => 3],
-                'help' => 'happening.markdown_allowed',
-                'help_html' => true,
+                'format' => 'simple',
+                'attr' => [
+                    'rows' => 3,
+                ],
             ])
             ->add('priceEn', null, [
                 'label' => 'happening.field.price_en',

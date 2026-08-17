@@ -133,8 +133,11 @@ final class ArtistControllerTest extends TestCase
         self::assertEmpty($controller->flashes, 'No flash messages expected.');
     }
 
-    public function testCreateSubmittedValidMissingPictureAddsWarningFlash(): void
+    public function testCreateSubmittedMissingPictureFailsValidationAndRerendersForm(): void
     {
+        // The Picture field now carries an Assert\NotNull constraint, so a
+        // submission without a picture is caught by form validation (surfaced
+        // as an inline field error) rather than a controller-level flash.
         $user = $this->makeUserWithMember(emailVerified: true);
         $controller = $this->makeController($user);
 
@@ -145,7 +148,7 @@ final class ArtistControllerTest extends TestCase
         $form = $this->createMock(FormInterface::class);
         $form->expects(self::once())->method('handleRequest');
         $form->method('isSubmitted')->willReturn(true);
-        $form->method('isValid')->willReturn(true);
+        $form->method('isValid')->willReturn(false);
         $form->method('getData')->willReturn($artist);
 
         /** @var FormFactoryInterface $formFactory */
@@ -155,20 +158,19 @@ final class ArtistControllerTest extends TestCase
         /** @var MattermostNotifierService $mm */
         $mm = $this->createStub(MattermostNotifierService::class);
 
-        /** @var EntityManagerInterface $em */
-        $em = $this->createStub(EntityManagerInterface::class);
+        /** @var EntityManagerInterface&MockObject $em */
+        $em = $this->createMock(EntityManagerInterface::class);
+        $em->expects(self::never())->method('persist');
+        $em->expects(self::never())->method('flush');
 
         $request = new Request();
 
         $response = $controller->create($request, $formFactory, $mm, $em);
 
         self::assertInstanceOf(Response::class, $response);
-        self::assertArrayHasKey('warning', $controller->flashes);
-        self::assertSame(
-            ['artist.form.pic_missing'],
-            $controller->flashes['warning'],
-        );
+        self::assertEmpty($controller->flashes, 'No flash messages expected; the form itself carries the error.');
         self::assertSame('render', $controller->lastAction);
+        self::assertArrayHasKey('form', $controller->lastRenderParams);
     }
 
     public function testCreateSubmittedValidWithPicturePersistsAndRedirects(): void
