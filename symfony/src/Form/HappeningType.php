@@ -39,6 +39,8 @@ class HappeningType extends AbstractType
                     'happening.type.event' => 'event',
                     'happening.type.lecture' => 'lecture',
                 ],
+                'multiple' => false,
+                'expanded' => true,
                 'required' => true,
                 'constraints' => [
                     new NotBlank(message: 'happening.validation.type_required'),

@@ -59,6 +59,7 @@ class EventController extends Controller
                 ],
                 UrlGeneratorInterface::ABSOLUTE_PATH,
             );
+
             return new RedirectResponse($url);
         }
         if ($event->getExternalUrl()) {
