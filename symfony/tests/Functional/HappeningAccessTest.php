@@ -726,12 +726,12 @@ final class HappeningAccessTest extends FixturesWebTestCase
         );
         $this->assertSame('Name in Finnish', $nameLabel);
 
-        /* // Check type dropdown has translated options */
-        /* $typeOptions = $crawler->filter('#happening_type option')->each( */
-        /*     static fn ($node) => $node->text(), */
-        /* ); */
-        /* $this->assertContains('Restaurant', $typeOptions); */
-        /* $this->assertContains('Lecture', $typeOptions); */
+        // Check type radio options have translated labels
+        $typeLabels = $crawler->filter('#happening_type label')->each(
+            static fn ($node) => $node->text(),
+        );
+        $this->assertContains('Restaurant', $typeLabels);
+        $this->assertContains('Lecture', $typeLabels);
     }
 
     /**

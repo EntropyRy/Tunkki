@@ -41,6 +41,9 @@ class HappeningType extends AbstractType
                 ],
                 'multiple' => false,
                 'expanded' => true,
+                'label_attr' => [
+                    'class' => 'radio-inline',
+                ],
                 'required' => true,
                 'constraints' => [
                     new NotBlank(message: 'happening.validation.type_required'),

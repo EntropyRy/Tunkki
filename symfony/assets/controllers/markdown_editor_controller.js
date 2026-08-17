@@ -83,6 +83,10 @@ export default class extends Controller {
       });
       this.container.addEventListener("click", this.onToolbarClick);
       this.registerCommands();
+
+      this.applyTheme(document.documentElement.getAttribute("data-bs-theme"));
+      this.onThemeChanged = (event) => this.applyTheme(event.detail?.theme);
+      document.addEventListener("theme:changed", this.onThemeChanged);
     } catch (error) {
       console.error("Failed to initialize Toast UI Editor", error);
       this.teardown();
@@ -91,6 +95,11 @@ export default class extends Controller {
 
   disconnect() {
     this.teardown();
+  }
+
+  applyTheme(theme) {
+    const root = this.container?.querySelector(".toastui-editor-defaultUI");
+    root?.classList.toggle("toastui-editor-dark", theme === "dark");
   }
 
   toolbarItems() {
@@ -421,6 +430,10 @@ export default class extends Controller {
   }
 
   teardown() {
+    if (this.onThemeChanged) {
+      document.removeEventListener("theme:changed", this.onThemeChanged);
+      this.onThemeChanged = null;
+    }
     if (this.editor && typeof this.editor.destroy === "function") {
       this.editor.destroy();
       this.editor = null;

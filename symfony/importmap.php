@@ -201,4 +201,8 @@ return [
     '@stripe/stripe-js' => [
         'version' => '9.13.0',
     ],
+    '@toast-ui/editor/dist/theme/toastui-editor-dark.css' => [
+        'version' => '3.2.2',
+        'type' => 'css',
+    ],
 ];
