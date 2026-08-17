@@ -703,6 +703,69 @@ final class HappeningAccessTest extends FixturesWebTestCase
     }
 
     /**
+     * Test that price is required when needsPreliminaryPayment is enabled,
+     * even when payment info is filled in.
+     * Covers HappeningType POST_SUBMIT price checks.
+     */
+    public function testCreateHappeningWithPaymentRequiredButMissingPrice(): void
+    {
+        $owner = $this->createUser();
+        $event = EventFactory::new()->published()->create();
+        $year = $event->getEventDate()->format('Y');
+
+        $this->loginClientAs($owner);
+
+        $createUrl = \sprintf(
+            '/en/%s/%s/happening/create',
+            $year,
+            $event->getUrl(),
+        );
+        $crawler = $this->client->request('GET', $createUrl);
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
+
+        $suffix = substr(bin2hex(random_bytes(4)), 0, 6);
+
+        $csrfToken = $crawler->filter('input[name="happening[_token]"]')->attr('value');
+
+        $validTime = (new \DateTimeImmutable('+2 hours'))->format('Y-m-d H:i:s');
+
+        $this->client->request('POST', $createUrl, [
+            'happening' => [
+                '_token' => $csrfToken,
+                'type' => 'event',
+                'time' => $validTime,
+                'nameFi' => 'Maksullinen ilman hintaa '.$suffix,
+                'descriptionFi' => 'Kuvaus FI',
+                'nameEn' => 'Payment Required Missing Price '.$suffix,
+                'descriptionEn' => 'Description EN',
+                'needsPreliminaryPayment' => '1',
+                'paymentInfoFi' => 'Maksu tilisiirrolla',
+                'paymentInfoEn' => 'Pay by bank transfer',
+                'priceFi' => '',  // Empty - should trigger validation error
+                'priceEn' => '',  // Empty - should trigger validation error
+                'maxSignUps' => '10',
+            ],
+        ]);
+
+        $status = $this->client->getResponse()->getStatusCode();
+        if (500 === $status) {
+            $content = $this->client->getResponse()->getContent() ?? '';
+            preg_match('/<title>([^<]+)<\/title>/', $content, $titleMatch);
+            preg_match('/at (\/[^\s]+\.php:\d+)/', $content, $traceMatch);
+            $info = 'Title: '.($titleMatch[1] ?? 'N/A');
+            if (isset($traceMatch[1])) {
+                $info .= ' At: '.$traceMatch[1];
+            }
+            $this->fail(\sprintf('Got 500 error. %s', $info));
+        }
+
+        $this->assertTrue(
+            \in_array($status, [200, 422], true),
+            \sprintf('Should show form with validation errors when price missing. Got status %d.', $status),
+        );
+    }
+
+    /**
      * Smoke test: verify translation keys resolve (detects broken YAML).
      */
     public function testHappeningFormTranslationsResolve(): void

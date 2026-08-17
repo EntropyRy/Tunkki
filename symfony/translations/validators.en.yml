@@ -36,3 +36,4 @@ happening:
         max_signups_positive_or_zero: Max sign-ups must be zero or a positive number
         # removed duplicate payment_info_required (use happening.payment_info_required)
     payment_info_required: Payment information is required
+    price_required: Price is required

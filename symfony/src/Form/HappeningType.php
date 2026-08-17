@@ -231,6 +231,8 @@ class HappeningType extends AbstractType
             if ($data->isNeedsPreliminaryPayment()) {
                 $fi = $data->getPaymentInfoFi();
                 $en = $data->getPaymentInfoEn();
+                $priceFi = $data->getPriceFi();
+                $priceEn = $data->getPriceEn();
 
                 if (
                     (null === $fi || '' === trim($fi))
@@ -256,6 +258,34 @@ class HappeningType extends AbstractType
                             new FormError(
                                 '',
                                 'happening.payment_info_required',
+                            ),
+                        );
+                }
+
+                if (
+                    (null === $priceFi || '' === trim($priceFi))
+                    && $form->has('priceFi')
+                ) {
+                    $form
+                        ->get('priceFi')
+                        ->addError(
+                            new FormError(
+                                '',
+                                'happening.price_required',
+                            ),
+                        );
+                }
+
+                if (
+                    (null === $priceEn || '' === trim($priceEn))
+                    && $form->has('priceEn')
+                ) {
+                    $form
+                        ->get('priceEn')
+                        ->addError(
+                            new FormError(
+                                '',
+                                'happening.price_required',
                             ),
                         );
                 }

@@ -33,3 +33,4 @@ happening:
         description_en_required: Kuvaus englanniksi on pakollinen
         max_signups_positive_or_zero: Maksimimäärän tulee olla nolla tai positiivinen luku
     payment_info_required: Maksutiedot ovat pakolliset
+    price_required: Hinta on pakollinen
