@@ -81,6 +81,11 @@
   --bs-border-radius-2xl: 2rem;
   --bs-border-radius-pill: 50rem;
   --bs-focus-ring-color: rgba(43, 112, 147, 0.25);
+
+  /* Happening type accent colors: hue-shifted from --bs-info so they stay in the same
+     family and follow whichever theme's --bs-info is active (see [data-bs-theme=dark]). */
+  --bs-happening-restaurant: hsl(from var(--bs-info) calc(h + 50) s l);
+  --bs-happening-lecture: hsl(from var(--bs-info) calc(h - 40) s l);
 }
 
 [data-bs-theme=dark] {
@@ -301,12 +306,23 @@ a:hover {
 }
 
 /* Happening type buttons */
-/* Shift the shared btn-info hue per happening.type so buttons stay recognizably
-   "info" colored but are distinguishable at a glance; "event" keeps the base color. */
+/* Give each happening.type its own background/border so buttons are distinguishable at a
+   glance; "event" keeps the base btn-info color. Only background/border are overridden (not
+   `filter`), so emoji and icons inside the button label keep their natural colors. */
 .happening-type-restaurant {
-  filter: hue-rotate(50deg) saturate(1.15);
+  --bs-btn-bg: var(--bs-happening-restaurant);
+  --bs-btn-border-color: var(--bs-happening-restaurant);
+  --bs-btn-hover-bg: var(--bs-happening-restaurant);
+  --bs-btn-hover-border-color: var(--bs-happening-restaurant);
+  --bs-btn-active-bg: var(--bs-happening-restaurant);
+  --bs-btn-active-border-color: var(--bs-happening-restaurant);
 }
 
 .happening-type-lecture {
-  filter: hue-rotate(-40deg);
+  --bs-btn-bg: var(--bs-happening-lecture);
+  --bs-btn-border-color: var(--bs-happening-lecture);
+  --bs-btn-hover-bg: var(--bs-happening-lecture);
+  --bs-btn-hover-border-color: var(--bs-happening-lecture);
+  --bs-btn-active-bg: var(--bs-happening-lecture);
+  --bs-btn-active-border-color: var(--bs-happening-lecture);
 }
