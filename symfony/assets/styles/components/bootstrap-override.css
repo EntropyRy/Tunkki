@@ -299,3 +299,14 @@ a:hover {
   display: inline-block;
   margin-right: 1rem;
 }
+
+/* Happening type buttons */
+/* Shift the shared btn-info hue per happening.type so buttons stay recognizably
+   "info" colored but are distinguishable at a glance; "event" keeps the base color. */
+.happening-type-restaurant {
+  filter: hue-rotate(50deg) saturate(1.15);
+}
+
+.happening-type-lecture {
+  filter: hue-rotate(-40deg);
+}
