@@ -84,6 +84,7 @@ class HappeningType extends AbstractType
             ->add('paymentInfoFi', MarkdownEditorType::class, [
                 'label' => 'happening.field.payment_info_fi',
                 'format' => 'simple',
+                'required' => false,
                 'attr' => [
                     'rows' => 3,
                 ],
@@ -91,6 +92,7 @@ class HappeningType extends AbstractType
             ])
             ->add('priceFi', null, [
                 'label' => 'happening.field.price_fi',
+                'required' => false,
                 'attr' => ['placeholder' => 'happening.price_fi'],
             ])
             ->add('nameEn', null, [
@@ -116,12 +118,14 @@ class HappeningType extends AbstractType
             ->add('paymentInfoEn', MarkdownEditorType::class, [
                 'label' => 'happening.field.payment_info_en',
                 'format' => 'simple',
+                'required' => false,
                 'attr' => [
                     'rows' => 3,
                 ],
             ])
             ->add('priceEn', null, [
                 'label' => 'happening.field.price_en',
+                'required' => false,
             ])
             ->add('needsPreliminarySignUp', null, [
                 'label' => 'happening.field.needs_preliminary_sign_up',
