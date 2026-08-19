@@ -236,7 +236,7 @@ final class HappeningControllerTest extends FixturesWebTestCase
         $this->assertResponseIsSuccessful();
         $this->client->assertSelectorExists('.happening-entire-event-heading');
         $this->client->assertSelectorTextContains(
-            '.happening-entire-event-heading + .d-grid',
+            '.happening-entire-event-heading + .happening-button-group',
             'Gift Table',
         );
         $timetableText = $this->client->getCrawler()->filter('table.happening-timetable')->text();

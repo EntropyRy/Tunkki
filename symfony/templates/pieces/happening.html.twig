@@ -31,7 +31,7 @@
 {%- if whole_event_happenings|length > 0 -%}
 <div class="pb-3 col-12">
 <h4 class="happening-entire-event-heading">{{ 'happening.entire_event_label'|trans }}</h4>
-<div class="d-grid gap-2">
+<div class="happening-button-group">
 {%- for happening in whole_event_happenings -%}
 {{ block('happening_link') }}
 {%- endfor -%}
@@ -81,7 +81,7 @@
 </td>
 {%- if will_add_indicator_target %}{% set indicator_added = true %}{% endif -%}
 <td class="time">{{ group.time|format_datetime(pattern: 'HH:mm') }}</td>
-<td class="happening-info">
+<td class="happening-info happening-button-group">
 {%- for happening in group.happenings -%}
 {{- block('happening_link') -}}
 {%- endfor -%}

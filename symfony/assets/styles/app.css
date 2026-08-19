@@ -311,11 +311,13 @@ h1 {
 .happening-timetable .happening-info {
     width: 100%;
     padding-left: 0.5em;
+}
+.happening-button-group {
     display: flex;
     flex-wrap: wrap;
     gap: 0.35em;
 }
-.happening-timetable .happening-info .btn {
+.happening-button-group .btn {
     text-align: left;
     flex: 1 1 12em;
     min-width: 12em;
