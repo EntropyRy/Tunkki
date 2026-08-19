@@ -313,14 +313,16 @@ h1 {
     padding-left: 0.5em;
 }
 .happening-button-group {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 0.35em;
 }
 .happening-button-group .btn {
     text-align: left;
-    flex: 1 1 12em;
-    min-width: 12em;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .happening-entire-event-heading {
     text-transform: uppercase;

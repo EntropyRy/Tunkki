@@ -164,6 +164,12 @@ final class HappeningControllerTest extends FixturesWebTestCase
         $this->assertStringContainsString('First At Seventeen', $firstRowText);
         $this->assertStringContainsString('Second At Seventeen', $firstRowText);
         $this->assertStringNotContainsString('Alone At Eighteen', $firstRowText);
+
+        $this->client->assertSelectorExists('table.happening-timetable td.happening-info.happening-button-group');
+        $groupedCellCount = $this->client->getCrawler()
+            ->filter('table.happening-timetable td.happening-info.happening-button-group')
+            ->count();
+        self::assertSame(1, $groupedCellCount, 'Only the shared 17:00 cell should get the multi-button grid layout.');
     }
 
     public function testEventPageRendersDaySeparatorForMultidayEvent(): void
@@ -236,7 +242,7 @@ final class HappeningControllerTest extends FixturesWebTestCase
         $this->assertResponseIsSuccessful();
         $this->client->assertSelectorExists('.happening-entire-event-heading');
         $this->client->assertSelectorTextContains(
-            '.happening-entire-event-heading + .happening-button-group',
+            '.happening-entire-event-heading + div',
             'Gift Table',
         );
         $timetableText = $this->client->getCrawler()->filter('table.happening-timetable')->text();
