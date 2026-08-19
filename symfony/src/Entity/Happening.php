@@ -34,6 +34,12 @@ class Happening implements \Stringable
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable $time;
 
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $endTime = null;
+
+    #[ORM\Column]
+    private bool $entireEvent = false;
+
     #[ORM\Column]
     private bool $needsPreliminarySignUp = false;
 
@@ -164,6 +170,34 @@ class Happening implements \Stringable
         $this->time = $time instanceof \DateTimeImmutable
             ? $time
             : \DateTimeImmutable::createFromInterface($time);
+
+        return $this;
+    }
+
+    public function getEndTime(): ?\DateTimeImmutable
+    {
+        return $this->endTime;
+    }
+
+    public function setEndTime(?\DateTimeInterface $endTime): self
+    {
+        $this->endTime = $endTime instanceof \DateTimeImmutable
+            ? $endTime
+            : ($endTime instanceof \DateTime
+                ? \DateTimeImmutable::createFromInterface($endTime)
+                : null);
+
+        return $this;
+    }
+
+    public function isEntireEvent(): bool
+    {
+        return $this->entireEvent;
+    }
+
+    public function setEntireEvent(bool $entireEvent): self
+    {
+        $this->entireEvent = $entireEvent;
 
         return $this;
     }

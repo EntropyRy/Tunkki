@@ -53,6 +53,22 @@ class HappeningType extends AbstractType
                 'label' => 'happening.field.time',
                 'help' => 'happening.time_help',
             ])
+            ->add('entireEvent', null, [
+                'required' => false,
+                'label' => 'happening.field.entire_event',
+                'help' => 'happening.entire_event_help',
+                'attr' => [
+                    'data-bs-toggle' => 'collapse',
+                    'data-bs-target' => '#endtime',
+                    'aria-expanded' => 'true',
+                    'aria-controls' => 'endtime',
+                ],
+            ])
+            ->add('endTime', null, [
+                'required' => false,
+                'label' => 'happening.field.end_time',
+                'help' => 'happening.end_time_help',
+            ])
             ->add('picture', MediaType::class, [
                 'label' => 'happening.field.picture',
                 'context' => 'artist',

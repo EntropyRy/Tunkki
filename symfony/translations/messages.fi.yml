@@ -643,6 +643,8 @@ happening:
     description_fi: Kuvaus suomeksi
     description_en: Kuvaus englanniksi
     time: Aika
+    end_time: Loppumisaika
+    entire_event: Tapahtuma kestää koko tapahtuman ajan
     picture: Kuva
     needs_preliminary_sign_up: Tarvitsee varaukset ennakkoon
     needs_preliminary_payment: Tarvitsee maksut ennakkoon
@@ -663,6 +665,9 @@ happening:
     lecture: Luento
   bookings: Varaukset
   time_help: Koska tapahtuma alkaa?
+  end_time_help: Koska tapahtuma loppuu?
+  entire_event_help: Valitse tämä jos tapahtuma ei ole yksittäinen aikaväli vaan kestää koko tapahtuman ajan (esim. jatkuva näyttely).
+  entire_event_label: Koko tapahtuman ajan
   seats_available: paikkaa vapaana
   sign_up: Varaa
   remove_reservation: Poista varaus

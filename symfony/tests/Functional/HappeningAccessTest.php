@@ -224,6 +224,55 @@ final class HappeningAccessTest extends FixturesWebTestCase
         }
     }
 
+    public function testCreateFormExposesEndTimeAndEntireEventFields(): void
+    {
+        $owner = $this->createUser();
+        $event = EventFactory::new()->published()->create();
+        $year = $event->getEventDate()->format('Y');
+
+        $this->loginClientAs($owner);
+
+        $createUrl = \sprintf(
+            '/en/%s/%s/happening/create',
+            $year,
+            $event->getUrl(),
+        );
+        $crawler = $this->client->request('GET', $createUrl);
+
+        $this->assertGreaterThan(
+            0,
+            $crawler->filter('label[for="happening_endTime"]')->count(),
+            'End time field should be present on the create form.',
+        );
+        $this->assertGreaterThan(
+            0,
+            $crawler->filter('label[for="happening_entireEvent"]')->count(),
+            'Entire event field should be present on the create form.',
+        );
+
+        $formNode = $crawler->filter('form')->first();
+        $form = $formNode->form();
+        $suffix = substr(bin2hex(random_bytes(4)), 0, 6);
+
+        $form['happening[type]'] = 'event';
+        $form['happening[nameFi]'] = 'Loppuaika FI '.$suffix;
+        $form['happening[descriptionFi]'] = 'Kuvaus FI';
+        $form['happening[nameEn]'] = 'End time EN '.$suffix;
+        $form['happening[descriptionEn]'] = 'Description EN';
+        $form['happening[endTime]'] = '2030-01-01T18:00';
+        $this->setCheckboxState(
+            $form,
+            'happening[releaseThisHappeningInEvent]',
+            true,
+        );
+        $this->setCheckboxState($form, 'happening[allowSignUpComments]', true);
+        $form['happening[maxSignUps]'] = '0';
+
+        $this->client->submit($form);
+        $status = $this->client->getResponse()->getStatusCode();
+        $this->assertContains($status, [302, 303], 'Creation with end time should redirect.');
+    }
+
     public function testOwnerCanEditOwnHappeningAndNonOwnerCannot(): void
     {
         $owner = $this->createUser();

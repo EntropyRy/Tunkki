@@ -64,6 +64,8 @@ final class HappeningFactory extends PersistentObjectFactory
                 'descriptionFi' => self::faker()->paragraph(),
                 'descriptionEn' => self::faker()->paragraph(),
                 'time' => $time,
+                'endTime' => null,
+                'entireEvent' => false,
                 'needsPreliminarySignUp' => false,
                 'needsPreliminaryPayment' => false,
                 'paymentInfoFi' => null,
@@ -170,6 +172,26 @@ final class HappeningFactory extends PersistentObjectFactory
     {
         return $this->with([
             'time' => $time,
+        ]);
+    }
+
+    /**
+     * Set an explicit end time for the happening.
+     */
+    public function withEndTime(\DateTimeInterface $endTime): static
+    {
+        return $this->with([
+            'endTime' => $endTime,
+        ]);
+    }
+
+    /**
+     * Mark as running for the whole event (not a single time slot).
+     */
+    public function entireEvent(): static
+    {
+        return $this->with([
+            'entireEvent' => true,
         ]);
     }
 

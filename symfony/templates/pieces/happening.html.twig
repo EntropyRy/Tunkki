@@ -1,29 +1,96 @@
 {%- block happening_list -%}
 {%- if event.url -%}
-<div class="pt-2 pb-2 col-12 d-grid" id="happening_list">
-    {%- for happening in event.happenings|filter(happening => happening.releaseThisHappeningInEvent == true) -%}
-    <a class="btn text-white btn-info btn-lg btn-block mb-2 happening-type-{{ happening.type }}"
-       target="_top"
-       href="{{ path('entropy_event_happening_show', {slug: event.url, year: event.eventdate|date('Y'), happeningSlug: happening.slug(app.request.locale)}) }}">{{ happening.name(app.request.locale) }} ~ {{ happening.time|format_datetime(pattern: 'E, HH:mm') }}
-        {% if happening.needsPreliminarySignUp %}( {{ happening.bookings|length }}/{{ happening.maxSignUps }} ){% endif %}
-    </a>
-    {%- endfor -%}
-    {%- for happening in event.happenings|filter(happening => happening.releaseThisHappeningInEvent == false) -%}
-        {%- if app.user and app.user.member in happening.owners -%}
-        <a class="btn btn-danger w-100 mt-2 mb-2"
-           href="{{- path('entropy_event_happening_show', {slug: event.url, year: event.eventdate|date('Y'), happeningSlug: happening.slug(app.request.locale)}) }}">{{ happening.name(app.request.locale) }} ~ {{ happening.time|format_datetime(pattern: 'E, HH:mm') -}}
-            {% if happening.needsPreliminarySignUp %}( {{ happening.bookings|length }}/{{ happening.maxSignUps }} ){% endif -%}
-            {{- block('shown_only_to') -}}
-        </a>
-        {%- endif -%}
-    {%- endfor -%}
-    {%- if event.allowMembersToCreateHappenings and app.user -%}
-        {%- if event.happenings|length > 0 %}<hr>{% endif -%}
-        <a class="btn btn-success text-white w-50 mx-auto mt-2"
-           href="{{- path('entropy_event_happening_create', {slug: event.url, year: event.eventdate|date('Y')}) }}">{{ 'happening.create'|trans -}}</a>
-    {%- endif -%}
+{%- set released = event.happenings|filter(h => h.releaseThisHappeningInEvent == true) -%}
+{%- set owned_unreleased = event.happenings|filter(h => h.releaseThisHappeningInEvent == false and app.user and app.user.member in h.owners) -%}
+{%- set visible_happenings = (released|merge(owned_unreleased))|sort((a, b) => a.time <=> b.time) -%}
+{%- set whole_event_happenings = visible_happenings|filter(h => h.entireEvent == true) -%}
+{%- set timed_happenings = visible_happenings|filter(h => h.entireEvent == false) -%}
+<div class="pt-2 pb-2 col-12" id="happening_list">
+{{- block('happening_whole_event_list') -}}
+{{- block('happening_timetable') -}}
+{%- if event.allowMembersToCreateHappenings and app.user -%}
+{%- if visible_happenings|length > 0 %}<hr>{% endif -%}
+<a class="btn btn-success text-white w-50 mx-auto mt-2 d-block mx-auto"
+   href="{{- path('entropy_event_happening_create', {slug: event.url, year: event.eventdate|date('Y')}) }}">{{ 'happening.create'|trans -}}</a>
+{%- endif -%}
 </div>
-{% endif %}
+{%- endif -%}
+{%- endblock -%}
+{%- block happening_link -%}
+{%- set is_private = happening.releaseThisHappeningInEvent == false -%}
+<a class="btn text-white w-100 btn-lg {{ is_private ? 'btn-danger' : 'btn-info' }} happening-type-{{ happening.type }}"
+   target="_top"
+   href="{{ path('entropy_event_happening_show', {slug: event.url, year: event.eventdate|date('Y'), happeningSlug: happening.slug(app.request.locale)}) }}">
+{{- happening.name(app.request.locale) -}}
+{%- if happening.needsPreliminarySignUp %} ( {{ happening.bookings|length }}/{{ happening.maxSignUps }} ){% endif -%}
+{%- if is_private %}{{ block('shown_only_to') }}{% endif -%}
+</a>
+{%- endblock -%}
+{%- block happening_whole_event_list -%}
+{%- if whole_event_happenings|length > 0 -%}
+<div class="pb-3 col-12">
+<h4 class="happening-entire-event-heading">{{ 'happening.entire_event_label'|trans }}</h4>
+<div class="d-grid gap-2">
+{%- for happening in whole_event_happenings -%}
+{{ block('happening_link') }}
+{%- endfor -%}
+</div>
+</div>
+{%- endif -%}
+{%- endblock -%}
+{%- block happening_timetable -%}
+{%- if timed_happenings|length > 0 -%}
+{%- set now = 'now'|date('U') -%}
+{%- set event_until = event.until|date('U') -%}
+{%- set unix_times = [] -%}
+{%- for h in timed_happenings -%}{%- set unix_times = unix_times|merge([h.time|date('U')]) -%}{%- endfor -%}
+{%- set first_start_unix = (timed_happenings|first).time|date('U') -%}
+{%- set show_indicator = now >= first_start_unix and now <= event_until -%}
+<table class="timetable happening-timetable"
+{%- if show_indicator -%}
+{{- stimulus_controller('time-indicator', {
+    'server-time': 'now'|date('c'),
+    'event-start': (timed_happenings|first).time|date('c'),
+    'event-end': event.until|date('c'),
+    'slot-times': unix_times|join(','),
+}) -}}
+{%- endif -%}
+>
+<tbody>
+{%- set indicator_added = false -%}
+{%- set last_day = null -%}
+{%- for happening in timed_happenings -%}
+{%- set current_day = happening.time|date('Y-m-d') -%}
+{%- if event.multiday == true and current_day != last_day -%}
+<tr class="time-gap happening-day-separator">
+<td colspan="3"><span class="gap-chip">{{ happening.time|format_datetime(pattern: 'E d.M.') }}</span></td>
+</tr>
+{%- endif -%}
+{%- set last_day = current_day -%}
+<tr>
+{%- set will_add_indicator_target = show_indicator and (not indicator_added) -%}
+<td class="indicator"
+{%- if will_add_indicator_target -%}
+{{ stimulus_target('time-indicator', 'indicator') }}
+{%- endif -%}
+>
+{%- if will_add_indicator_target -%}
+{{ 'timetable.now'|trans }} <twig:ux:icon name="arrow-right" height="1em" />
+{%- endif -%}
+</td>
+{%- if will_add_indicator_target %}{% set indicator_added = true %}{% endif -%}
+<td class="time">
+{{- happening.time|format_datetime(pattern: 'HH:mm') -}}
+{%- if happening.endTime %}–{{ happening.endTime|format_datetime(pattern: 'HH:mm') }}{% endif -%}
+</td>
+<td class="happening-info">
+{{- block('happening_link') -}}
+</td>
+</tr>
+{%- endfor -%}
+</tbody>
+</table>
+{%- endif -%}
 {%- endblock -%}
 {% block shown_only_to %}
     {{ 'happening.shown_only_to'|trans }}
@@ -83,7 +150,15 @@
                 <div class="col-12 mt-4 mt-sm-0">
                 {% endif %}
                 <h3>
-                    {{ name }} <small>{{ happening.time|format_datetime(pattern: 'E, HH:mm') }}</small>
+                    {{ name }}
+                    <small>
+                        {%- if happening.entireEvent -%}
+                            {{ 'happening.entire_event_label'|trans }}
+                        {%- else -%}
+                            {{- happening.time|format_datetime(pattern: 'E, HH:mm') -}}
+                            {%- if happening.endTime %}–{{ happening.endTime|format_datetime(pattern: 'HH:mm') }}{% endif -%}
+                        {%- endif -%}
+                    </small>
                 </h3>
                 <p>{{ description|raw }}</p>
                 {% if happening.needsPreliminaryPayment and not eventInPast %}

@@ -196,6 +196,19 @@ export default class extends Controller {
     const nextSlot = timeSlots[currentSlotIndex + 1];
     const duration = nextSlot.timestampMs - currentSlot.timestampMs;
     const elapsed = currentMs - currentSlot.timestampMs;
+
+    // For a large gap to the next slot (e.g. happenings on different days, or
+    // hours apart), sliding proportionally across the full gap would drag the
+    // arrow toward a row that's still far away in time. Settle it just below
+    // the current slot instead, mirroring the "last slot" behavior above.
+    const settleWindowMs = 60 * 60 * 1000;
+    if (duration > settleWindowMs) {
+      const minutesInto = elapsed / (60 * 1000);
+      if (minutesInto > 60) return currentSlot.top + 30 + baseOffset;
+      const pct = minutesInto / 60;
+      return currentSlot.top + baseOffset + 30 * pct;
+    }
+
     const pct = duration > 0 ? elapsed / duration : 0;
     const rowHeight = nextSlot.top - currentSlot.top;
     return currentSlot.top + baseOffset + rowHeight * pct;

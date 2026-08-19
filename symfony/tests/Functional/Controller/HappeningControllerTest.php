@@ -84,6 +84,132 @@ final class HappeningControllerTest extends FixturesWebTestCase
         $this->client->assertSelectorExists(\sprintf('a[href="%s"]', $nextHref));
     }
 
+    public function testEventPageRendersTimedHappeningWithEndTime(): void
+    {
+        $event = EventFactory::new()->published()->create();
+        $year = $event->getEventDate()->format('Y');
+
+        HappeningFactory::new()
+            ->released()
+            ->forEvent($event)
+            ->at(new \DateTimeImmutable('2030-01-01 17:00:00'))
+            ->withEndTime(new \DateTimeImmutable('2030-01-01 18:00:00'))
+            ->create();
+
+        $this->client->request(
+            'GET',
+            \sprintf('/en/%s/%s', $year, $event->getUrl()),
+        );
+
+        $this->assertResponseIsSuccessful();
+        $this->client->assertSelectorExists('table.happening-timetable td.time');
+        $this->client->assertSelectorTextContains('table.happening-timetable td.time', '17:00');
+        $this->client->assertSelectorTextContains('table.happening-timetable td.time', '18:00');
+    }
+
+    public function testEventPageRendersTimedHappeningWithoutEndTime(): void
+    {
+        $event = EventFactory::new()->published()->create();
+        $year = $event->getEventDate()->format('Y');
+
+        HappeningFactory::new()
+            ->released()
+            ->forEvent($event)
+            ->at(new \DateTimeImmutable('2030-01-01 19:00:00'))
+            ->create();
+
+        $this->client->request(
+            'GET',
+            \sprintf('/en/%s/%s', $year, $event->getUrl()),
+        );
+
+        $this->assertResponseIsSuccessful();
+        $this->client->assertSelectorTextContains('table.happening-timetable td.time', '19:00');
+        $timeText = $this->client->getCrawler()->filter('table.happening-timetable td.time')->text();
+        $this->assertStringNotContainsString('–', $timeText);
+    }
+
+    public function testEventPageRendersDaySeparatorForMultidayEvent(): void
+    {
+        $event = EventFactory::new()->published()->create(['multiday' => true]);
+        $year = $event->getEventDate()->format('Y');
+
+        HappeningFactory::new()
+            ->released()
+            ->forEvent($event)
+            ->at(new \DateTimeImmutable('2030-01-01 20:00:00'))
+            ->create(['nameEn' => 'Day One Happening']);
+        HappeningFactory::new()
+            ->released()
+            ->forEvent($event)
+            ->at(new \DateTimeImmutable('2030-01-02 20:00:00'))
+            ->create(['nameEn' => 'Day Two Happening']);
+
+        $this->client->request(
+            'GET',
+            \sprintf('/en/%s/%s', $year, $event->getUrl()),
+        );
+
+        $this->assertResponseIsSuccessful();
+        $separators = $this->client->getCrawler()->filter('tr.happening-day-separator');
+        $this->assertCount(2, $separators);
+    }
+
+    public function testEventPageOmitsDaySeparatorForSingleDayEvent(): void
+    {
+        $event = EventFactory::new()->published()->create(['multiday' => false]);
+        $year = $event->getEventDate()->format('Y');
+
+        HappeningFactory::new()
+            ->released()
+            ->forEvent($event)
+            ->at(new \DateTimeImmutable('2030-01-01 20:00:00'))
+            ->create();
+
+        $this->client->request(
+            'GET',
+            \sprintf('/en/%s/%s', $year, $event->getUrl()),
+        );
+
+        $this->assertResponseIsSuccessful();
+        $this->client->assertSelectorNotExists('tr.happening-day-separator');
+    }
+
+    public function testEventPageRendersEntireEventHappeningOutsideTimetable(): void
+    {
+        $event = EventFactory::new()->published()->create();
+        $year = $event->getEventDate()->format('Y');
+
+        HappeningFactory::new()
+            ->released()
+            ->forEvent($event)
+            ->entireEvent()
+            ->create(['nameEn' => 'Gift Table']);
+        HappeningFactory::new()
+            ->released()
+            ->forEvent($event)
+            ->at(new \DateTimeImmutable('2030-01-01 20:00:00'))
+            ->create(['nameEn' => 'Timed Workshop']);
+
+        $this->client->request(
+            'GET',
+            \sprintf('/en/%s/%s', $year, $event->getUrl()),
+        );
+
+        $this->assertResponseIsSuccessful();
+        $this->client->assertSelectorExists('.happening-entire-event-heading');
+        $this->client->assertSelectorTextContains(
+            '.happening-entire-event-heading + .d-grid',
+            'Gift Table',
+        );
+        $timetableText = $this->client->getCrawler()->filter('table.happening-timetable')->text();
+        $this->assertStringNotContainsString('Gift Table', $timetableText);
+        $this->client->assertSelectorTextContains(
+            'table.happening-timetable',
+            'Timed Workshop',
+        );
+    }
+
     public function testRemoveDeletesBookingForMember(): void
     {
         $member = MemberFactory::new()->create(['emailVerified' => true]);

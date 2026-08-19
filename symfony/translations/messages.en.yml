@@ -546,6 +546,8 @@ happening:
     description_fi: Description in Finnish
     description_en: Description in English
     time: Time
+    end_time: End time
+    entire_event: Happening runs for the whole event
     picture: Picture
     needs_preliminary_sign_up: Requires sign-up in advance
     needs_preliminary_payment: Requires payment in advance
@@ -566,6 +568,9 @@ happening:
     lecture: Lecture
   bookings: Bookings
   time_help: When is this happening?
+  end_time_help: When does this happening end?
+  entire_event_help: Check this if the happening isn't a single time slot but runs for the whole event (e.g. an ongoing exhibit).
+  entire_event_label: Whole event
   seats_available: seats available
   sign_up: Sign up
   remove_reservation: Remove reservation

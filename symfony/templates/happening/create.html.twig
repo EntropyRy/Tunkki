@@ -6,7 +6,21 @@
         {{ form_start(form) }}
             <div class="row">
                 {{ form_row(form.type) }}
-                {{ form_row(form.time) }}
+                {{ form_row(form.entireEvent, {row_attr: {class: 'my-2'}}) }}
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <div id="endtime" class="accordion-collapse collapse {{ (not form.entireEvent.vars.data or form_errors(form.time) or form_errors(form.endTime)) ? 'show' : '' }}">
+                            <div class="row accordion-body">
+                                <div class="col-md-6">
+                                    {{ form_row(form.time) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.endTime) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-md-6">
                     {{ form_row(form.nameFi) }}
                     {{ form_row(form.descriptionFi) }}
