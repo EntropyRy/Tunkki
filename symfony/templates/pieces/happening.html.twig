@@ -31,7 +31,7 @@
 {%- if whole_event_happenings|length > 0 -%}
 <div class="pb-3 col-12">
 <h4 class="happening-entire-event-heading">{{ 'happening.entire_event_label'|trans }}</h4>
-<div{% if whole_event_happenings|length > 1 %} class="happening-button-group"{% endif %}>
+<div{% if whole_event_happenings|length > 1 %} class="happening-whole-event-group"{% endif %}>
 {%- for happening in whole_event_happenings -%}
 {{ block('happening_link') }}
 {%- endfor -%}

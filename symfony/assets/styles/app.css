@@ -313,11 +313,21 @@ h1 {
     padding-left: 0.5em;
 }
 .happening-button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35em;
+}
+.happening-button-group .btn {
+    text-align: left;
+    flex: 1 1 12em;
+    min-width: 12em;
+}
+.happening-whole-event-group {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 0.35em;
 }
-.happening-button-group .btn {
+.happening-whole-event-group .btn {
     text-align: left;
     min-width: 0;
     overflow: hidden;
