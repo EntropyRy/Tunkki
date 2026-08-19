@@ -22,6 +22,7 @@
    target="_top"
    href="{{ path('entropy_event_happening_show', {slug: event.url, year: event.eventdate|date('Y'), happeningSlug: happening.slug(app.request.locale)}) }}">
 {{- happening.name(app.request.locale) -}}
+{%- if happening.endTime %} <small>(–{{ happening.endTime|format_datetime(pattern: 'HH:mm') }})</small>{% endif -%}
 {%- if happening.needsPreliminarySignUp %} ( {{ happening.bookings|length }}/{{ happening.maxSignUps }} ){% endif -%}
 {%- if is_private %}{{ block('shown_only_to') }}{% endif -%}
 </a>
@@ -40,17 +41,17 @@
 {%- endblock -%}
 {%- block happening_timetable -%}
 {%- if timed_happenings|length > 0 -%}
+{%- set happening_groups = timed_happenings|group_happenings_by_time -%}
 {%- set now = 'now'|date('U') -%}
 {%- set event_until = event.until|date('U') -%}
-{%- set unix_times = [] -%}
-{%- for h in timed_happenings -%}{%- set unix_times = unix_times|merge([h.time|date('U')]) -%}{%- endfor -%}
-{%- set first_start_unix = (timed_happenings|first).time|date('U') -%}
+{%- set unix_times = happening_groups|map(g => g.time|date('U')) -%}
+{%- set first_start_unix = (happening_groups|first).time|date('U') -%}
 {%- set show_indicator = now >= first_start_unix and now <= event_until -%}
 <table class="timetable happening-timetable"
 {%- if show_indicator -%}
 {{- stimulus_controller('time-indicator', {
     'server-time': 'now'|date('c'),
-    'event-start': (timed_happenings|first).time|date('c'),
+    'event-start': (happening_groups|first).time|date('c'),
     'event-end': event.until|date('c'),
     'slot-times': unix_times|join(','),
 }) -}}
@@ -59,11 +60,11 @@
 <tbody>
 {%- set indicator_added = false -%}
 {%- set last_day = null -%}
-{%- for happening in timed_happenings -%}
-{%- set current_day = happening.time|date('Y-m-d') -%}
+{%- for group in happening_groups -%}
+{%- set current_day = group.time|date('Y-m-d') -%}
 {%- if event.multiday == true and current_day != last_day -%}
 <tr class="time-gap happening-day-separator">
-<td colspan="3"><span class="gap-chip">{{ happening.time|format_datetime(pattern: 'E d.M.') }}</span></td>
+<td colspan="3"><span class="gap-chip">{{ group.time|format_datetime(pattern: 'E d.M.') }}</span></td>
 </tr>
 {%- endif -%}
 {%- set last_day = current_day -%}
@@ -79,12 +80,11 @@
 {%- endif -%}
 </td>
 {%- if will_add_indicator_target %}{% set indicator_added = true %}{% endif -%}
-<td class="time">
-{{- happening.time|format_datetime(pattern: 'HH:mm') -}}
-{%- if happening.endTime %}–{{ happening.endTime|format_datetime(pattern: 'HH:mm') }}{% endif -%}
-</td>
+<td class="time">{{ group.time|format_datetime(pattern: 'HH:mm') }}</td>
 <td class="happening-info">
+{%- for happening in group.happenings -%}
 {{- block('happening_link') -}}
+{%- endfor -%}
 </td>
 </tr>
 {%- endfor -%}

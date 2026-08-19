@@ -311,10 +311,14 @@ h1 {
 .happening-timetable .happening-info {
     width: 100%;
     padding-left: 0.5em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35em;
 }
 .happening-timetable .happening-info .btn {
-    display: block;
     text-align: left;
+    flex: 1 1 12em;
+    min-width: 12em;
 }
 .happening-entire-event-heading {
     text-transform: uppercase;

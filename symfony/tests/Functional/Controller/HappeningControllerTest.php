@@ -104,7 +104,7 @@ final class HappeningControllerTest extends FixturesWebTestCase
         $this->assertResponseIsSuccessful();
         $this->client->assertSelectorExists('table.happening-timetable td.time');
         $this->client->assertSelectorTextContains('table.happening-timetable td.time', '17:00');
-        $this->client->assertSelectorTextContains('table.happening-timetable td.time', '18:00');
+        $this->client->assertSelectorTextContains('table.happening-timetable .happening-info', '18:00');
     }
 
     public function testEventPageRendersTimedHappeningWithoutEndTime(): void
@@ -127,6 +127,43 @@ final class HappeningControllerTest extends FixturesWebTestCase
         $this->client->assertSelectorTextContains('table.happening-timetable td.time', '19:00');
         $timeText = $this->client->getCrawler()->filter('table.happening-timetable td.time')->text();
         $this->assertStringNotContainsString('–', $timeText);
+    }
+
+    public function testEventPageGroupsSameTimeHappeningsUnderOneTimeCell(): void
+    {
+        $event = EventFactory::new()->published()->create();
+        $year = $event->getEventDate()->format('Y');
+        $sharedTime = new \DateTimeImmutable('2030-01-01 17:00:00');
+
+        HappeningFactory::new()
+            ->released()
+            ->forEvent($event)
+            ->at($sharedTime)
+            ->create(['nameEn' => 'First At Seventeen']);
+        HappeningFactory::new()
+            ->released()
+            ->forEvent($event)
+            ->at($sharedTime)
+            ->create(['nameEn' => 'Second At Seventeen']);
+        HappeningFactory::new()
+            ->released()
+            ->forEvent($event)
+            ->at(new \DateTimeImmutable('2030-01-01 18:00:00'))
+            ->create(['nameEn' => 'Alone At Eighteen']);
+
+        $this->client->request(
+            'GET',
+            \sprintf('/en/%s/%s', $year, $event->getUrl()),
+        );
+
+        $this->assertResponseIsSuccessful();
+        $timeCells = $this->client->getCrawler()->filter('table.happening-timetable td.time');
+        $this->assertCount(2, $timeCells, 'One time cell should cover both 17:00 happenings, one covers 18:00.');
+
+        $firstRowText = $this->client->getCrawler()->filter('table.happening-timetable tr')->eq(0)->text();
+        $this->assertStringContainsString('First At Seventeen', $firstRowText);
+        $this->assertStringContainsString('Second At Seventeen', $firstRowText);
+        $this->assertStringNotContainsString('Alone At Eighteen', $firstRowText);
     }
 
     public function testEventPageRendersDaySeparatorForMultidayEvent(): void
