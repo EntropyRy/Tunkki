@@ -393,6 +393,9 @@ h1 {
         flex: 0 0 auto;
         min-width: 0;
     }
+    .happening-whole-event-group {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 .happening-entire-event-heading {
     text-transform: uppercase;

@@ -18,7 +18,7 @@
 {%- endblock -%}
 {%- block happening_link -%}
 {%- set is_private = happening.releaseThisHappeningInEvent == false -%}
-<a class="btn text-white w-100 btn-lg d-flex flex-column {{ is_private ? 'btn-danger' : 'btn-info' }} happening-type-{{ happening.type }}"
+<a class="btn text-white w-100 btn-lg d-flex flex-column {{ is_private ? 'btn-danger' : ('btn-info happening-type-' ~ happening.type) }}"
    target="_top"
    href="{{ path('entropy_event_happening_show', {slug: event.url, year: event.eventdate|date('Y'), happeningSlug: happening.slug(app.request.locale)}) }}">
 <span class="d-flex justify-content-between align-items-center gap-2 w-100">
