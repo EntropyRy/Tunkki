@@ -18,12 +18,16 @@
 {%- endblock -%}
 {%- block happening_link -%}
 {%- set is_private = happening.releaseThisHappeningInEvent == false -%}
-<a class="btn text-white w-100 btn-lg {{ is_private ? 'btn-danger' : 'btn-info' }} happening-type-{{ happening.type }}"
+<a class="btn text-white w-100 btn-lg d-flex flex-column {{ is_private ? 'btn-danger' : 'btn-info' }} happening-type-{{ happening.type }}"
    target="_top"
    href="{{ path('entropy_event_happening_show', {slug: event.url, year: event.eventdate|date('Y'), happeningSlug: happening.slug(app.request.locale)}) }}">
+<span class="d-flex justify-content-between align-items-center gap-2 w-100">
+<span class="text-truncate">
 {{- happening.name(app.request.locale) -}}
 {%- if happening.endTime %} <small>(–{{ happening.endTime|format_datetime(pattern: 'HH:mm') }})</small>{% endif -%}
-{%- if happening.needsPreliminarySignUp %} ( {{ happening.bookings|length }}/{{ happening.maxSignUps }} ){% endif -%}
+</span>
+{%- if happening.needsPreliminarySignUp %}<span class="flex-shrink-0 happening-signup-count">{{ happening.bookings|length }}/{{ happening.maxSignUps }}</span>{% endif -%}
+</span>
 {%- if is_private %}{{ block('shown_only_to') }}{% endif -%}
 </a>
 {%- endblock -%}
@@ -47,7 +51,7 @@
 {%- set unix_times = happening_groups|map(g => g.time|date('U')) -%}
 {%- set first_start_unix = (happening_groups|first).time|date('U') -%}
 {%- set show_indicator = now >= first_start_unix and now <= event_until -%}
-<table class="timetable happening-timetable"
+<div class="happening-timetable-wrapper"
 {%- if show_indicator -%}
 {{- stimulus_controller('time-indicator', {
     'server-time': 'now'|date('c'),
@@ -57,29 +61,23 @@
 }) -}}
 {%- endif -%}
 >
+{%- if show_indicator -%}
+<div class="happening-now-badge" {{ stimulus_target('time-indicator', 'indicator') }}>
+{{ 'timetable.now'|trans }} <twig:ux:icon name="arrow-right" height="1em" />
+</div>
+{%- endif -%}
+<table class="timetable happening-timetable">
 <tbody>
-{%- set indicator_added = false -%}
 {%- set last_day = null -%}
 {%- for group in happening_groups -%}
 {%- set current_day = group.time|date('Y-m-d') -%}
 {%- if event.multiday == true and current_day != last_day -%}
 <tr class="time-gap happening-day-separator">
-<td colspan="3"><span class="gap-chip">{{ group.time|format_datetime(pattern: 'E d.M.') }}</span></td>
+<td colspan="2"><span class="gap-chip">{{ group.time|format_datetime(pattern: 'E d.M.') }}</span></td>
 </tr>
 {%- endif -%}
 {%- set last_day = current_day -%}
 <tr>
-{%- set will_add_indicator_target = show_indicator and (not indicator_added) -%}
-<td class="indicator"
-{%- if will_add_indicator_target -%}
-{{ stimulus_target('time-indicator', 'indicator') }}
-{%- endif -%}
->
-{%- if will_add_indicator_target -%}
-{{ 'timetable.now'|trans }} <twig:ux:icon name="arrow-right" height="1em" />
-{%- endif -%}
-</td>
-{%- if will_add_indicator_target %}{% set indicator_added = true %}{% endif -%}
 <td class="time">{{ group.time|format_datetime(pattern: 'HH:mm') }}</td>
 <td class="happening-info{% if group.happenings|length > 1 %} happening-button-group{% endif %}">
 {%- for happening in group.happenings -%}
@@ -90,6 +88,7 @@
 {%- endfor -%}
 </tbody>
 </table>
+</div>
 {%- endif -%}
 {%- endblock -%}
 {% block shown_only_to %}

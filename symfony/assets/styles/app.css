@@ -334,6 +334,66 @@ h1 {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+.happening-signup-count {
+    position: relative;
+    padding-left: 0.5em;
+}
+.happening-signup-count::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: calc(-1 * var(--bs-btn-padding-y));
+    bottom: calc(-1 * var(--bs-btn-padding-y));
+    width: 1px;
+    background: rgba(255, 255, 255, 0.4);
+}
+.happening-timetable-wrapper {
+    position: relative;
+}
+.happening-now-badge {
+    position: absolute;
+    top: 0;
+    left: -0.5em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    background: var(--bs-primary);
+    color: #fff;
+    padding: 0.15em 0.6em;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    transition: transform 0.3s ease;
+    z-index: 3;
+}
+.happening-now-badge svg {
+    animation: flip-animation 3s ease-in-out infinite;
+}
+@media (max-width: 575.98px) {
+    .timetable .time {
+        width: 2.5em;
+        padding-right: 0.4em;
+    }
+    .timetable .indicator {
+        width: 2.5em;
+        min-width: 2.5em;
+        padding-right: 0.3em;
+        font-size: 0.8rem;
+    }
+    .happening-timetable .happening-info {
+        padding-left: 0.3em;
+    }
+    .happening-button-group {
+        flex-direction: column;
+    }
+    .happening-button-group .btn {
+        flex: 0 0 auto;
+        min-width: 0;
+    }
+}
 .happening-entire-event-heading {
     text-transform: uppercase;
     font-size: 0.9rem;

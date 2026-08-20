@@ -97,50 +97,39 @@ export default class extends Controller {
       return;
     }
 
-    // Identify current slot index (standard linear interpolation across all gaps)
-    let idx = -1;
-    for (let i = 0; i < timeSlots.length; i++) {
-      if (i === timeSlots.length - 1) {
-        if (now.getTime() >= timeSlots[i].timestampMs) idx = i;
-      } else if (
-        now.getTime() >= timeSlots[i].timestampMs &&
-        now.getTime() < timeSlots[i + 1].timestampMs
-      ) {
-        idx = i;
-        break;
-      }
-    }
-    if (idx === -1) idx = 0;
-
     this.showIndicator();
 
-    // Position calculation
-    const position = this.calculatePositionWithSlots(now, timeSlots);
+    const position = this.calculatePosition(now.getTime(), timeSlots);
     if (position !== null) {
       this.indicatorTarget.style.transform = `translateY(${position}px)`;
     }
-
-    // Dynamic label state
-    this.updateNowLabel(now, idx, timeSlots);
   }
 
-  updateNowLabel(now, idx, timeSlots) {
-    if (!this.indicatorTarget) return;
-    // We only keep the original innerHTML (NOW label + icon) when "active"
-    // Determine active range: from slot start to either next slot start or slot start + 60m if last.
-    const slotStart = timeSlots[idx].timestampMs;
-    let slotEnd;
-    if (idx === timeSlots.length - 1) {
-      slotEnd = slotStart + 60 * 60 * 1000;
-    } else {
-      slotEnd = timeSlots[idx + 1].timestampMs;
+  // Always-accurate crawl: the indicator's position is a straight-line
+  // interpolation between the two real slot timestamps bracketing `nowMs` -
+  // no invented "active window" or settle threshold, just the actual times.
+  calculatePosition(nowMs, timeSlots) {
+    const baseOffset = -10;
+
+    if (nowMs <= timeSlots[0].timestampMs) {
+      return timeSlots[0].top + baseOffset;
     }
-    const active = now.getTime() >= slotStart && now.getTime() < slotEnd;
-    if (active) {
-      this.indicatorTarget.classList.add("is-active");
-    } else {
-      this.indicatorTarget.classList.remove("is-active");
+
+    for (let i = 0; i < timeSlots.length - 1; i++) {
+      const current = timeSlots[i];
+      const next = timeSlots[i + 1];
+      if (nowMs >= current.timestampMs && nowMs < next.timestampMs) {
+        const pct =
+          (nowMs - current.timestampMs) /
+          (next.timestampMs - current.timestampMs);
+        return current.top + baseOffset + (next.top - current.top) * pct;
+      }
     }
+
+    // Past the last slot's own start - nothing further to interpolate
+    // toward, settle there.
+    const last = timeSlots[timeSlots.length - 1];
+    return last.top + baseOffset;
   }
 
   recalculateRowPositions() {
@@ -161,57 +150,6 @@ export default class extends Controller {
     });
     slots.sort((a, b) => a.timestampMs - b.timestampMs);
     return slots;
-  }
-
-  calculatePositionWithSlots(currentTime, timeSlots) {
-    if (!timeSlots.length) return null;
-    const currentMs = currentTime.getTime();
-    const baseOffset = -10;
-
-    if (currentMs <= timeSlots[0].timestampMs) return baseOffset;
-
-    let currentSlotIndex = -1;
-    for (let i = 0; i < timeSlots.length; i++) {
-      if (i === timeSlots.length - 1) {
-        if (currentMs >= timeSlots[i].timestampMs) currentSlotIndex = i;
-      } else if (
-        currentMs >= timeSlots[i].timestampMs &&
-        currentMs < timeSlots[i + 1].timestampMs
-      ) {
-        currentSlotIndex = i;
-        break;
-      }
-    }
-    if (currentSlotIndex === -1) return baseOffset;
-
-    const currentSlot = timeSlots[currentSlotIndex];
-
-    if (currentSlotIndex === timeSlots.length - 1) {
-      const minutesInto = (currentMs - currentSlot.timestampMs) / (60 * 1000);
-      if (minutesInto > 60) return currentSlot.top + 30 + baseOffset;
-      const pct = minutesInto / 60;
-      return currentSlot.top + baseOffset + 30 * pct;
-    }
-
-    const nextSlot = timeSlots[currentSlotIndex + 1];
-    const duration = nextSlot.timestampMs - currentSlot.timestampMs;
-    const elapsed = currentMs - currentSlot.timestampMs;
-
-    // For a large gap to the next slot (e.g. happenings on different days, or
-    // hours apart), sliding proportionally across the full gap would drag the
-    // arrow toward a row that's still far away in time. Settle it just below
-    // the current slot instead, mirroring the "last slot" behavior above.
-    const settleWindowMs = 60 * 60 * 1000;
-    if (duration > settleWindowMs) {
-      const minutesInto = elapsed / (60 * 1000);
-      if (minutesInto > 60) return currentSlot.top + 30 + baseOffset;
-      const pct = minutesInto / 60;
-      return currentSlot.top + baseOffset + 30 * pct;
-    }
-
-    const pct = duration > 0 ? elapsed / duration : 0;
-    const rowHeight = nextSlot.top - currentSlot.top;
-    return currentSlot.top + baseOffset + rowHeight * pct;
   }
 
   parseSlotTimes() {
