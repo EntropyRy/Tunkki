@@ -307,15 +307,15 @@ h1 {
 /* Happening timetable styles */
 .happening-timetable {
     width: 100%;
-    table-layout: fixed;
 }
 .happening-timetable .happening-info {
     width: 100%;
-    min-width: 0;
     padding-left: 0.5em;
 }
-.happening-info .btn .text-truncate {
-    min-width: 0;
+.happening-timetable .happening-info .text-truncate {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
 }
 .happening-button-group {
     display: flex;
