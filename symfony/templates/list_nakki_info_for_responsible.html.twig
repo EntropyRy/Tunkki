@@ -105,8 +105,9 @@
 <h1>{{ 'No permissions'|trans }}</h1>
 {% endfor %}
 {% endblock %}
+
 {% block thead %}
-        <table class="table table-striped {% if theme == 'dark' %}table-dark{% endif %} ">
+    <table class="table table-striped {% if theme == 'dark' %}table-dark{% endif %} ">
         <thead>
             <tr>
                 <th scope="col">{{ 'Username'|trans }}</th>
@@ -118,5 +119,5 @@
                 {% if event.nakkikone and event.nakkikone.requiresDifferentTimes %}<th scope="col">Time</th>{% endif %}
             </tr>
         </thead>
-        <tbody>
-        {% endblock %}
+    <tbody>
+{% endblock %}
