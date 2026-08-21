@@ -95,7 +95,9 @@ export default class extends Controller {
   showFetchError(error) {
     this.statusTarget.classList.add("text-danger");
     this.statusTarget.innerText =
-      "Error reading ticket - reload the page (session may have expired)";
+      "Error reading ticket: " +
+      error.message +
+      " - reload the page (session may have expired)";
     this.resultTarget.style.top =
       -(
         this.videoTarget.offsetHeight / 2 +
