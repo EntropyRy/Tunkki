@@ -42,8 +42,14 @@ export default class extends Controller {
 
   fetchTicket(text) {
     fetch("/api/ticket/" + this.eventIdValue + "/" + text + "/info")
-      .then((response) => response.json())
-      .then((data) => this.showTicketStatus(JSON.parse(data)));
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("HTTP " + response.status);
+        }
+        return response.json();
+      })
+      .then((data) => this.showTicketStatus(JSON.parse(data)))
+      .catch((error) => this.showFetchError(error));
   }
 
   showTicketStatus(data) {
@@ -76,8 +82,27 @@ export default class extends Controller {
   giveTicket() {
     let text = this.referenceNumberTarget.innerText;
     fetch("/api/ticket/" + this.eventIdValue + "/" + text + "/give")
-      .then((response) => response.json())
-      .then((data) => this.hideTicketStatus(JSON.parse(data)));
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("HTTP " + response.status);
+        }
+        return response.json();
+      })
+      .then((data) => this.hideTicketStatus(JSON.parse(data)))
+      .catch((error) => this.showFetchError(error));
+  }
+
+  showFetchError(error) {
+    this.statusTarget.classList.add("text-danger");
+    this.statusTarget.innerText =
+      "Error reading ticket - reload the page (session may have expired)";
+    this.resultTarget.style.top =
+      -(
+        this.videoTarget.offsetHeight / 2 +
+        this.resultTarget.offsetHeight / 2
+      ) + "px";
+    // eslint-disable-next-line no-console
+    console.error("QR scanner fetch failed", error);
   }
 
   hideTicketStatus(data) {
