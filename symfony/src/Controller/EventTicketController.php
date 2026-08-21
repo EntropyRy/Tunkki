@@ -172,7 +172,7 @@ class EventTicketController extends Controller
         ],
     ),]
     public function ticketApiCheck(
-        #[MapEntity(mapping: ['id' => 'id'])] Event $event,
+        #[MapEntity(id: 'id')] Event $event,
         #[MapEntity(mapping: ['referenceNumber' => 'referenceNumber']),]
         Ticket $ticket,
     ): JsonResponse {
@@ -201,7 +201,7 @@ class EventTicketController extends Controller
         ],
     ),]
     public function ticketApiGive(
-        #[MapEntity(mapping: ['id' => 'id'])] Event $event,
+        #[MapEntity(id: 'id')] Event $event,
         #[MapEntity(mapping: ['referenceNumber' => 'referenceNumber']),]
         Ticket $ticket,
         TicketRepository $ticketR,
