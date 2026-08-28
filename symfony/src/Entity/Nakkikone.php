@@ -84,7 +84,9 @@ class Nakkikone implements \Stringable
         #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
         private Event $event)
     {
-        $this->initCollections();
+        $this->nakkis = new ArrayCollection();
+        $this->bookings = new ArrayCollection();
+        $this->responsibleAdmins = new ArrayCollection();
     }
 
     // === Core Accessors ===
@@ -209,8 +211,6 @@ class Nakkikone implements \Stringable
      */
     public function getNakkis(): Collection
     {
-        $this->initCollections();
-
         return $this->nakkis;
     }
 
@@ -240,8 +240,6 @@ class Nakkikone implements \Stringable
      */
     public function getBookings(): Collection
     {
-        $this->initCollections();
-
         return $this->bookings;
     }
 
@@ -271,16 +269,7 @@ class Nakkikone implements \Stringable
      */
     public function getResponsibleAdmins(): Collection
     {
-        $this->initCollections();
-
         return $this->responsibleAdmins;
-    }
-
-    private function initCollections(): void
-    {
-        $this->nakkis ??= new ArrayCollection();
-        $this->bookings ??= new ArrayCollection();
-        $this->responsibleAdmins ??= new ArrayCollection();
     }
 
     public function addResponsibleAdmin(Member $admin): self
