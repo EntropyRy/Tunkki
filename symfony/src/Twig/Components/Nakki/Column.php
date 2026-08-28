@@ -367,13 +367,11 @@ final class Column
         foreach ($this->getBookings() as $booking) {
             // Group by both start AND end time to separate different intervals
             $key = $booking->getStartAt()->format('c').'|'.$booking->getEndAt()->format('c');
-            if (!isset($groups[$key])) {
-                $groups[$key] = [
-                    'start' => $booking->getStartAt(),
-                    'end' => $booking->getEndAt(),
-                    'bookings' => [],
-                ];
-            }
+            $groups[$key] ??= [
+                'start' => $booking->getStartAt(),
+                'end' => $booking->getEndAt(),
+                'bookings' => [],
+            ];
 
             $groups[$key]['bookings'][] = $booking;
         }
@@ -503,22 +501,18 @@ final class Column
         $byStartTime = [];
         foreach ($this->getBookings() as $booking) {
             $startKey = $booking->getStartAt()->format('c');
-            if (!isset($byStartTime[$startKey])) {
-                $byStartTime[$startKey] = [
-                    'startTime' => $booking->getStartAt(),
-                    'intervalGroups' => [],
-                ];
-            }
+            $byStartTime[$startKey] ??= [
+                'startTime' => $booking->getStartAt(),
+                'intervalGroups' => [],
+            ];
 
             // Within each start time, group by end time (interval)
             $intervalKey = $booking->getEndAt()->format('c');
-            if (!isset($byStartTime[$startKey]['intervalGroups'][$intervalKey])) {
-                $byStartTime[$startKey]['intervalGroups'][$intervalKey] = [
-                    'start' => $booking->getStartAt(),
-                    'end' => $booking->getEndAt(),
-                    'bookings' => [],
-                ];
-            }
+            $byStartTime[$startKey]['intervalGroups'][$intervalKey] ??= [
+                'start' => $booking->getStartAt(),
+                'end' => $booking->getEndAt(),
+                'bookings' => [],
+            ];
 
             $byStartTime[$startKey]['intervalGroups'][$intervalKey]['bookings'][] = $booking;
         }

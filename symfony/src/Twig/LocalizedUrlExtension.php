@@ -221,9 +221,7 @@ class LocalizedUrlExtension extends AbstractExtension
         // 1. Try direct object comparison first (works when $page is a managed SonataPagePage entity)
         try {
             $menuItem = $menuRepository->findOneBy(['pageFi' => $page]);
-            if (null === $menuItem) {
-                $menuItem = $menuRepository->findOneBy(['pageEn' => $page]);
-            }
+            $menuItem ??= $menuRepository->findOneBy(['pageEn' => $page]);
             if (null !== $menuItem) {
                 return $menuItem->getPageByLang($targetLocale);
             }

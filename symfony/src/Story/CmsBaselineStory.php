@@ -333,9 +333,7 @@ final class CmsBaselineStory extends Story
         $streams = $pageRepo->findBy(['site' => $site, 'url' => '/stream']);
         $chosen = array_find($streams, static fn (SonataPagePage $candidate): bool => 'stream' === (string) $candidate->getTemplateCode()
             && 'entropy.page.stream' === (string) $candidate->getType());
-        if (null === $chosen) {
-            $chosen = $streams[0] ?? null;
-        }
+        $chosen ??= $streams[0] ?? null;
 
         // Remove duplicates beyond the canonical one
         foreach ($streams as $dup) {

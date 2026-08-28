@@ -43,12 +43,10 @@ final class ArtistStreams extends AbstractController
         foreach ($streams as $stream) {
             $streamId = $stream->getStream()->getId();
 
-            if (!isset($groupedStreams[$streamId])) {
-                $groupedStreams[$streamId] = [
-                    'stream' => $stream->getStream(),
-                    'items' => [],
-                ];
-            }
+            $groupedStreams[$streamId] ??= [
+                'stream' => $stream->getStream(),
+                'items' => [],
+            ];
 
             $groupedStreams[$streamId]['items'][] = $stream;
         }

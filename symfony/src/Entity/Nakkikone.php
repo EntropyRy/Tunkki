@@ -278,15 +278,9 @@ class Nakkikone implements \Stringable
 
     private function initCollections(): void
     {
-        if (!isset($this->nakkis)) {
-            $this->nakkis = new ArrayCollection();
-        }
-        if (!isset($this->bookings)) {
-            $this->bookings = new ArrayCollection();
-        }
-        if (!isset($this->responsibleAdmins)) {
-            $this->responsibleAdmins = new ArrayCollection();
-        }
+        $this->nakkis ??= new ArrayCollection();
+        $this->bookings ??= new ArrayCollection();
+        $this->responsibleAdmins ??= new ArrayCollection();
     }
 
     public function addResponsibleAdmin(Member $admin): self

@@ -173,9 +173,7 @@ class HappeningController extends AbstractController
             $happeningB->setHappening($happening);
         }
         $ticket_ref = $ticketR->findMemberTicketReferenceForEvent($member, $event);
-        if (null === $ticket_ref) {
-            $ticket_ref = $trans->trans('happening.ticket_missing');
-        }
+        $ticket_ref ??= $trans->trans('happening.ticket_missing');
         $form = $this->createForm(HappeningBookingType::class, $happeningB, ['comments' => $happening->isAllowSignUpComments()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

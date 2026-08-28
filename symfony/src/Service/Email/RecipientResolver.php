@@ -67,9 +67,7 @@ class RecipientResolver
             foreach ($recipients as $recipient) {
                 // Deduplicate by email address (case-insensitive)
                 $key = $recipient->getDeduplicationKey();
-                if (!isset($allRecipients[$key])) {
-                    $allRecipients[$key] = $recipient;
-                }
+                $allRecipients[$key] ??= $recipient;
             }
         }
 

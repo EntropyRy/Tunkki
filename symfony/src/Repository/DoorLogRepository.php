@@ -23,9 +23,7 @@ class DoorLogRepository extends ServiceEntityRepository
      */
     public function getLatest(?int $count): mixed
     {
-        if (null === $count) {
-            $count = 10;
-        }
+        $count ??= 10;
 
         return $this->createQueryBuilder('d')
             ->orderBy('d.createdAt', 'DESC')
