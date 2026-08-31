@@ -94,7 +94,7 @@ class EmailService
 
         // Update email template metadata if sent by someone
         $now = $this->clock->now();
-        if ($sentBy && $sentCount > 0) {
+        if ($sentBy instanceof Member && $sentCount > 0) {
             $email->setSentAt($now);
             $email->setSentBy($sentBy);
             $this->entityManager->flush();

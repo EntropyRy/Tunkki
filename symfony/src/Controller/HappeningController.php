@@ -55,8 +55,8 @@ class HappeningController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if (
-                $hr->findHappeningByEventSlugAndSlug($event->getUrl(), $happening->getSlugFi())
-                || $hr->findHappeningByEventSlugAndSlug($event->getUrl(), $happening->getSlugEn())
+                $hr->findHappeningByEventSlugAndSlug($event->getUrl(), $happening->getSlugFi()) instanceof Happening
+                || $hr->findHappeningByEventSlugAndSlug($event->getUrl(), $happening->getSlugEn()) instanceof Happening
             ) {
                 $this->addFlash('warning', 'happening.same_name_exists');
 

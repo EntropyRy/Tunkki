@@ -96,7 +96,7 @@ class Product implements \Stringable
 
     public function getMax(?int $inCheckouts): int
     {
-        if ($this->event && $this->ticket) {
+        if ($this->event instanceof Event && $this->ticket) {
             $sold = $this->getSold();
             $left = $this->quantity - $sold - $inCheckouts;
             if ($left <= $this->howManyOneCanBuyAtOneTime) {

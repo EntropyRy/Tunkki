@@ -109,7 +109,7 @@ final class EventFactory extends PersistentObjectFactory
         return $this->afterInstantiate(static function (Event $event): void {
             // Normalize publishDate so it never exceeds eventDate for default/generated fixtures.
             if (
-                $event->getPublishDate()
+                $event->getPublishDate() instanceof \DateTimeImmutable
                 && $event->getPublishDate() > $event->getEventDate()
             ) {
                 $event->setPublishDate(

@@ -127,7 +127,7 @@ class LocalizedUrlExtension extends AbstractExtension
         $site = $page->getSite();
 
         // Use the site's locale to build target alias (no regex needed!)
-        if ($pageAlias && $site) {
+        if ($pageAlias && $site instanceof SiteInterface) {
             $sourceLocale = $site->getLocale();
             $localeSuffix = '_'.$sourceLocale;
 
@@ -137,10 +137,10 @@ class LocalizedUrlExtension extends AbstractExtension
                 $targetAlias = $baseAlias.'_'.$targetLocale;
                 $targetPage = $this->findPageByAlias($targetAlias);
 
-                if ($targetPage && $targetPage->getEnabled()) {
+                if ($targetPage instanceof PageInterface && $targetPage->getEnabled()) {
                     $url = $targetPage->getUrl();
                     $site = $targetPage->getSite();
-                    if ($url && $site) {
+                    if ($url && $site instanceof SiteInterface) {
                         // Site's relativePath already contains the locale prefix (/en or '')
                         return ($site->getRelativePath() ?? '').$url;
                     }
@@ -150,10 +150,10 @@ class LocalizedUrlExtension extends AbstractExtension
 
         // Fallback to Menu-based lookup (always works)
         $targetPage = $this->findPageThroughMenu($page, $targetLocale);
-        if ($targetPage && $targetPage->getEnabled()) {
+        if ($targetPage instanceof PageInterface && $targetPage->getEnabled()) {
             $url = $targetPage->getUrl();
             $site = $targetPage->getSite();
-            if ($url && $site) {
+            if ($url && $site instanceof SiteInterface) {
                 // Site's relativePath already contains the locale prefix (/en or '')
                 return ($site->getRelativePath() ?? '').$url;
             }

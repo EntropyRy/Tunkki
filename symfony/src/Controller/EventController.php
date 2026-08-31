@@ -89,7 +89,7 @@ class EventController extends Controller
         EntityManagerInterface $em,
     ): Response {
         $user = $this->getUser();
-        if ($event->getTicketsEnabled() && $user) {
+        if ($event->getTicketsEnabled() && $user instanceof UserInterface) {
             \assert($user instanceof User);
             $member = $user->getMember();
             $tickets = $ticketRepo->findBy([

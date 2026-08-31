@@ -123,6 +123,6 @@ class NakkiBooking implements \Stringable
 
     public function memberHasEventTicket(): bool
     {
-        return $this->member && $this->getEvent()->memberHasTicket($this->member);
+        return $this->member instanceof Member && $this->getEvent()->memberHasTicket($this->member);
     }
 }

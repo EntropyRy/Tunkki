@@ -110,7 +110,7 @@ final class ArtistControl extends AbstractController
             ]);
         }
 
-        if ($this->isInStream && $this->existingStreamArtist) {
+        if ($this->isInStream && $this->existingStreamArtist instanceof StreamArtist) {
             // If already in stream, instantiate form for removal
             return $this->createForm(
                 StreamArtistType::class,
@@ -150,7 +150,7 @@ final class ArtistControl extends AbstractController
         $this->validate();
         $form = $this->getForm();
 
-        if ($this->isInStream && $this->existingStreamArtist) {
+        if ($this->isInStream && $this->existingStreamArtist instanceof StreamArtist) {
             // Handle removal - Set stoppedAt to mark it as inactive
             $this->existingStreamArtist->setStoppedAt(new \DateTimeImmutable());
             $this->entityManager->flush();
@@ -221,7 +221,7 @@ final class ArtistControl extends AbstractController
     public function cancel(): void
     {
         // Only process if member exists
-        if (!$this->member || !$this->existingStreamArtist) {
+        if (!$this->member instanceof Member || !$this->existingStreamArtist instanceof StreamArtist) {
             return;
         }
 
