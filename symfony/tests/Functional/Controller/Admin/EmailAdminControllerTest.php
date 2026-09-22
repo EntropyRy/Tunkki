@@ -299,7 +299,7 @@ final class EmailAdminControllerTest extends FixturesWebTestCase
         ]);
 
         // Create active members as recipients
-        MemberFactory::new()->createMany(5, [
+        MemberFactory::new()->many(5)->create([
             'isActiveMember' => true,
             'emailVerified' => true,
             'allowActiveMemberMails' => true,
@@ -323,7 +323,7 @@ final class EmailAdminControllerTest extends FixturesWebTestCase
         $email = EmailFactory::new()->aktiivit()->forEvent($event)->create();
         $emailId = $email->getId();
 
-        MemberFactory::new()->createMany(3, [
+        MemberFactory::new()->many(3)->create([
             'isActiveMember' => true,
             'emailVerified' => true,
             'allowActiveMemberMails' => true,
@@ -347,7 +347,7 @@ final class EmailAdminControllerTest extends FixturesWebTestCase
     {
         $email = EmailFactory::new()->aktiivit()->create();
 
-        MemberFactory::new()->createMany(10, [
+        MemberFactory::new()->many(10)->create([
             'isActiveMember' => true,
             'emailVerified' => true,
             'allowActiveMemberMails' => true,
@@ -434,7 +434,7 @@ final class EmailAdminControllerTest extends FixturesWebTestCase
         $email = EmailFactory::new()->aktiivit()->create();
 
         // Create members that would normally receive the email
-        MemberFactory::new()->createMany(3, [
+        MemberFactory::new()->many(3)->create([
             'isActiveMember' => true,
             'emailVerified' => true,
             'allowActiveMemberMails' => true,
@@ -549,7 +549,7 @@ final class EmailAdminControllerTest extends FixturesWebTestCase
     public function testSendActionAjaxViaStandaloneAdmin(): void
     {
         $email = EmailFactory::new()->aktiivit()->create();
-        MemberFactory::new()->createMany(3, [
+        MemberFactory::new()->many(3)->create([
             'isActiveMember' => true,
             'emailVerified' => true,
             'allowActiveMemberMails' => true,

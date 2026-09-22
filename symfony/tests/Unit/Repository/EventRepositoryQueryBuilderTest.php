@@ -207,13 +207,18 @@ final class RecordingQueryBuilder extends \Doctrine\ORM\QueryBuilder
 
     public function orderBy(
         \Doctrine\ORM\Query\Expr\OrderBy|string $sort,
-        ?string $order = null,
+        \SortDirection|string|null $order = null,
     ): static {
         $sortVal =
             $sort instanceof \Doctrine\ORM\Query\Expr\OrderBy
                 ? (string) $sort
                 : $sort;
-        $this->orderBy[] = [$sortVal, strtoupper($order ?? 'ASC')];
+        $orderVal = match (true) {
+            $order instanceof \SortDirection => 'Descending' === $order->name ? 'DESC' : 'ASC',
+            null === $order => 'ASC',
+            default => strtoupper($order),
+        };
+        $this->orderBy[] = [$sortVal, $orderVal];
 
         return $this;
     }

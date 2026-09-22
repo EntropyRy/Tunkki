@@ -227,9 +227,6 @@
     "psr/log": {
         "version": "1.1.2"
     },
-    "ralouphie/getallheaders": {
-        "version": "3.0.3"
-    },
     "sonata-project/admin-bundle": {
         "version": "4.22",
         "recipe": {

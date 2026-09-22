@@ -104,7 +104,7 @@ return [
         'version' => '5.1.4',
     ],
     'moment/min/moment-with-locales.min.js' => [
-        'version' => '2.30.1',
+        'version' => '2.31.0',
     ],
     'es-module-shims' => [
         'version' => '2.8.4',
@@ -114,13 +114,13 @@ return [
         'type' => 'css',
     ],
     'prosemirror-model' => [
-        'version' => '1.25.11',
+        'version' => '1.25.12',
     ],
     'prosemirror-view' => [
-        'version' => '1.42.3',
+        'version' => '1.42.5',
     ],
     'prosemirror-transform' => [
-        'version' => '1.12.0',
+        'version' => '1.12.1',
     ],
     'prosemirror-state' => [
         'version' => '1.4.4',
@@ -195,11 +195,11 @@ return [
         'version' => '1.3.4',
     ],
     'prosemirror-view/style/prosemirror.min.css' => [
-        'version' => '1.42.3',
+        'version' => '1.42.5',
         'type' => 'css',
     ],
     '@stripe/stripe-js' => [
-        'version' => '9.14.0',
+        'version' => '9.17.0',
     ],
     '@toast-ui/editor/dist/theme/toastui-editor-dark.css' => [
         'version' => '3.2.2',

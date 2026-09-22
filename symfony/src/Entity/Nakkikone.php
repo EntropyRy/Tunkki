@@ -211,13 +211,14 @@ class Nakkikone implements \Stringable
      */
     public function getNakkis(): Collection
     {
-        return $this->nakkis;
+        // @phpstan-ignore nullCoalesce.initializedProperty (Sonata's Instantiator bypasses __construct() for "new" instances, leaving this uninitialized; review 2027-01-01)
+        return $this->nakkis ??= new ArrayCollection();
     }
 
     public function addNakki(Nakki $nakki): self
     {
-        if (!$this->nakkis->contains($nakki)) {
-            $this->nakkis->add($nakki);
+        if (!$this->getNakkis()->contains($nakki)) {
+            $this->getNakkis()->add($nakki);
             $nakki->setNakkikone($this);
         }
 
@@ -226,7 +227,7 @@ class Nakkikone implements \Stringable
 
     public function removeNakki(Nakki $nakki): self
     {
-        if ($this->nakkis->removeElement($nakki)) {
+        if ($this->getNakkis()->removeElement($nakki)) {
             // Nakki is the owning side; avoid nulling here to prevent invalid state.
         }
 
@@ -240,13 +241,14 @@ class Nakkikone implements \Stringable
      */
     public function getBookings(): Collection
     {
-        return $this->bookings;
+        // @phpstan-ignore nullCoalesce.initializedProperty (Sonata's Instantiator bypasses __construct() for "new" instances, leaving this uninitialized; review 2027-01-01)
+        return $this->bookings ??= new ArrayCollection();
     }
 
     public function addBooking(NakkiBooking $booking): self
     {
-        if (!$this->bookings->contains($booking)) {
-            $this->bookings->add($booking);
+        if (!$this->getBookings()->contains($booking)) {
+            $this->getBookings()->add($booking);
             $booking->setNakkikone($this);
         }
 
@@ -255,7 +257,7 @@ class Nakkikone implements \Stringable
 
     public function removeBooking(NakkiBooking $booking): self
     {
-        if ($this->bookings->removeElement($booking)) {
+        if ($this->getBookings()->removeElement($booking)) {
             // NakkiBooking is the owning side; avoid nulling here to prevent invalid state.
         }
 
@@ -269,13 +271,14 @@ class Nakkikone implements \Stringable
      */
     public function getResponsibleAdmins(): Collection
     {
-        return $this->responsibleAdmins;
+        // @phpstan-ignore nullCoalesce.initializedProperty (Sonata's Instantiator bypasses __construct() for "new" instances, leaving this uninitialized; review 2027-01-01)
+        return $this->responsibleAdmins ??= new ArrayCollection();
     }
 
     public function addResponsibleAdmin(Member $admin): self
     {
-        if (!$this->responsibleAdmins->contains($admin)) {
-            $this->responsibleAdmins->add($admin);
+        if (!$this->getResponsibleAdmins()->contains($admin)) {
+            $this->getResponsibleAdmins()->add($admin);
         }
 
         return $this;
@@ -283,7 +286,7 @@ class Nakkikone implements \Stringable
 
     public function removeResponsibleAdmin(Member $admin): self
     {
-        $this->responsibleAdmins->removeElement($admin);
+        $this->getResponsibleAdmins()->removeElement($admin);
 
         return $this;
     }
@@ -299,9 +302,9 @@ class Nakkikone implements \Stringable
     {
         $result = [];
 
-        foreach ($this->nakkis as $nakki) {
+        foreach ($this->getNakkis() as $nakki) {
             $isResponsible = $nakki->getResponsible() === $member;
-            $isAdmin = $this->responsibleAdmins->contains($member);
+            $isAdmin = $this->getResponsibleAdmins()->contains($member);
 
             if ($isResponsible || $isAdmin) {
                 $locale = $member->getLocale();
@@ -350,7 +353,7 @@ class Nakkikone implements \Stringable
     {
         $result = [];
 
-        foreach ($this->nakkis as $nakki) {
+        foreach ($this->getNakkis() as $nakki) {
             $name = $nakki->getDefinition()->getName($locale);
             $result[$name]['mattermost'] = $nakki->getMattermostChannel();
             $result[$name]['responsible'] = $nakki->getResponsible();
@@ -372,7 +375,7 @@ class Nakkikone implements \Stringable
             return null;
         }
 
-        foreach ($this->bookings as $booking) {
+        foreach ($this->getBookings() as $booking) {
             if ($booking->getMember() === $member) {
                 return $booking;
             }
@@ -395,7 +398,7 @@ class Nakkikone implements \Stringable
 
     private function getMemberBooking(Member $member): ?NakkiBooking
     {
-        foreach ($this->bookings as $booking) {
+        foreach ($this->getBookings() as $booking) {
             if ($booking->getMember() === $member) {
                 return $booking;
             }
