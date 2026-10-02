@@ -121,10 +121,10 @@ return [
         'version' => '1.25.12',
     ],
     'prosemirror-view' => [
-        'version' => '1.42.5',
+        'version' => '1.42.6',
     ],
     'prosemirror-transform' => [
-        'version' => '1.12.1',
+        'version' => '1.12.2',
     ],
     'prosemirror-state' => [
         'version' => '1.4.4',
@@ -139,7 +139,7 @@ return [
         'version' => '1.5.1',
     ],
     'prosemirror-history' => [
-        'version' => '1.5.0',
+        'version' => '1.5.1',
     ],
     'sortablejs' => [
         'version' => '1.15.7',
@@ -199,11 +199,11 @@ return [
         'version' => '1.3.4',
     ],
     'prosemirror-view/style/prosemirror.min.css' => [
-        'version' => '1.42.5',
+        'version' => '1.42.6',
         'type' => 'css',
     ],
     '@stripe/stripe-js' => [
-        'version' => '9.17.0',
+        'version' => '10.0.0',
     ],
     '@toast-ui/editor/dist/theme/toastui-editor-dark.css' => [
         'version' => '3.2.2',
