@@ -28,6 +28,7 @@ function start() {
         resolutionScale: 0.7,
         randomizeColors: false,
         backgroundFlares: false,
+        flareColor: null,
     };
     const config = readEffectConfig(canvas, defaults);
     const clamp = (value, fallback, min, max) => {
@@ -43,9 +44,13 @@ function start() {
         validHex(config.colorB, defaults.colorB),
         validHex(config.colorC, defaults.colorC),
     ];
-    const colors = hexColors.map((value) =>
-        [1, 3, 5].map((index) => parseInt(value.slice(index, index + 2), 16) / 255),
-    );
+    const toRgb = (value) =>
+        [1, 3, 5].map((index) => parseInt(value.slice(index, index + 2), 16) / 255);
+    const colors = hexColors.map(toRgb);
+    const customFlareColor =
+        typeof config.flareColor === "string" && /^#[0-9a-f]{6}$/i.test(config.flareColor)
+            ? toRgb(config.flareColor)
+            : null;
     const speed = clamp(config.speed, defaults.speed, 0, 1);
     const scale = clamp(config.scale, defaults.scale, 0.5, 8);
     const resolutionScale = clamp(config.resolutionScale, defaults.resolutionScale, 0.25, 1);
@@ -96,6 +101,8 @@ function start() {
             uniform vec3 u_color_c;
             uniform float u_flares_enabled;
             uniform vec3 u_flare;
+            uniform vec3 u_flare_color;
+            uniform float u_custom_flare_color;
 
             vec2 hash(vec2 p) {
                 p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
@@ -141,7 +148,8 @@ function start() {
                     vec2 distanceToFlare = (uv - u_flare.xy) * vec2(aspect, 1.0);
                     float glow = exp(-dot(distanceToFlare, distanceToFlare) * 12000.0);
                     float strength = u_flare.z * glow * (1.0 - smoothstep(0.25, 0.85, brightness));
-                    result = mix(result, u_color_c, strength);
+                    vec3 flareColor = mix(u_color_c, u_flare_color, u_custom_flare_color);
+                    result = mix(result, flareColor, strength);
                 }
                 gl_FragColor = vec4(result, 1.0);
             }
@@ -184,10 +192,14 @@ function start() {
                     colors: ["u_color_a", "u_color_b", "u_color_c"].map((name) => gl.getUniformLocation(program, name)),
                     flaresEnabled: gl.getUniformLocation(program, "u_flares_enabled"),
                     flare: gl.getUniformLocation(program, "u_flare"),
+                    flareColor: gl.getUniformLocation(program, "u_flare_color"),
+                    customFlareColor: gl.getUniformLocation(program, "u_custom_flare_color"),
                 };
                 gl.uniform1f(uniforms.scale, scale);
                 colors.forEach((rgb, index) => gl.uniform3fv(uniforms.colors[index], rgb));
                 gl.uniform1f(uniforms.flaresEnabled, 0);
+                gl.uniform3fv(uniforms.flareColor, customFlareColor || colors[2]);
+                gl.uniform1f(uniforms.customFlareColor, customFlareColor ? 1 : 0);
 
                 let frame = 0;
                 let elapsed = 0;

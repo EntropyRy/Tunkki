@@ -403,7 +403,7 @@ final class EventAdmin extends AbstractAdmin
                 ->add('backgroundEffectConfig', TextareaType::class, [
                     'required' => false,
                     'attr' => ['rows' => 12],
-                    'help' => 'Effect config JSON. Leave empty to use runtime defaults (handled in the front-end). Supported effects: Flowfields, Chladni, Cockroaches, Grid, Wavy Lines, Rain, Snowfall, Starfield, TV white noise, VHS static, Voronoi Diagram, Flowing Clouds. Clouds: set randomizeColors or backgroundFlares to true to enable either option.',
+                    'help' => 'Effect config JSON. Leave empty to use runtime defaults (handled in the front-end). Supported effects: Flowfields, Chladni, Cockroaches, Grid, Wavy Lines, Rain, Snowfall, Starfield, TV white noise, VHS static, Voronoi Diagram, Flowing Clouds.',
                     'help_html' => true,
                 ])
 

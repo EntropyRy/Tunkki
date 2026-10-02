@@ -202,6 +202,7 @@
             resolutionScale: 0.7,
             randomizeColors: false,
             backgroundFlares: false,
+            flareColor: null,
         };
     }
 
