@@ -47,6 +47,10 @@ function start() {
     const speed = clamp(config.speed, defaults.speed, 0, 1);
     const scale = clamp(config.scale, defaults.scale, 0.5, 8);
     const resolutionScale = clamp(config.resolutionScale, defaults.resolutionScale, 0.25, 1);
+    // Use the shorter side so the phone limit also applies in landscape.
+    const isPhone = () =>
+        window.matchMedia("(pointer: coarse)").matches &&
+        Math.min(window.innerWidth, window.innerHeight) <= 600;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     canvas.style.background = `linear-gradient(135deg, ${hexColors[0]}, ${hexColors[2]})`;
     const gl = canvas.getContext("webgl", { alpha: false, antialias: false });
@@ -151,14 +155,19 @@ function start() {
                 let frame = 0;
                 let elapsed = 0;
                 let lastFrame = 0;
+                let lastDraw = 0;
+                let phone = isPhone();
                 let stopped = false;
                 const resize = () => {
-                    const ratio = Math.min(window.devicePixelRatio || 1, 2) * resolutionScale;
+                    phone = isPhone();
+                    const scaleForDevice = phone ? Math.min(resolutionScale, 0.5) : resolutionScale;
+                    const ratio = Math.min(window.devicePixelRatio || 1, 2) * scaleForDevice;
                     canvas.width = Math.max(1, Math.round(window.innerWidth * ratio));
                     canvas.height = Math.max(1, Math.round(window.innerHeight * ratio));
                     gl.viewport(0, 0, canvas.width, canvas.height);
                     gl.uniform2f(uniforms.resolution, canvas.width, canvas.height);
                     render();
+                    lastDraw = performance.now();
                 };
                 const render = () => {
                     gl.uniform1f(uniforms.time, elapsed * speed);
@@ -168,13 +177,17 @@ function start() {
                     if (stopped || reducedMotion.matches || document.hidden) return;
                     if (lastFrame) elapsed += Math.min((now - lastFrame) / 1000, 0.1);
                     lastFrame = now;
-                    render();
+                    if (!phone || now - lastDraw >= 1000 / 30 - 1) {
+                        render();
+                        lastDraw = now;
+                    }
                     frame = requestAnimationFrame(tick);
                 };
                 const resume = () => {
                     cancelAnimationFrame(frame);
                     lastFrame = 0;
                     render();
+                    lastDraw = performance.now();
                     if (!stopped && !reducedMotion.matches && !document.hidden) {
                         frame = requestAnimationFrame(tick);
                     }
