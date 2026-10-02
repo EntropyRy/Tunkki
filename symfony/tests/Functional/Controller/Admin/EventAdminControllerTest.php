@@ -627,6 +627,37 @@ final class EventAdminControllerTest extends FixturesWebTestCase
         self::assertCount(0, $menu->getChildren());
     }
 
+    public function testCloudsEffectCanBeConfiguredInEventAdmin(): void
+    {
+        $event = EventFactory::new()->published()->create([
+            'url' => 'event-clouds-config-'.uniqid('', true),
+        ]);
+        $this->loginAsRole('ROLE_SUPER_ADMIN');
+
+        $crawler = $this->client->request('GET', "/admin/event/{$event->getId()}/edit");
+        $this->assertResponseIsSuccessful();
+        self::assertCount(1, $crawler->filter('select[id$="_backgroundEffect"] option[value="clouds"]'));
+
+        $formNode = $this->findFormNodeByField($crawler, 'Name');
+        self::assertNotNull($formNode);
+        $form = $formNode->form();
+        $values = $form->getPhpValues();
+        $root = $this->detectRootName($crawler->html() ?? '', 'Name');
+        $config = '{"colorA":"#123456","speed":0.25}';
+        $values[$root]['backgroundEffect'] = 'clouds';
+        $values[$root]['backgroundEffectConfig'] = $config;
+
+        $this->client->request($form->getMethod(), $form->getUri(), $values);
+        self::assertContains($this->client->getResponse()->getStatusCode(), [200, 302]);
+
+        $em = $this->em();
+        $em->clear();
+        $updated = $em->getRepository(Event::class)->find($event->getId());
+        self::assertNotNull($updated);
+        self::assertSame('clouds', $updated->getBackgroundEffect());
+        self::assertSame($config, $updated->getBackgroundEffectConfig());
+    }
+
     public function testBackgroundEffectConfigClearsForUnsupportedAndNullEffect(): void
     {
         $event = EventFactory::new()->published()->withBackgroundEffect('flowfields')->create([

@@ -35,6 +35,31 @@ final class BackgroundEffectFrontendTest extends FixturesWebTestCase
         // (Removed redundant assignment to $client; assertions now use base class registered client)
     }
 
+    public function testCloudsEffectRendersConfiguredCanvasAndImportmap(): void
+    {
+        $config = ['colorA' => '#123456', 'speed' => 0.25];
+        $event = EventFactory::new()->published()->withBackgroundEffect('clouds', 70)->create([
+            'url' => $this->uniqueSlug('clouds-front-test'),
+            'backgroundEffectConfig' => json_encode($config, \JSON_THROW_ON_ERROR),
+        ]);
+
+        $year = (int) $event->getEventDate()->format('Y');
+        $crawler = $this->client->request('GET', \sprintf('/%d/%s', $year, $event->getUrl()));
+        if ($this->client->getResponse()->isRedirect()) {
+            $crawler = $this->client->followRedirect();
+        }
+        $this->assertResponseIsSuccessful();
+
+        $canvas = $crawler->filter('canvas.effect_canvas#clouds');
+        self::assertCount(1, $canvas, $this->client->getRequest()->getUri());
+        self::assertSame($config, json_decode((string) $canvas->attr('data-config'), true, 512, \JSON_THROW_ON_ERROR));
+        self::assertSame('opacity: 0.7; z-index:0;', trim((string) $canvas->attr('style')));
+        $importmap = $crawler->filter('script[type="importmap"]');
+        self::assertCount(1, $importmap);
+        $imports = json_decode($importmap->text(), true, 512, \JSON_THROW_ON_ERROR);
+        self::assertArrayHasKey('clouds', $imports['imports']);
+    }
+
     public function testFlowfieldsEffectCanvasRendersWithConfig(): void
     {
         // Create event with background effect via factory (structural assertions)

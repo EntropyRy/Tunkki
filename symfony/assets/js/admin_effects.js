@@ -192,6 +192,16 @@
             maxWeight: 150,
         };
     }
+    function cloudsDefaults() {
+        return {
+            colorA: "#4f7dd6",
+            colorB: "#86aef2",
+            colorC: "#eaf2ff",
+            speed: 0.15,
+            scale: 2.8,
+            resolutionScale: 0.7,
+        };
+    }
 
     /** @type {Record<string, () => Record<string, unknown>>} */
     const DEFAULTS = {
@@ -206,6 +216,7 @@
         tv: tvDefaults,
         vhs: vhsDefaults,
         voronoi: voronoiDefaults,
+        clouds: cloudsDefaults,
     };
 
     /**

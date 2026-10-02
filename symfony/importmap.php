@@ -72,6 +72,10 @@ return [
         'path' => './assets/js/voronoi.js',
         'entrypoint' => true,
     ],
+    'clouds' => [
+        'path' => './assets/js/clouds.js',
+        'entrypoint' => true,
+    ],
     '@symfony/stimulus-bundle' => [
         'path' => './vendor/symfony/stimulus-bundle/assets/dist/loader.js',
     ],
