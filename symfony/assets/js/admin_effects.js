@@ -200,6 +200,8 @@
             speed: 0.15,
             scale: 2.8,
             resolutionScale: 0.7,
+            randomizeColors: false,
+            backgroundFlares: false,
         };
     }
 

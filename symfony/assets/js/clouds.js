@@ -26,6 +26,8 @@ function start() {
         speed: 0.15,
         scale: 2.8,
         resolutionScale: 0.7,
+        randomizeColors: false,
+        backgroundFlares: false,
     };
     const config = readEffectConfig(canvas, defaults);
     const clamp = (value, fallback, min, max) => {
@@ -47,6 +49,28 @@ function start() {
     const speed = clamp(config.speed, defaults.speed, 0, 1);
     const scale = clamp(config.scale, defaults.scale, 0.5, 8);
     const resolutionScale = clamp(config.resolutionScale, defaults.resolutionScale, 0.25, 1);
+    const randomizeColors = config.randomizeColors === true;
+    const backgroundFlares = config.backgroundFlares === true;
+    const paletteTones = colors.map((rgb) => {
+        const max = Math.max(...rgb);
+        const min = Math.min(...rgb);
+        const lightness = (max + min) / 2;
+        const saturation = max === min ? 0 : (max - min) / (1 - Math.abs(2 * lightness - 1));
+        return { lightness, saturation };
+    });
+    const hueColor = (hue, saturation, lightness) => {
+        const chroma = saturation * Math.min(lightness, 1 - lightness);
+        return [0, 8, 4].map((offset) => {
+            const position = (offset + hue * 12) % 12;
+            return lightness - chroma * Math.max(-1, Math.min(position - 3, 9 - position, 1));
+        });
+    };
+    const randomPalette = () => {
+        const hue = Math.random();
+        return paletteTones.map(({ saturation, lightness }) =>
+            hueColor(hue, saturation, lightness),
+        );
+    };
     // Use the shorter side so the phone limit also applies in landscape.
     const isPhone = () =>
         window.matchMedia("(pointer: coarse)").matches &&
@@ -70,6 +94,8 @@ function start() {
             uniform vec3 u_color_a;
             uniform vec3 u_color_b;
             uniform vec3 u_color_c;
+            uniform float u_flares_enabled;
+            uniform vec3 u_flare;
 
             vec2 hash(vec2 p) {
                 p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
@@ -109,6 +135,14 @@ function start() {
                 float brightness = smoothstep(-0.35, 0.42, field);
                 vec3 result = mix(u_color_a, u_color_b, smoothstep(0.0, 0.65, brightness));
                 result = mix(result, u_color_c, smoothstep(0.38, 1.0, brightness));
+                if (u_flares_enabled > 0.5) {
+                    vec2 uv = gl_FragCoord.xy / u_resolution;
+                    float aspect = u_resolution.x / u_resolution.y;
+                    vec2 distanceToFlare = (uv - u_flare.xy) * vec2(aspect, 1.0);
+                    float glow = exp(-dot(distanceToFlare, distanceToFlare) * 12000.0);
+                    float strength = u_flare.z * glow * (1.0 - smoothstep(0.25, 0.85, brightness));
+                    result = mix(result, u_color_c, strength);
+                }
                 gl_FragColor = vec4(result, 1.0);
             }
         `;
@@ -148,9 +182,12 @@ function start() {
                     time: gl.getUniformLocation(program, "u_time"),
                     scale: gl.getUniformLocation(program, "u_scale"),
                     colors: ["u_color_a", "u_color_b", "u_color_c"].map((name) => gl.getUniformLocation(program, name)),
+                    flaresEnabled: gl.getUniformLocation(program, "u_flares_enabled"),
+                    flare: gl.getUniformLocation(program, "u_flare"),
                 };
                 gl.uniform1f(uniforms.scale, scale);
                 colors.forEach((rgb, index) => gl.uniform3fv(uniforms.colors[index], rgb));
+                gl.uniform1f(uniforms.flaresEnabled, 0);
 
                 let frame = 0;
                 let elapsed = 0;
@@ -158,6 +195,11 @@ function start() {
                 let lastDraw = 0;
                 let phone = isPhone();
                 let stopped = false;
+                let paletteFrom = colors;
+                let paletteTo = randomizeColors ? randomPalette() : colors;
+                let paletteStart = 0;
+                let activeFlare = null;
+                let nextFlare = 3 + Math.random() * 5;
                 const resize = () => {
                     phone = isPhone();
                     const scaleForDevice = phone ? Math.min(resolutionScale, 0.5) : resolutionScale;
@@ -170,6 +212,47 @@ function start() {
                     lastDraw = performance.now();
                 };
                 const render = () => {
+                    if (randomizeColors) {
+                        if (elapsed - paletteStart >= 20) {
+                            paletteFrom = paletteTo;
+                            paletteTo = randomPalette();
+                            paletteStart = elapsed;
+                        }
+                        const progress = Math.min((elapsed - paletteStart) / 20, 1);
+                        const blend = progress * progress * (3 - 2 * progress);
+                        paletteFrom.forEach((rgb, index) => {
+                            gl.uniform3fv(
+                                uniforms.colors[index],
+                                rgb.map((channel, component) =>
+                                    channel + (paletteTo[index][component] - channel) * blend,
+                                ),
+                            );
+                        });
+                    }
+                    if (backgroundFlares) {
+                        if (elapsed >= nextFlare) {
+                            activeFlare = {
+                                x: Math.random(),
+                                y: Math.random(),
+                                start: elapsed,
+                                duration: 2 + Math.random() * 2,
+                            };
+                            nextFlare = elapsed + 4 + Math.random() * 5;
+                        }
+                        const age = activeFlare
+                            ? (elapsed - activeFlare.start) / activeFlare.duration
+                            : 1;
+                        const visible = age >= 0 && age < 1;
+                        gl.uniform1f(uniforms.flaresEnabled, visible ? 1 : 0);
+                        if (visible) {
+                            gl.uniform3f(
+                                uniforms.flare,
+                                activeFlare.x,
+                                activeFlare.y,
+                                Math.sin(Math.PI * age) * 0.22,
+                            );
+                        }
+                    }
                     gl.uniform1f(uniforms.time, elapsed * speed);
                     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
                 };
