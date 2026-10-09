@@ -218,6 +218,8 @@ final class ProfileDashboardLocaleTest extends FixturesWebTestCase
         $this->assertResponseIsSuccessful();
         // Artist preview content renders (component uses dedicated selectors to avoid collisions)
         $this->client->assertSelectorExists('.random-artist .random-artist-content');
+        // Long biographies are contained by dashboard-specific preview styling.
+        $this->client->assertSelectorExists('.random-artist .artist-preview-bio');
         // Verify empty state message does NOT exist
         $this->client->assertSelectorNotExists('.random-artist .random-artist-empty');
         // Verify the polaroid caption is present and not empty

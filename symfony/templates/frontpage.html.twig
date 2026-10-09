@@ -59,7 +59,7 @@
     {% set name = (artist.name|split(' for')).0 %}
     {% set frontpage = true %}
     {# bio_attribute removed: using artist.bio / artist.bioEn directly elsewhere #}
-    <div class="tile col-12 p-2">
+    <div class="tile col-12 p-2 frontpage-random-artist">
         <a href="{{ block('event_path') }}">
             <div class="rect-img-container">
                 {{ block('artist_pic') }}

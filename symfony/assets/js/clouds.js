@@ -96,6 +96,7 @@ function start() {
             uniform vec2 u_resolution;
             uniform float u_time;
             uniform float u_scale;
+            uniform float u_scroll_y;
             uniform vec3 u_color_a;
             uniform vec3 u_color_b;
             uniform vec3 u_color_c;
@@ -133,6 +134,8 @@ function start() {
 
             void main() {
                 vec2 p = gl_FragCoord.xy / u_resolution.y * u_scale;
+                // Anchor the field to the document while rendering only the viewport.
+                p.y -= u_scroll_y * u_scale;
                 float time = u_time;
                 vec2 warp = vec2(
                     clouds(p + vec2(time * 0.35, time * 0.18)),
@@ -189,6 +192,7 @@ function start() {
                     resolution: gl.getUniformLocation(program, "u_resolution"),
                     time: gl.getUniformLocation(program, "u_time"),
                     scale: gl.getUniformLocation(program, "u_scale"),
+                    scrollY: gl.getUniformLocation(program, "u_scroll_y"),
                     colors: ["u_color_a", "u_color_b", "u_color_c"].map((name) => gl.getUniformLocation(program, name)),
                     flaresEnabled: gl.getUniformLocation(program, "u_flares_enabled"),
                     flare: gl.getUniformLocation(program, "u_flare"),
@@ -202,6 +206,7 @@ function start() {
                 gl.uniform1f(uniforms.customFlareColor, customFlareColor ? 1 : 0);
 
                 let frame = 0;
+                let scrollFrame = 0;
                 let elapsed = 0;
                 let lastFrame = 0;
                 let lastDraw = 0;
@@ -265,6 +270,11 @@ function start() {
                             );
                         }
                     }
+                    const viewportHeight = Math.max(
+                        1,
+                        canvas.clientHeight || window.innerHeight,
+                    );
+                    gl.uniform1f(uniforms.scrollY, window.scrollY / viewportHeight);
                     gl.uniform1f(uniforms.time, elapsed * speed);
                     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
                 };
@@ -278,6 +288,18 @@ function start() {
                     }
                     frame = requestAnimationFrame(tick);
                 };
+                const renderScrolledFrame = () => {
+                    scrollFrame = 0;
+                    if (stopped || document.hidden) return;
+                    render();
+                    lastDraw = performance.now();
+                };
+                const handleScroll = () => {
+                    // The normal animation loop already samples scroll position. When
+                    // reduced motion pauses it, redraw once per painted scroll frame.
+                    if (!reducedMotion.matches || scrollFrame) return;
+                    scrollFrame = requestAnimationFrame(renderScrolledFrame);
+                };
                 const resume = () => {
                     cancelAnimationFrame(frame);
                     lastFrame = 0;
@@ -290,7 +312,9 @@ function start() {
                 const stop = () => {
                     stopped = true;
                     cancelAnimationFrame(frame);
+                    cancelAnimationFrame(scrollFrame);
                     window.removeEventListener("resize", resize);
+                    window.removeEventListener("scroll", handleScroll);
                     document.removeEventListener("visibilitychange", resume);
                     reducedMotion.removeEventListener("change", resume);
                     document.removeEventListener("turbo:before-cache", pause);
@@ -299,10 +323,13 @@ function start() {
                 };
                 const pause = () => {
                     cancelAnimationFrame(frame);
+                    cancelAnimationFrame(scrollFrame);
+                    scrollFrame = 0;
                     lastFrame = 0;
                 };
 
                 window.addEventListener("resize", resize);
+                window.addEventListener("scroll", handleScroll, { passive: true });
                 document.addEventListener("visibilitychange", resume);
                 reducedMotion.addEventListener("change", resume);
                 document.addEventListener("turbo:before-cache", pause);

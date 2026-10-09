@@ -686,7 +686,7 @@
         {%- if show_genre -%}
             <small>{{- artist.genre -}}</small>
         {%- endif -%}
-        <div class="d-none d-sm-block">
+        <div class="artist-event-bio d-none d-sm-block">
             {{- artist.getBioByLocale(app.request.locale)|nl2br -}}
         </div>
         {{- block('artist_links') -}}
@@ -746,7 +746,7 @@
     {% if bio_config.show_genre ?? true %}
         <small>{{ artist.genre }}</small>
     {% endif %}
-    <div>
+    <div class="artist-preview-bio">
         {{ artist.getBioByLocale(app.request.locale)|nl2br }}
     </div>
     {{ block('artist_links') }}

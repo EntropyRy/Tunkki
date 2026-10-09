@@ -98,6 +98,30 @@
     overflow: hidden;
 }
 
+/* Keep the dashboard teaser compact even when an artist has a long biography. */
+.random-artist .artist-preview-bio {
+    display: -webkit-box;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 10;
+    line-clamp: 10;
+}
+
+.frontpage-random-artist .artist-event-bio {
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 8;
+    line-clamp: 8;
+}
+
+@media (min-width: 576px) {
+    .frontpage-random-artist .artist-event-bio {
+        display: -webkit-box !important;
+    }
+}
+
 /* Media queries for container borders */
 @media (max-width: 991.98px) {
     .e-container {
