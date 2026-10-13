@@ -658,6 +658,37 @@ final class EventAdminControllerTest extends FixturesWebTestCase
         self::assertSame($config, $updated->getBackgroundEffectConfig());
     }
 
+    public function testImageFilterBlendModeCanBeClearedWithoutHidingColor(): void
+    {
+        $event = EventFactory::new()->published()->create([
+            'url' => 'event-image-filter-'.uniqid('', true),
+            'imgFilterColor' => '#123456',
+            'imgFilterBlendMode' => 'mix-blend-mode: multiply',
+        ]);
+        $this->loginAsRole('ROLE_SUPER_ADMIN');
+
+        $crawler = $this->client->request('GET', "/admin/event/{$event->getId()}/edit");
+        $this->assertResponseIsSuccessful();
+        self::assertCount(1, $crawler->filter('input[id$="_imgFilterColor"]'));
+        self::assertCount(1, $crawler->filter('select[id$="_imgFilterBlendMode"] option[value=""]'));
+
+        $formNode = $this->findFormNodeByField($crawler, 'Name');
+        self::assertNotNull($formNode);
+        $form = $formNode->form();
+        $values = $form->getPhpValues();
+        $root = $this->detectRootName($crawler->html() ?? '', 'Name');
+        $values[$root]['imgFilterBlendMode'] = '';
+
+        $this->client->request($form->getMethod(), $form->getUri(), $values);
+        self::assertContains($this->client->getResponse()->getStatusCode(), [200, 302]);
+
+        $em = $this->em();
+        $em->clear();
+        $updated = $em->getRepository(Event::class)->find($event->getId());
+        self::assertNotNull($updated);
+        self::assertNull($updated->getImgFilterBlendMode());
+    }
+
     public function testBackgroundEffectConfigClearsForUnsupportedAndNullEffect(): void
     {
         $event = EventFactory::new()->published()->withBackgroundEffect('flowfields')->create([

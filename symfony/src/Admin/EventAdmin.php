@@ -336,7 +336,7 @@ final class EventAdmin extends AbstractAdmin
                 'choices' => Event::PICTURE_POSITION_CHOICES,
             ])
             ->add('imgFilterColor', ColorType::class)
-            ->add('imgFilterBlendMode', ChoiceFieldMaskType::class, [
+            ->add('imgFilterBlendMode', ChoiceType::class, [
                 'required' => false,
                 'help' => 'Color does not work if you dont choose here how it should work',
                 'choices' => [
@@ -345,13 +345,6 @@ final class EventAdmin extends AbstractAdmin
                     'exclusion' => 'mix-blend-mode: exclusion',
                     'difference' => 'mix-blend-mode: difference',
                     'screen' => 'mix-blend-mode: screen',
-                ],
-                'map' => [
-                    'mix-blend-mode: luminosity' => ['imgFilterColor'],
-                    'mix-blend-mode: multiply' => ['imgFilterColor'],
-                    'mix-blend-mode: exclusion' => ['imgFilterColor'],
-                    'mix-blend-mode: difference' => ['imgFilterColor'],
-                    'mix-blend-mode: screen' => ['imgFilterColor'],
                 ],
             ]);
         if (false == $event->getexternalUrl()) {

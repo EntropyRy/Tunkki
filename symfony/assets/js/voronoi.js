@@ -87,7 +87,6 @@ function start() {
     uniform vec3 u_colors[MAX_SEEDS];
     uniform vec3 u_lineColor;
     uniform float u_lineThreshold;
-    uniform float u_scrollY;
     varying vec2 v_uv;
 
     int findClosest(vec2 p) {
@@ -96,8 +95,6 @@ function start() {
         for (int i = 0; i < MAX_SEEDS; i++) {
             if (i >= u_seedCount) break;
             vec2 offset = abs(p - u_seeds[i]);
-            // Repeat cells vertically so scrolling stays seamless on long pages.
-            offset.y = min(offset.y, 1.0 - offset.y);
             float d = length(offset) - u_weights[i];
             if (i == 0 || d < minDist) {
                 minDist = d;
@@ -108,11 +105,10 @@ function start() {
     }
 
     void main() {
-        // Anchor the visible cell field to document scroll while drawing one viewport.
-        vec2 p = vec2(v_uv.x, fract(v_uv.y + u_scrollY));
+        vec2 p = v_uv;
         int c = findClosest(p);
         int cx = findClosest(vec2(p.x + u_lineThreshold, p.y));
-        int cy = findClosest(vec2(p.x, fract(p.y + u_lineThreshold)));
+        int cy = findClosest(vec2(p.x, p.y + u_lineThreshold));
 
         // If neighbor cell is different, draw line
         if (c != cx || c != cy) {
@@ -169,7 +165,6 @@ function start() {
     const u_colors = gl.getUniformLocation(program, "u_colors");
     const u_lineColor = gl.getUniformLocation(program, "u_lineColor");
     const u_lineThreshold = gl.getUniformLocation(program, "u_lineThreshold");
-    const u_scrollY = gl.getUniformLocation(program, "u_scrollY");
 
     // Seed and color animation logic (preserved from your original)
     let seeds = [];
@@ -239,7 +234,6 @@ function start() {
     // Animate and draw
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
-    let scrollFrame = 0;
     let lastFrameTime = 0;
     let stopped = false;
     const targetFPS = 30;
@@ -268,10 +262,6 @@ function start() {
         gl.uniform3fv(u_colors, colors.flat());
         gl.uniform3fv(u_lineColor, theme === "dark" ? lineColorRgb : invertedLineColorRgb);
         gl.uniform1f(u_lineThreshold, lineThreshold);
-        gl.uniform1f(
-            u_scrollY,
-            window.scrollY / Math.max(1, canvas.clientHeight || window.innerHeight),
-        );
         gl.clear(gl.COLOR_BUFFER_BIT);
         gl.drawArrays(gl.TRIANGLES, 0, 6);
     }
@@ -283,15 +273,6 @@ function start() {
             lastFrameTime = now;
         }
         frame = requestAnimationFrame(animate);
-    }
-    function renderScrolledFrame() {
-        scrollFrame = 0;
-        if (!stopped && !document.hidden) draw(false);
-    }
-    function handleScroll() {
-        if (reducedMotion.matches && !scrollFrame) {
-            scrollFrame = requestAnimationFrame(renderScrolledFrame);
-        }
     }
     function handleThemeChange(event) {
         if (!stopped && !document.hidden) draw(false, event.detail?.theme);
@@ -309,15 +290,12 @@ function start() {
     }
     function pause() {
         cancelAnimationFrame(frame);
-        cancelAnimationFrame(scrollFrame);
-        scrollFrame = 0;
         lastFrameTime = 0;
     }
     function stop() {
         stopped = true;
         pause();
         window.removeEventListener("resize", resize);
-        window.removeEventListener("scroll", handleScroll);
         document.removeEventListener("visibilitychange", resume);
         document.removeEventListener("theme:changed", handleThemeChange);
         document.removeEventListener("turbo:before-cache", pause);
@@ -326,7 +304,6 @@ function start() {
         gl.deleteProgram(program);
     }
     window.addEventListener("resize", resize);
-    window.addEventListener("scroll", handleScroll, { passive: true });
     document.addEventListener("visibilitychange", resume);
     document.addEventListener("theme:changed", handleThemeChange);
     document.addEventListener("turbo:before-cache", pause);
