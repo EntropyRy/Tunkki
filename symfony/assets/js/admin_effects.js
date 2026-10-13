@@ -48,7 +48,7 @@
   "seedWeights": [],
   // Line width for cell boundaries (0.5-3.0 recommended)
   "lineWidth": ${obj.lineWidth},
-  // Line color for cell boundaries (hex color)
+  // Line color in dark theme (hex color; inverted in light theme)
   "lineColor": "${obj.lineColor}",
   // Use varied weights for organic bubble look
   "weightVariation": ${obj.weightVariation},
