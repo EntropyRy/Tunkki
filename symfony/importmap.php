@@ -203,7 +203,7 @@ return [
         'type' => 'css',
     ],
     '@stripe/stripe-js' => [
-        'version' => '10.0.0',
+        'version' => '10.1.0',
     ],
     '@toast-ui/editor/dist/theme/toastui-editor-dark.css' => [
         'version' => '3.2.2',
