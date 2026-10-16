@@ -187,7 +187,7 @@ return [
         'type' => 'css',
     ],
     'typo-js' => [
-        'version' => '1.3.2',
+        'version' => '1.4.0',
     ],
     'orderedmap' => [
         'version' => '2.1.1',
