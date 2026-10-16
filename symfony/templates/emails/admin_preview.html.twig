@@ -8,7 +8,7 @@
     {% endif %}
 {% endblock %}
 {% block admin_send %}
-    {% if (admin is defined and admin.isChild and qr is null) or (email.purpose == 'aktiivit' or email.purpose == 'tiedotus') %}
+    {% if (admin is defined and admin.isChild and qr is null) or (email.purpose is not null and email.purpose.canBeSentFromStandaloneAdmin()) %}
         <style>
           .button {
             background-color: #4CAF50;

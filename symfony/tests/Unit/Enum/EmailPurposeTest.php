@@ -89,6 +89,24 @@ final class EmailPurposeTest extends TestCase
         }
     }
 
+    public function testCanBeSentFromStandaloneAdmin(): void
+    {
+        $sendable = [
+            EmailPurpose::AKTIIVIT,
+            EmailPurpose::TIEDOTUS,
+            EmailPurpose::VJ_ROSTER,
+            EmailPurpose::DJ_ROSTER,
+        ];
+
+        foreach (EmailPurpose::cases() as $purpose) {
+            $this->assertSame(
+                \in_array($purpose, $sendable, true),
+                $purpose->canBeSentFromStandaloneAdmin(),
+                \sprintf('Unexpected standalone sendability for purpose "%s"', $purpose->value)
+            );
+        }
+    }
+
     public function testEnumValuesMatchDatabaseStrings(): void
     {
         // Verify backing values match the old string-based DB data

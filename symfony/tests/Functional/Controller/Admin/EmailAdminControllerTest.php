@@ -13,6 +13,7 @@ use App\Factory\MemberFactory;
 use App\Factory\RSVPFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use Twig\Environment;
 
@@ -209,6 +210,40 @@ final class EmailAdminControllerTest extends FixturesWebTestCase
         $crawler = $this->client->getCrawler();
         $imgTag = $crawler->filter('img[src*="data:image/png;base64"]');
         $this->assertGreaterThan(0, $imgTag->count(), 'QR code image should be present');
+    }
+
+    /**
+     * @return iterable<string, array{EmailPurpose}>
+     */
+    public static function standaloneSendablePurposes(): iterable
+    {
+        yield 'aktiivit' => [EmailPurpose::AKTIIVIT];
+        yield 'tiedotus' => [EmailPurpose::TIEDOTUS];
+        yield 'vj roster' => [EmailPurpose::VJ_ROSTER];
+        yield 'dj roster' => [EmailPurpose::DJ_ROSTER];
+    }
+
+    #[DataProvider('standaloneSendablePurposes')]
+    public function testStandalonePreviewShowsSendButtonForSendablePurpose(EmailPurpose $purpose): void
+    {
+        $email = EmailFactory::new()->create(['purpose' => $purpose]);
+        [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN');
+
+        $this->client->request('GET', "/admin/email/{$email->getId()}/preview");
+
+        $this->assertResponseIsSuccessful();
+        $this->client->assertSelectorExists('#sendEmails');
+    }
+
+    public function testStandalonePreviewHidesSendButtonForNonSendablePurpose(): void
+    {
+        $email = EmailFactory::new()->create(['purpose' => EmailPurpose::MEMBER_WELCOME]);
+        [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN');
+
+        $this->client->request('GET', "/admin/email/{$email->getId()}/preview");
+
+        $this->assertResponseIsSuccessful();
+        $this->client->assertSelectorNotExists('#sendEmails');
     }
 
     // =========================================================================

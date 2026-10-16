@@ -49,6 +49,18 @@ enum EmailPurpose: string
     }
 
     /**
+     * Check if emails with this purpose can be bulk-sent from the standalone admin
+     * (i.e. without an Event context).
+     */
+    public function canBeSentFromStandaloneAdmin(): bool
+    {
+        return match ($this) {
+            self::AKTIIVIT, self::TIEDOTUS, self::VJ_ROSTER, self::DJ_ROSTER => true,
+            default => false,
+        };
+    }
+
+    /**
      * Check if this purpose requires an Event context.
      */
     public function requiresEvent(): bool
