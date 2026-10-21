@@ -228,7 +228,6 @@ final class NakkiCreateFormTest extends FixturesWebTestCase
     {
         $component = $this->component();
         $method = new \ReflectionMethod(NakkiCreateForm::class, 'normaliseString');
-        $method->setAccessible(true);
 
         self::assertNull($method->invoke($component, null));
         self::assertNull($method->invoke($component, '   '));

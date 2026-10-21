@@ -189,18 +189,15 @@ final class NakkiBookingAdminTest extends FixturesWebTestCase
     private function clearParent(AbstractAdmin $admin): void
     {
         $parentRef = new \ReflectionProperty(AbstractAdmin::class, 'parent');
-        $parentRef->setAccessible(true);
         $parentRef->setValue($admin, null);
 
         $mappingRef = new \ReflectionProperty(AbstractAdmin::class, 'parentAssociationMapping');
-        $mappingRef->setAccessible(true);
         $mappingRef->setValue($admin, []);
     }
 
     private function resetAdminCaches(AbstractAdmin $admin): void
     {
         $loadedRef = new \ReflectionProperty(AbstractAdmin::class, 'loaded');
-        $loadedRef->setAccessible(true);
         $loadedRef->setValue($admin, [
             'routes' => false,
             'tab_menu' => false,
@@ -212,7 +209,6 @@ final class NakkiBookingAdminTest extends FixturesWebTestCase
 
         foreach (['list', 'show', 'form', 'datagrid', 'routes'] as $property) {
             $ref = new \ReflectionProperty(AbstractAdmin::class, $property);
-            $ref->setAccessible(true);
             $ref->setValue($admin, null);
         }
     }

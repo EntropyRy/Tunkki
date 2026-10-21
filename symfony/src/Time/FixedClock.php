@@ -27,7 +27,6 @@ namespace App\Time;
  *   $clock = static::getContainer()->get(App\Time\ClockInterface::class);
  *   // If you want a different instant for a specific test:
  *   $reflected = new \ReflectionProperty($clock, 'now');
- *   $reflected->setAccessible(true);
  *   $reflected->setValue($clock, new \DateTimeImmutable('2030-12-31T23:59:59+00:00'));
  *
  * (For cleaner mutation, prefer a MutableTestClock variant if frequent time

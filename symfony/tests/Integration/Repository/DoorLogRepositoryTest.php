@@ -211,7 +211,6 @@ final class DoorLogRepositoryTest extends RepositoryTestCase
             return;
         }
         $p = $ref->getProperty($prop);
-        $p->setAccessible(true);
         $p->setValue($obj, $value);
     }
 
@@ -233,7 +232,6 @@ final class DoorLogRepositoryTest extends RepositoryTestCase
             return null;
         }
         $p = $ref->getProperty($prop);
-        $p->setAccessible(true);
 
         return $p->getValue($obj);
     }

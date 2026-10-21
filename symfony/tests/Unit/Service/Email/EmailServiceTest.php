@@ -296,7 +296,6 @@ final class EmailServiceTest extends TestCase
         // Access the context using reflection (since it's private)
         $reflection = new \ReflectionClass($capturedMessage);
         $contextProperty = $reflection->getProperty('context');
-        $contextProperty->setAccessible(true);
         $context = $contextProperty->getValue($capturedMessage);
 
         // Verify standard context fields are present
@@ -365,7 +364,6 @@ final class EmailServiceTest extends TestCase
         // Access the context using reflection
         $reflection = new \ReflectionClass($capturedMessage);
         $contextProperty = $reflection->getProperty('context');
-        $contextProperty->setAccessible(true);
         $context = $contextProperty->getValue($capturedMessage);
 
         // Verify extraContext values override standard values
@@ -415,7 +413,6 @@ final class EmailServiceTest extends TestCase
         // Verify standard context is present
         $reflection = new \ReflectionClass($capturedMessage);
         $contextProperty = $reflection->getProperty('context');
-        $contextProperty->setAccessible(true);
         $context = $contextProperty->getValue($capturedMessage);
 
         $this->assertArrayHasKey('body', $context);

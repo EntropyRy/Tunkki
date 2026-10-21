@@ -141,7 +141,6 @@ final class PlayerTest extends TestCase
     {
         $reflection = new \ReflectionObject($player);
         $property = $reflection->getProperty('liveResponder');
-        $property->setAccessible(true);
 
         return $property->getValue($player);
     }
@@ -153,7 +152,6 @@ final class PlayerTest extends TestCase
     {
         $reflection = new \ReflectionObject($target);
         $refMethod = $reflection->getMethod($method);
-        $refMethod->setAccessible(true);
 
         return $refMethod->invokeArgs($target, $arguments);
     }

@@ -55,7 +55,6 @@ final class SitemapControllerTest extends TestCase
 
         if (null !== $id) {
             $ref = new \ReflectionProperty(Event::class, 'id');
-            $ref->setAccessible(true);
             $ref->setValue($event, $id);
         }
 

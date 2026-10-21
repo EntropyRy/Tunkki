@@ -223,7 +223,6 @@ final class StatusEventAdminTest extends TestCase
     private function invokePrivate(StatusEventAdmin $admin, string $methodName, array $args = []): mixed
     {
         $method = new \ReflectionMethod(StatusEventAdmin::class, $methodName);
-        $method->setAccessible(true);
 
         return $method->invokeArgs($admin, $args);
     }

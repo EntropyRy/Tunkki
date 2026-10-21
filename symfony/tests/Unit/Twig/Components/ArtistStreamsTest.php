@@ -154,7 +154,6 @@ final class ArtistStreamsTest extends TestCase
     {
         $reflection = new \ReflectionObject($target);
         $refMethod = $reflection->getMethod($method);
-        $refMethod->setAccessible(true);
 
         return $refMethod->invokeArgs($target, $arguments);
     }
@@ -163,7 +162,6 @@ final class ArtistStreamsTest extends TestCase
     {
         $reflection = new \ReflectionObject($entity);
         $property = $reflection->getProperty('id');
-        $property->setAccessible(true);
         $property->setValue($entity, $id);
     }
 }

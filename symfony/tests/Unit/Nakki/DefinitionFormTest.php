@@ -94,14 +94,12 @@ final class DefinitionFormTest extends FixturesWebTestCase
         $component = $this->component();
 
         $method = new \ReflectionMethod(DefinitionForm::class, 'resolveDefinition');
-        $method->setAccessible(true);
 
         $component->definitionId = null;
         $newDefinition = $method->invoke($component);
         self::assertInstanceOf(\App\Entity\NakkiDefinition::class, $newDefinition);
 
         $property = new \ReflectionProperty(DefinitionForm::class, 'definition');
-        $property->setAccessible(true);
         $property->setValue($component, null);
 
         $missingId = 999999;

@@ -111,7 +111,6 @@ final class StreamRepositoryTest extends RepositoryTestCase
             );
         }
         $prop = $ref->getProperty($property);
-        $prop->setAccessible(true);
         $prop->setValue($entity, $value);
     }
 
@@ -209,7 +208,6 @@ final class StreamRepositoryTest extends RepositoryTestCase
                     $ref = new \ReflectionObject($s);
                     if ($ref->hasProperty('online')) {
                         $p = $ref->getProperty('online');
-                        $p->setAccessible(true);
                         $p->setValue($s, false);
                     }
                 }
@@ -237,7 +235,6 @@ final class StreamRepositoryTest extends RepositoryTestCase
             $ref = new \ReflectionObject($onlineWithArtist);
             if ($ref->hasProperty('artists')) {
                 $p = $ref->getProperty('artists');
-                $p->setAccessible(true);
                 $collection = $p->getValue($onlineWithArtist);
                 if (
                     $collection instanceof \Doctrine\Common\Collections\Collection
@@ -320,7 +317,6 @@ final class StreamRepositoryTest extends RepositoryTestCase
             $refA = new \ReflectionObject($artist);
             if ($refA->hasProperty('stoppedAt')) {
                 $p = $refA->getProperty('stoppedAt');
-                $p->setAccessible(true);
                 self::assertNotNull(
                     $p->getValue($artist),
                     'Artist stoppedAt must be set (reflection fallback).',
@@ -348,7 +344,6 @@ final class StreamRepositoryTest extends RepositoryTestCase
         }
         if ($ref) {
             $p = $ref->getProperty($name);
-            $p->setAccessible(true);
 
             return (bool) $p->getValue($entity);
         }

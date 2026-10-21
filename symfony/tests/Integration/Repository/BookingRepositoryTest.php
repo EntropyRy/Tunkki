@@ -100,7 +100,6 @@ final class BookingRepositoryTest extends RepositoryTestCase
         }
         if ($ref) {
             $prop = $ref->getProperty($property);
-            $prop->setAccessible(true);
             $prop->setValue($entity, $value);
         } else {
             self::fail(

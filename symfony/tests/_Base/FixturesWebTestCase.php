@@ -1992,7 +1992,6 @@ abstract class FixturesWebTestCase extends WebTestCase
             $ref = new \ReflectionClass(WebTestCase::class);
             if ($ref->hasProperty('client')) {
                 $prop = $ref->getProperty('client');
-                $prop->setAccessible(true);
                 $prop->setValue(null, $this->siteAwareClient);
             }
         } catch (\Throwable $e) {

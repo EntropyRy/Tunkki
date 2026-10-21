@@ -69,7 +69,6 @@ final class ArtistControllerTest extends TestCase
             self::fail("Property {$prop} not found via reflection.");
         }
         $p = $ref->getProperty($prop);
-        $p->setAccessible(true);
         $p->setValue($object, $value);
     }
 

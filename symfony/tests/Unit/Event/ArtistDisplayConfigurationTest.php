@@ -66,7 +66,6 @@ final class ArtistDisplayConfigurationTest extends TestCase
 
         $ref = new \ReflectionClass(ArtistDisplayConfiguration::class);
         $method = $ref->getMethod('getFlag');
-        $method->setAccessible(true);
 
         // Use a non-existent group/flag to hit the defensive false-return branch.
         $result = $method->invoke($config, 'DJ', 'nonexistent_group', 'nonexistent_flag');

@@ -278,7 +278,6 @@ final class ProductRepositoryTest extends RepositoryTestCase
         }
         if ($ref) {
             $p = $ref->getProperty($prop);
-            $p->setAccessible(true);
             $p->setValue($entity, $value);
         }
     }
@@ -314,7 +313,6 @@ final class ProductRepositoryTest extends RepositoryTestCase
             return null;
         }
         $p = $ref->getProperty($prop);
-        $p->setAccessible(true);
 
         try {
             return $p->getValue($entity);

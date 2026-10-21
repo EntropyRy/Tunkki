@@ -57,11 +57,9 @@ final readonly class QrService
         $y = (int) ((imagesy($qr) - $targetH) / 2);
 
         imagecopyresampled($qr, $logo, $x, $y, 0, 0, $targetW, $targetH, $logoW, $logoH);
-        imagedestroy($logo);
 
         ob_start();
         imagepng($qr);
-        imagedestroy($qr);
 
         return ob_get_clean();
     }

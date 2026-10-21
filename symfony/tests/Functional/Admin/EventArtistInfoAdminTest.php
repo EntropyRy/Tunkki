@@ -130,7 +130,6 @@ final class EventArtistInfoAdminTest extends FixturesWebTestCase
     {
         $admin = $this->admin();
         $method = new \ReflectionMethod($admin, 'configureExportFields');
-        $method->setAccessible(true);
         $fields = $method->invoke($admin);
 
         self::assertContains('artistClone.name', $fields);

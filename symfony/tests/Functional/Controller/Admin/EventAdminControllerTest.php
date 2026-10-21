@@ -621,7 +621,6 @@ final class EventAdminControllerTest extends FixturesWebTestCase
         $menu = new MenuItem('root', new MenuFactory());
 
         $method = new \ReflectionMethod($admin, 'configureTabMenu');
-        $method->setAccessible(true);
         $method->invoke($admin, $menu, 'list', null);
 
         self::assertCount(0, $menu->getChildren());

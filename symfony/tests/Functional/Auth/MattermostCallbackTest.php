@@ -278,7 +278,6 @@ final class MattermostCallbackTest extends FixturesWebTestCase
         // Access provider via reflection
         $reflection = new \ReflectionClass($oauthClient);
         $providerProp = $reflection->getProperty('provider');
-        $providerProp->setAccessible(true);
         $provider = $providerProp->getValue($oauthClient);
 
         // Inject mock HTTP client

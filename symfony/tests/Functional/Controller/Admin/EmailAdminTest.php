@@ -273,11 +273,9 @@ final class EmailAdminTest extends FixturesWebTestCase
     {
         $admin = $this->emailAdmin();
         $subjectRef = new \ReflectionProperty(AbstractAdmin::class, 'subject');
-        $subjectRef->setAccessible(true);
         $subjectRef->setValue($admin, null);
 
         $method = new \ReflectionMethod(EmailAdmin::class, 'getExistingSingletonPurposes');
-        $method->setAccessible(true);
 
         self::assertSame([], $method->invoke($admin));
     }
@@ -315,11 +313,9 @@ final class EmailAdminTest extends FixturesWebTestCase
     private function clearParent(AbstractAdmin $admin): void
     {
         $parentRef = new \ReflectionProperty(AbstractAdmin::class, 'parent');
-        $parentRef->setAccessible(true);
         $parentRef->setValue($admin, null);
 
         $mappingRef = new \ReflectionProperty(AbstractAdmin::class, 'parentAssociationMapping');
-        $mappingRef->setAccessible(true);
         $mappingRef->setValue($admin, []);
     }
 }

@@ -190,7 +190,6 @@ final class EmailVerifierTest extends TestCase
     ): void {
         $ref = new \ReflectionClass($object);
         $prop = $ref->getProperty($property);
-        $prop->setAccessible(true);
         $prop->setValue($object, $value);
     }
 }

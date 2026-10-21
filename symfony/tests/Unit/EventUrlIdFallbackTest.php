@@ -43,7 +43,6 @@ final class EventUrlIdFallbackTest extends TestCase
 
         // Reflection-set private id so fallback has a numeric value.
         $ref = new \ReflectionProperty($e, 'id');
-        $ref->setAccessible(true);
         $ref->setValue($e, $id);
 
         return $e;

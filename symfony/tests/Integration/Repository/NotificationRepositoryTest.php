@@ -194,7 +194,6 @@ final class NotificationRepositoryTest extends RepositoryTestCase
         }
 
         $p = $ref->getProperty($prop);
-        $p->setAccessible(true);
         $p->setValue($obj, $value);
     }
 
@@ -221,7 +220,6 @@ final class NotificationRepositoryTest extends RepositoryTestCase
         }
 
         $p = $ref->getProperty($prop);
-        $p->setAccessible(true);
 
         return $p->getValue($obj);
     }

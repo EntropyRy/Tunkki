@@ -46,7 +46,6 @@ final class MemberAdminTest extends FixturesWebTestCase
     {
         $admin = $this->memberAdmin();
         $method = new \ReflectionMethod(AbstractAdmin::class, 'getDefaultSortValues');
-        $method->setAccessible(true);
 
         $values = $method->invoke($admin);
 
