@@ -71,10 +71,6 @@ services:
   Symfony\UX\Icons\Registry\LocalSvgIconRegistry:
     arguments:
       - "%kernel.project_dir%/assets/icons"
-  Symfony\UX\Icons\Twig\IconFinder:
-    arguments:
-      - "@twig"
-      - "%kernel.project_dir%/assets/icons"
 
   entropy.menu_builder:
     class: App\Menu\MenuBuilder
