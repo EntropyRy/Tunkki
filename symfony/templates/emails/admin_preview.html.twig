@@ -88,9 +88,11 @@
                     },
                     credentials: 'same-origin'
                 })
-                .then(response => {
+                .then(async response => {
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        const contentType = response.headers.get('Content-Type') || '';
+                        const data = contentType.includes('application/json') ? await response.json().catch(() => null) : null;
+                        throw new Error(`Send request failed (HTTP ${response.status})${data?.error ? ': ' + data.error : ''}`);
                     }
                     return response.json();
                 })

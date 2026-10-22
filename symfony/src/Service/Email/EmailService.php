@@ -75,6 +75,9 @@ class EmailService
         $totalRecipients = \count($recipients);
 
         foreach ($recipients as $index => $recipient) {
+            // Give each message a fresh execution window during bulk sends.
+            set_time_limit((int) ini_get('max_execution_time'));
+
             try {
                 $message = $this->createEmailMessage(
                     $email,
