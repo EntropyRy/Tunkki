@@ -2224,11 +2224,11 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         auth_code_ttl?: scalar|Param|null, // How long the issued auth code should be valid for. The value should be a valid interval: http://php.net/manual/en/dateinterval.construct.php#refsect1-dateinterval.construct-parameters // Default: "PT10M"
  *         device_code_ttl?: scalar|Param|null, // How long the issued device code should be valid for. The value should be a valid interval: http://php.net/manual/en/dateinterval.construct.php#refsect1-dateinterval.construct-parameters // Default: "PT10M"
  *         enable_client_credentials_grant?: bool|Param, // Whether to enable the client credentials grant // Default: true
- *         enable_password_grant?: bool|Param, // Whether to enable the password grant
+ *         enable_password_grant?: bool|Param, // Whether to enable the password grant // Default: false
  *         enable_refresh_token_grant?: bool|Param, // Whether to enable the refresh token grant // Default: true
  *         enable_auth_code_grant?: bool|Param, // Whether to enable the authorization code grant // Default: true
  *         require_code_challenge_for_public_clients?: bool|Param, // Whether to require code challenge for public clients for the auth code grant // Default: true
- *         enable_implicit_grant?: bool|Param, // Whether to enable the implicit grant
+ *         enable_implicit_grant?: bool|Param, // Whether to enable the implicit grant // Default: false
  *         persist_access_token?: bool|Param, // Whether to enable access token saving to persistence layer // Default: true
  *         response_type_class?: scalar|Param|null, // Define a custom ResponseType // Default: null
  *         revoke_refresh_tokens?: bool|Param, // Whether to revoke refresh tokens after they were used for all grant types // Default: true
@@ -2263,7 +2263,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     },
  *     client?: array{
  *         classname?: scalar|Param|null, // Set a custom client class. Must be a League\Bundle\OAuth2ServerBundle\Model\AbstractClient // Default: "League\\Bundle\\OAuth2ServerBundle\\Model\\Client"
- *         allow_plaintext_secrets?: bool|Param, // Whether to allow plaintext client secrets. // Default: true
+ *         allow_plaintext_secrets?: bool|Param|null, // Deprecated: The "allow_plaintext_secrets" option is deprecated. Value is ignored. Remove it from your configuration. // Plaintext client secrets are no longer supported. // Default: null
  *     },
  *     role_prefix?: scalar|Param|null, // Set a custom prefix that replaces the default 'ROLE_OAUTH2_' role prefix // Default: "ROLE_OAUTH2_"
  * }

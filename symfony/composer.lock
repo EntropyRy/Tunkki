@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bd66ec07de2ffa1b03176bdc392e12cc",
+    "content-hash": "96520e8d9e9144ee39ea0fb13053fb58",
     "packages": [
         {
             "name": "arkounay/ux-collection",
@@ -3301,47 +3301,50 @@
         },
         {
             "name": "league/oauth2-server-bundle",
-            "version": "v1.2.3",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/oauth2-server-bundle.git",
-                "reference": "cbe2ab7e47b071b5f0f5c1011798e4c4c823b6d8"
+                "reference": "e3f23d5acff652e5902397f398fd406001762773"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/oauth2-server-bundle/zipball/cbe2ab7e47b071b5f0f5c1011798e4c4c823b6d8",
-                "reference": "cbe2ab7e47b071b5f0f5c1011798e4c4c823b6d8",
+                "url": "https://api.github.com/repos/thephpleague/oauth2-server-bundle/zipball/e3f23d5acff652e5902397f398fd406001762773",
+                "reference": "e3f23d5acff652e5902397f398fd406001762773",
                 "shasum": ""
             },
             "require": {
                 "ext-openssl": "*",
+                "lcobucci/jwt": "^5.6",
                 "league/oauth2-server": "^9.2",
                 "nyholm/psr7": "^1.4",
-                "php": "^8.1",
+                "php": "^8.2",
                 "psr/http-factory": "^1.0",
                 "symfony/deprecation-contracts": "^3.0",
-                "symfony/event-dispatcher": "^6.4|^7.4|^8.1",
-                "symfony/filesystem": "^6.4|^7.4|^8.1",
-                "symfony/framework-bundle": "^6.4|^7.4|^8.1",
-                "symfony/password-hasher": "^6.4|^7.4|^8.1",
-                "symfony/psr-http-message-bridge": "^6.4|^7.4|^8.1",
-                "symfony/security-bundle": "^6.4|^7.4|^8.1"
+                "symfony/event-dispatcher": "^7.4|^8.1",
+                "symfony/filesystem": "^7.4|^8.1",
+                "symfony/framework-bundle": "^7.4|^8.1",
+                "symfony/password-hasher": "^7.4|^8.1",
+                "symfony/psr-http-message-bridge": "^7.4|^8.1",
+                "symfony/security-bundle": "^7.4|^8.1"
             },
             "conflict": {
-                "doctrine/doctrine-bundle": "<2.8.0",
-                "doctrine/orm": "<2.14",
-                "symfony/console": "<6.1"
+                "doctrine/dbal": "<4.0",
+                "doctrine/doctrine-bundle": "<2.15",
+                "doctrine/orm": "<3.0",
+                "symfony/error-handler": "<7.4.17"
             },
             "require-dev": {
-                "doctrine/doctrine-bundle": "^2.8|^3.0",
-                "doctrine/orm": "^2.14|^3.0",
+                "doctrine/dbal": "^4.0",
+                "doctrine/doctrine-bundle": "^2.15|^3.0",
+                "doctrine/orm": "^3.0",
                 "ext-pdo": "*",
                 "ext-pdo_sqlite": "*",
-                "php-cs-fixer/shim": "^3.38",
-                "phpstan/phpstan": "^2.1",
-                "phpstan/phpstan-symfony": "^2.0",
-                "rector/rector": "^2.5",
-                "symfony/browser-kit": "^6.4|^7.4|^8.1",
+                "php-cs-fixer/shim": "^3.95",
+                "phpstan/phpstan": "^2.3",
+                "phpstan/phpstan-symfony": "^2.1",
+                "rector/rector": "^2.6",
+                "symfony/browser-kit": "^7.4|^8.1",
                 "symfony/phpunit-bridge": "^8.1"
             },
             "suggest": {
@@ -3379,9 +3382,9 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/oauth2-server-bundle/issues",
-                "source": "https://github.com/thephpleague/oauth2-server-bundle/tree/v1.2.3"
+                "source": "https://github.com/thephpleague/oauth2-server-bundle/tree/v2.0.0"
             },
-            "time": "2026-09-27T15:50:17+00:00"
+            "time": "2026-10-14T12:51:18+00:00"
         },
         {
             "name": "league/uri",
@@ -3673,16 +3676,16 @@
         },
         {
             "name": "nette/schema",
-            "version": "v1.3.7",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/schema.git",
-                "reference": "c1162897273bf9499ca57924c4688a19d82c9310"
+                "reference": "af9fa8a86bfca9b02b10346220db26e62ef942ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/schema/zipball/c1162897273bf9499ca57924c4688a19d82c9310",
-                "reference": "c1162897273bf9499ca57924c4688a19d82c9310",
+                "url": "https://api.github.com/repos/nette/schema/zipball/af9fa8a86bfca9b02b10346220db26e62ef942ec",
+                "reference": "af9fa8a86bfca9b02b10346220db26e62ef942ec",
                 "shasum": ""
             },
             "require": {
@@ -3690,16 +3693,16 @@
                 "php": "8.1 - 8.6"
             },
             "require-dev": {
-                "nette/phpstan-rules": "^1.0",
+                "nette/phpstan-rules": "^1.0.7",
                 "nette/tester": "^2.6",
                 "phpstan/extension-installer": "^1.4@stable",
-                "phpstan/phpstan": "^2.1.39@stable",
+                "phpstan/phpstan": "^2.3@stable",
                 "tracy/tracy": "^2.8"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.3-dev"
+                    "dev-master": "1.4-dev"
                 }
             },
             "autoload": {
@@ -3720,23 +3723,23 @@
                 {
                     "name": "David Grudl",
                     "homepage": "https://davidgrudl.com"
-                },
-                {
-                    "name": "Nette Community",
-                    "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "📐 Nette Schema: validating data structures against a given Schema.",
-            "homepage": "https://nette.org",
+            "description": "📐 Nette Schema: validates and normalizes data such as configuration or API input against a schema described in a few readable lines of PHP, with precise error messages.",
+            "homepage": "https://doc.nette.org/schema",
             "keywords": [
-                "config",
-                "nette"
+                "configuration",
+                "data validation",
+                "nette",
+                "normalization",
+                "schema",
+                "validation"
             ],
             "support": {
                 "issues": "https://github.com/nette/schema/issues",
-                "source": "https://github.com/nette/schema/tree/v1.3.7"
+                "source": "https://github.com/nette/schema/tree/v1.4.0"
             },
-            "time": "2026-10-20T15:46:50+00:00"
+            "time": "2026-10-22T02:12:50+00:00"
         },
         {
             "name": "nette/utils",
