@@ -9,6 +9,7 @@
       {{ block('timetable_to_page_with_genre') }}
       {{ block('vj_timetable') }}
       {{ block('vj_timetable_to_page') }}
+      {{ block('art_timetable') }}
 
   Blocks provided:
     - dj_timetable                  (DJ, configurable via admin)
@@ -18,6 +19,7 @@
     - timetable_with_genre          (DJ, no page links, with genre)
     - timetable                     (DJ, no page links)
     - vj_timetable                  (VJ, no page links)
+    - art_timetable                 (ART, configurable via admin)
     - timetable_list                (core rendering logic)
 #}
 
@@ -95,6 +97,17 @@
 {% set genre = timetable_config.include_genre ?? false %}
 {% set timetable_show_time = timetable_config.include_time ?? true %}
 {% set type = 'VJ' %}
+{{- block('timetable_list') -}}
+{%- endblock -%}
+
+{%- block art_timetable -%}
+{% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
+{% set bios = event.ArtistInfosByType('ART') %}
+{% set timetable_config = artist_display.getTimetableConfig('ART') %}
+{% set page_links = timetable_config.include_page_links ?? false %}
+{% set genre = timetable_config.include_genre ?? false %}
+{% set timetable_show_time = timetable_config.include_time ?? true %}
+{% set type = 'ART' %}
 {{- block('timetable_list') -}}
 {%- endblock -%}
 

@@ -6,12 +6,12 @@ const DEFAULT_TOKENS = [
   "links",
   "dj_timetable",
   "vj_timetable",
+  "art_timetable",
   "dj_bio",
   "vj_bio",
   "art_bio",
   "rsvp",
   "stripe_ticket",
-  "art_artist_list",
   "happening_list",
 ];
 

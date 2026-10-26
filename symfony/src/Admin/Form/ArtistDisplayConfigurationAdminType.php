@@ -108,6 +108,26 @@ final class ArtistDisplayConfigurationAdminType extends AbstractType
                     ]),
             )
             ->add(
+                $builder->create('artTimetable', FormType::class, [
+                    'inherit_data' => true,
+                    'label' => 'Art Timetable',
+                    'row_attr' => ['class' => 'col-md-4'],
+                    'label_attr' => ['class' => 'fw-bold text-uppercase d-block mb-2'],
+                ])
+                    ->add('artTimetableShowTime', CheckboxType::class, [
+                        'required' => false,
+                        'label' => 'Show times',
+                    ])
+                    ->add('artTimetableIncludePageLinks', CheckboxType::class, [
+                        'required' => false,
+                        'label' => 'Link artist names to artist page',
+                    ])
+                    ->add('artTimetableShowGenre', CheckboxType::class, [
+                        'required' => false,
+                        'label' => 'Show genre',
+                    ]),
+            )
+            ->add(
                 $builder->create('artBio', FormType::class, [
                     'inherit_data' => true,
                     'label' => 'Art Bio',

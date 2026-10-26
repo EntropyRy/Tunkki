@@ -101,6 +101,15 @@ TWIG);
         self::assertSame('Intro <div>Art Bio</div> Outro', $rendered);
     }
 
+    public function testRenderReplacesArtTimetableToken(): void
+    {
+        $template = $this->loadTemplate('{% block art_timetable %}<table>Art</table>{% endblock %}');
+
+        $rendered = $this->renderer->render('Intro {{ art_timetable }} Outro', $template, []);
+
+        self::assertSame('Intro <table>Art</table> Outro', $rendered);
+    }
+
     public function testNormalizeLegacyContentRewritesArtBios(): void
     {
         self::assertSame(

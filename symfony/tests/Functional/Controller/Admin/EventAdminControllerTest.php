@@ -105,6 +105,11 @@ final class EventAdminControllerTest extends FixturesWebTestCase
             ->attr('name');
         self::assertNotNull($bioShowTimeName, 'ART bio show_time field not found');
 
+        $artTimetableShowTimeName = $formNode
+            ->filter('input[name*="artTimetableShowTime"]')
+            ->attr('name');
+        self::assertNotNull($artTimetableShowTimeName, 'ART timetable show_time field not found');
+
         // Update the exact field names that Sonata rendered.
         $this->setFormFieldValueByName($values, $includeLinksName, '1'); // false -> true
 
@@ -112,6 +117,8 @@ final class EventAdminControllerTest extends FixturesWebTestCase
         $this->removeFormFieldValueByName($values, $showGenreName);      // true -> false
 
         $this->setFormFieldValueByName($values, $bioShowTimeName, '1');  // false -> true
+
+        $this->removeFormFieldValueByName($values, $artTimetableShowTimeName); // true -> false
 
         $this->client->request($form->getMethod(), $form->getUri(), $values);
 
@@ -157,6 +164,11 @@ final class EventAdminControllerTest extends FixturesWebTestCase
         self::assertTrue(
             $cfg->shouldBioShowTime('ART'),
             'Expected ART bio show_time to persist as true'
+        );
+
+        self::assertFalse(
+            $cfg->shouldTimetableShowTime('ART'),
+            'Expected ART timetable include_time to persist as false'
         );
     }
 

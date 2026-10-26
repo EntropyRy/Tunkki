@@ -311,6 +311,36 @@ final class ArtistDisplayConfiguration
         $this->setBioShowGenre('VJ', $value);
     }
 
+    public function getArtTimetableIncludePageLinks(): bool
+    {
+        return $this->shouldTimetableIncludePageLinks('ART');
+    }
+
+    public function setArtTimetableIncludePageLinks(bool $value): void
+    {
+        $this->setTimetableIncludePageLinks('ART', $value);
+    }
+
+    public function getArtTimetableShowGenre(): bool
+    {
+        return $this->shouldTimetableShowGenre('ART');
+    }
+
+    public function setArtTimetableShowGenre(bool $value): void
+    {
+        $this->setTimetableShowGenre('ART', $value);
+    }
+
+    public function getArtTimetableShowTime(): bool
+    {
+        return $this->shouldTimetableShowTime('ART');
+    }
+
+    public function setArtTimetableShowTime(bool $value): void
+    {
+        $this->setTimetableShowTime('ART', $value);
+    }
+
     public function getArtBioShowStage(): bool
     {
         return $this->shouldBioShowStage('ART');

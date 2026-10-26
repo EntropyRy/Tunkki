@@ -217,6 +217,19 @@ final class ArtistDisplayConfigurationTest extends TestCase
         $config->setVjBioShowGenre(false);
         self::assertFalse($config->getVjBioShowGenre());
 
+        // ART timetable
+        self::assertFalse($config->getArtTimetableIncludePageLinks());
+        $config->setArtTimetableIncludePageLinks(true);
+        self::assertTrue($config->getArtTimetableIncludePageLinks());
+
+        self::assertTrue($config->getArtTimetableShowGenre());
+        $config->setArtTimetableShowGenre(false);
+        self::assertFalse($config->getArtTimetableShowGenre());
+
+        self::assertTrue($config->getArtTimetableShowTime());
+        $config->setArtTimetableShowTime(false);
+        self::assertFalse($config->getArtTimetableShowTime());
+
         // ART bio
         self::assertTrue($config->getArtBioShowStage());
         $config->setArtBioShowStage(false);

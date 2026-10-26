@@ -22,6 +22,7 @@ final class ContentTokenRenderer
         'timetable_with_genre' => 'timetable_with_genre',
         'vj_timetable' => 'vj_timetable',
         'vj_timetable_to_page' => 'vj_timetable_to_page',
+        'art_timetable' => 'art_timetable',
         'dj_bio' => 'dj_bio',
         'bios' => 'bios',
         'vj_bio' => 'vj_bio',
