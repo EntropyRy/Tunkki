@@ -8,6 +8,7 @@ const DEFAULT_TOKENS = [
   "vj_timetable",
   "dj_bio",
   "vj_bio",
+  "art_bio",
   "rsvp",
   "stripe_ticket",
   "art_artist_list",

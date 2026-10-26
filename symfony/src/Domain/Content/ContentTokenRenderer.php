@@ -26,6 +26,8 @@ final class ContentTokenRenderer
         'bios' => 'bios',
         'vj_bio' => 'vj_bio',
         'vj_bios' => 'vj_bios',
+        'art_bio' => 'art_bio',
+        'art_bios' => 'art_bios',
         'streamplayer' => 'streamplayer',
         'links' => 'links',
         'rsvp' => 'RSVP',
@@ -46,6 +48,7 @@ final class ContentTokenRenderer
         '{{ timetable }}' => '{{ dj_timetable }}',
         '{{ bios }}' => '{{ dj_bio }}',
         '{{ vj_bios }}' => '{{ vj_bio }}',
+        '{{ art_bios }}' => '{{ art_bio }}',
         '{{ vj_timetable_to_page }}' => '{{ vj_timetable }}',
     ];
 

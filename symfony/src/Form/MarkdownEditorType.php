@@ -34,6 +34,7 @@ final class MarkdownEditorType extends AbstractType
         'vj_timetable' => 'VJ timetable',
         'dj_bio' => 'DJ bio',
         'vj_bio' => 'VJ bio',
+        'art_bio' => 'ART bio',
         'rsvp' => 'RSVP',
         'stripe_ticket' => 'Stripe ticket',
         'art_artist_list' => 'Art artist list',

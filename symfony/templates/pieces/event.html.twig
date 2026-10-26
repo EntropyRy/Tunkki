@@ -634,6 +634,9 @@
 {% set artist_bio_type = 'ART' %}
     {{- block('artist_bios_container') -}}
 {%- endblock -%}
+{%- block art_bio -%}
+    {{- block('art_bios') -}}
+{%- endblock -%}
 {%- block artist_event_info -%}
     {% set current_event = event is defined ? event : null %}
     {% set artist_display = artist_display is defined

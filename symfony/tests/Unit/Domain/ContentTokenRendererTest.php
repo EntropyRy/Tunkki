@@ -92,6 +92,23 @@ TWIG);
         );
     }
 
+    public function testRenderReplacesArtBioToken(): void
+    {
+        $template = $this->loadTemplate('{% block art_bio %}<div>Art Bio</div>{% endblock %}');
+
+        $rendered = $this->renderer->render('Intro {{ art_bio }} Outro', $template, []);
+
+        self::assertSame('Intro <div>Art Bio</div> Outro', $rendered);
+    }
+
+    public function testNormalizeLegacyContentRewritesArtBios(): void
+    {
+        self::assertSame(
+            'Art: {{ art_bio }}',
+            ContentTokenRenderer::normalizeLegacyContent('Art: {{ art_bios }}')
+        );
+    }
+
     public function testNormalizeLegacyContentReturnsNullForNull(): void
     {
         self::assertNull(ContentTokenRenderer::normalizeLegacyContent(null));
