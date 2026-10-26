@@ -34,7 +34,7 @@ final readonly class DoorRequestMatcher implements RequestMatcherInterface
         private CacheInterface $cache,
         ?\Closure $resolver = null,
     ) {
-        $this->resolver = $resolver ?? self::resolveDns(...);
+        $this->resolver = $resolver ?? $this->resolveDns(...);
     }
 
     public function matches(Request $request): bool
@@ -84,7 +84,7 @@ final readonly class DoorRequestMatcher implements RequestMatcherInterface
     /**
      * @return list<string>
      */
-    private static function resolveDns(string $host): array
+    private function resolveDns(string $host): array
     {
         $records = @dns_get_record($host, \DNS_A | \DNS_AAAA);
         if (false === $records) {
