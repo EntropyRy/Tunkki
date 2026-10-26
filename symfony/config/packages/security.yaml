@@ -1,6 +1,3 @@
-parameters:
-    env(DOOR_ALLOWED_IPS): "%env(json:DOOR_ALLOWED_IPS)%"
-
 security:
     password_hashers:
         App\Entity\User: auto
@@ -119,12 +116,8 @@ security:
         - { path: ^/vahvista/sahkoposti, role: PUBLIC_ACCESS }
         # Resend verification now requires authentication (removed PUBLIC_ACCESS)
         - { path: ^/oauth/authorize, roles: IS_AUTHENTICATED_REMEMBERED }
-        # Door route: allow only from configured IPs; otherwise deny explicitly
-        - path: "^/(en/kerde/door|kerde/ovi)/?$"
-          ips:
-              - "%env(DOOR_ALLOWED_IPS_1)%"
-              - "%env(DOOR_ALLOWED_IPS_2)%"
-          roles: ROLE_USER
+        # Door route: allow only from the Kerde network (DOOR_ALLOWED_HOSTS, DDNS-resolved); otherwise deny explicitly
+        - { request_matcher: App\Security\DoorRequestMatcher, roles: ROLE_USER }
 
         - { path: "^/(en/kerde/door|kerde/ovi)/?$", roles: ROLE_NO_ACCESS }
         # Other Kerde routes require login

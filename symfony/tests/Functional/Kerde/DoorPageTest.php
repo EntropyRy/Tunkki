@@ -44,6 +44,17 @@ final class DoorPageTest extends FixturesWebTestCase
         $this->assertSame(403, $response->getStatusCode(), 'Door page should be IP-restricted (403 when IP not allowed)');
     }
 
+    public function testDoorPageAccessibleFromAllowedIp(): void
+    {
+        [$user, $client] = $this->loginAsActiveMember();
+
+        // .env.test sets DOOR_ALLOWED_HOSTS=127.0.0.1,::1
+        $client->setServerParameter('REMOTE_ADDR', '127.0.0.1');
+        $client->request('GET', '/en/kerde/door');
+
+        $this->assertResponseIsSuccessful();
+    }
+
     public function testFinnishDoorRouteIsIpRestricted(): void
     {
         [$user, $client] = $this->loginAsActiveMember();
