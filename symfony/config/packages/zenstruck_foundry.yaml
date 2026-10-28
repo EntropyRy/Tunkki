@@ -2,6 +2,10 @@
 when@dev: &dev
     zenstruck_foundry:
         enable_auto_refresh_with_lazy_objects: true
+        orm:
+            reset:
+                # Explicit to silence 2.15 deprecation; tests use DAMA transactions, not ResetDatabase
+                mode: schema
         persistence:
             # Flush only once per call of `PersistentObjectFactory::create()`
             flush_once: true
