@@ -21,7 +21,7 @@
     }
   },
   "require": {
-    "php": "^8.4",
+    "php": "^8.5",
     "arkounay/ux-collection": "^4.0",
     "bacon/bacon-qr-code": "^3.0",
     "beberlei/doctrineextensions": "^1.3",

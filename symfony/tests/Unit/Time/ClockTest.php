@@ -131,19 +131,11 @@ final class ClockTest extends TestCase
     {
         $clock = new MutableClock('2025-01-01T00:00:00+00:00');
 
-        // DateTimeImmutable::modify() may throw a \DateMalformedStringException in newer PHP versions
-        // before returning false (which our MutableClock would then convert to InvalidArgumentException).
-        // Accept either to keep the test stable across minor engine changes.
-        try {
-            $clock->advance('++ invalid relative spec ++');
-            $this->fail('Expected an exception for invalid relative time modifier.');
-        } catch (\InvalidArgumentException|\DateMalformedStringException $e) {
-            $this->assertMatchesRegularExpression(
-                '/invalid/i',
-                $e->getMessage(),
-                'Exception message should reference invalid modifier.'
-            );
-        }
+        // MutableClock wraps the engine's \DateMalformedStringException in an InvalidArgumentException.
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/Invalid relative time modifier/');
+
+        $clock->advance('++ invalid relative spec ++');
     }
 
     public function testAllClocksImplementInterface(): void

@@ -21,12 +21,15 @@ class SonataMediaMedia extends BaseMedia
 
     // Override parent properties to disable NotNull validation
     #[Assert\DisableAutoMapping]
+    #[\Override]
     protected ?\DateTimeInterface $createdAt = null;
 
     #[Assert\DisableAutoMapping]
+    #[\Override]
     protected ?\DateTimeInterface $updatedAt = null;
 
     #[Assert\DisableAutoMapping]
+    #[\Override]
     protected ?int $size = null;
 
     #[\Override]

@@ -33,5 +33,6 @@ class SonataPageSite extends BaseSite
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
+    #[\Override]
     protected $id;
 }

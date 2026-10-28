@@ -99,11 +99,11 @@ final class MutableClock implements ClockInterface
      */
     public function advance(string $modifier): void
     {
-        $modified = $this->now->modify($modifier);
-        if (false === $modified) {
-            throw new \InvalidArgumentException(\sprintf('MutableClock::advance(): Invalid relative time modifier "%s".', $modifier));
+        try {
+            $this->now = $this->now->modify($modifier);
+        } catch (\DateMalformedStringException $e) {
+            throw new \InvalidArgumentException(\sprintf('MutableClock::advance(): Invalid relative time modifier "%s".', $modifier), previous: $e);
         }
-        $this->now = $modified;
     }
 
     /**
