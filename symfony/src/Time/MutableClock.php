@@ -102,7 +102,7 @@ final class MutableClock implements ClockInterface
         try {
             $this->now = $this->now->modify($modifier);
         } catch (\DateMalformedStringException $e) {
-            throw new \InvalidArgumentException(\sprintf('MutableClock::advance(): Invalid relative time modifier "%s".', $modifier), previous: $e);
+            throw new \InvalidArgumentException(\sprintf('MutableClock::advance(): Invalid relative time modifier "%s".', $modifier), $e->getCode(), previous: $e);
         }
     }
 
