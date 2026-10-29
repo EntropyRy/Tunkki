@@ -477,6 +477,9 @@ artist:
     promo_picture:
       Promokuva (skaalataan neliöksi jonka sivu on 800px, joten kannattaa
       tehdä se ennen kuin lisäät tänne)
+    picture_too_large: Valitse alle 8 Mt:n kuva.
+    picture_invalid: Kuvan lataus ei onnistunut. Valitse alle 8 Mt:n JPEG-, PNG-, GIF- tai WebP-kuva.
+    picture_request_too_large: Lähetys on liian suuri. Valitse pienempi kuva ja yritä uudelleen.
     genre: Genre(t)
     hardware: Laitteisto
     links: Linkit medianäytteisiin ja muihin palveluihin

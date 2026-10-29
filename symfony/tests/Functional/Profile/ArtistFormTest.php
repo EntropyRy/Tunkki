@@ -357,6 +357,85 @@ final class ArtistFormTest extends FixturesWebTestCase
         $this->client->assertSelectorExists('#artist_Picture_error1.invalid-feedback');
     }
 
+    public function testCreateFormRejectsOversizedPictureWithAnInlineError(): void
+    {
+        $member = MemberFactory::new()->active()->create([
+            'emailVerified' => true,
+        ]);
+        $this->loginAsMember($member->getEmail());
+        $this->seedClientHome('en');
+
+        $imagePath = $this->createTemporaryUpload('oversized.png', str_repeat('x', 8 * 1024 * 1024 + 1));
+
+        try {
+            $crawler = $this->client->request('GET', '/en/profile/artist/create');
+            $form = $crawler->filter('form input[type="submit"]')->form();
+            $this->fillRequiredArtistFields($form);
+            $form['artist[Picture][binaryContent]']->upload($imagePath);
+
+            $this->client->submit($form);
+
+            $this->assertResponseStatusCodeSame(422);
+            $this->client->assertSelectorExists('#artist_Picture_error1.invalid-feedback');
+            self::assertSame(
+                'Please choose an image smaller than 8 MB.',
+                trim($this->client->getCrawler()->filter('#artist_Picture_error1')->text()),
+            );
+        } finally {
+            $this->removeTemporaryUpload($imagePath);
+        }
+    }
+
+    public function testCreateFormRejectsUnsupportedPictureWithAnInlineError(): void
+    {
+        $member = MemberFactory::new()->active()->create([
+            'emailVerified' => true,
+        ]);
+        $this->loginAsMember($member->getEmail());
+        $this->seedClientHome('en');
+
+        $imagePath = $this->createTemporaryUpload('not-an-image.txt', 'This is not an image.');
+
+        try {
+            $crawler = $this->client->request('GET', '/en/profile/artist/create');
+            $form = $crawler->filter('form input[type="submit"]')->form();
+            $this->fillRequiredArtistFields($form);
+            $form['artist[Picture][binaryContent]']->upload($imagePath);
+
+            $this->client->submit($form);
+
+            $this->assertResponseStatusCodeSame(422);
+            $this->client->assertSelectorExists('#artist_Picture_error1.invalid-feedback');
+            self::assertSame(
+                'The image could not be uploaded. Please choose a JPEG, PNG, GIF, or WebP image smaller than 8 MB.',
+                trim($this->client->getCrawler()->filter('#artist_Picture_error1')->text()),
+            );
+        } finally {
+            $this->removeTemporaryUpload($imagePath);
+        }
+    }
+
+    public function testCreateFormShowsAnErrorWhenTheEntireUploadExceedsPhpLimit(): void
+    {
+        $member = MemberFactory::new()->active()->create([
+            'emailVerified' => true,
+        ]);
+        $this->loginAsMember($member->getEmail());
+        $this->seedClientHome('en');
+
+        $this->client->request('POST', '/en/profile/artist/create', [], [], [
+            'CONTENT_LENGTH' => '524288001',
+            'CONTENT_TYPE' => 'multipart/form-data',
+        ]);
+
+        $this->assertResponseStatusCodeSame(422);
+        $this->client->assertSelectorExists('form .alert-danger');
+        self::assertSame(
+            'The upload is too large. Please choose a smaller image and try again.',
+            trim($this->client->getCrawler()->filter('form .alert-danger')->text()),
+        );
+    }
+
     public function testEditFormSubmissionSuccess(): void
     {
         $member = MemberFactory::new()->active()->create();
@@ -451,5 +530,30 @@ final class ArtistFormTest extends FixturesWebTestCase
         $this->em()->clear();
         $deletedArtist = $this->em()->getRepository(Artist::class)->find($artistId);
         $this->assertNull($deletedArtist, 'Artist with event associations should be deleted');
+    }
+
+    private function fillRequiredArtistFields(\Symfony\Component\DomCrawler\Form $form): void
+    {
+        $form['artist[name]'] = 'Test Artist';
+        $form['artist[type]'] = 'DJ';
+        $form['artist[hardware]'] = 'CDJs';
+        $form['artist[bio]'] = 'Test bio';
+        $form['artist[bioEn]'] = 'Test bio EN';
+    }
+
+    private function createTemporaryUpload(string $filename, string $contents): string
+    {
+        $directory = sys_get_temp_dir().'/artist-form-test-'.bin2hex(random_bytes(6));
+        mkdir($directory);
+        $path = $directory.'/'.$filename;
+        file_put_contents($path, $contents);
+
+        return $path;
+    }
+
+    private function removeTemporaryUpload(string $path): void
+    {
+        unlink($path);
+        rmdir(dirname($path));
     }
 }

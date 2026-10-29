@@ -399,6 +399,9 @@ artist:
     bio_en: Bio in English
     links: Links to media and other stuff
     promo_picture: Promo picture (will be scaled to a square of 800px per side; crop before uploading for best results)
+    picture_too_large: Please choose an image smaller than 8 MB.
+    picture_invalid: The image could not be uploaded. Please choose a JPEG, PNG, GIF, or WebP image smaller than 8 MB.
+    picture_request_too_large: The upload is too large. Please choose a smaller image and try again.
 
     genre: Genre(s)
     information: Basic info
