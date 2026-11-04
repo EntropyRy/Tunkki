@@ -24,7 +24,7 @@ class ArtistType extends AbstractType
 {
     private const MAX_PICTURE_SIZE = 8 * 1024 * 1024;
 
-    private const ALLOWED_PICTURE_MIME_TYPES = [
+    private const array ALLOWED_PICTURE_MIME_TYPES = [
         'image/pjpeg',
         'image/jpeg',
         'image/png',

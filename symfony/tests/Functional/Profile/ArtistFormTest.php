@@ -554,6 +554,6 @@ final class ArtistFormTest extends FixturesWebTestCase
     private function removeTemporaryUpload(string $path): void
     {
         unlink($path);
-        rmdir(dirname($path));
+        rmdir(\dirname($path));
     }
 }

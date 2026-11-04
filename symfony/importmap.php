@@ -121,7 +121,7 @@ return [
         'version' => '1.25.12',
     ],
     'prosemirror-view' => [
-        'version' => '1.42.8',
+        'version' => '1.42.9',
     ],
     'prosemirror-transform' => [
         'version' => '1.12.4',
@@ -199,11 +199,11 @@ return [
         'version' => '1.3.4',
     ],
     'prosemirror-view/style/prosemirror.min.css' => [
-        'version' => '1.42.8',
+        'version' => '1.42.9',
         'type' => 'css',
     ],
     '@stripe/stripe-js' => [
-        'version' => '10.2.0',
+        'version' => '10.2.1',
     ],
     '@toast-ui/editor/dist/theme/toastui-editor-dark.css' => [
         'version' => '3.2.2',
