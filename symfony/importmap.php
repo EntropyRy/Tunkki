@@ -124,7 +124,7 @@ return [
         'version' => '1.42.9',
     ],
     'prosemirror-transform' => [
-        'version' => '1.12.4',
+        'version' => '1.12.5',
     ],
     'prosemirror-state' => [
         'version' => '1.4.4',
