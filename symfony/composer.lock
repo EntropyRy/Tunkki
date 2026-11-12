@@ -699,21 +699,22 @@
                     "type": "tidelift"
                 }
             ],
+            "abandoned": true,
             "time": "2025-01-01T22:12:03+00:00",
             "published-time": "2025-01-01T22:13:20+00:00"
         },
         {
             "name": "doctrine/dbal",
-            "version": "4.5.0",
+            "version": "4.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "c435cd7ea33e17d2a89288caf994cf3d4549b879"
+                "reference": "b2815456989aa41964ee66d7ab47b7885264acf3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/c435cd7ea33e17d2a89288caf994cf3d4549b879",
-                "reference": "c435cd7ea33e17d2a89288caf994cf3d4549b879",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/b2815456989aa41964ee66d7ab47b7885264acf3",
+                "reference": "b2815456989aa41964ee66d7ab47b7885264acf3",
                 "shasum": ""
             },
             "require": {
@@ -726,7 +727,7 @@
                 "doctrine/coding-standard": "14.0.0",
                 "fig/log-test": "^1",
                 "jetbrains/phpstorm-stubs": "2023.2",
-                "phpstan/phpstan": "2.1.30",
+                "phpstan/phpstan": "2.3.4",
                 "phpstan/phpstan-phpunit": "2.0.7",
                 "phpstan/phpstan-strict-rules": "^2",
                 "phpunit/phpunit": "11.5.56",
@@ -790,7 +791,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/4.5.0"
+                "source": "https://github.com/doctrine/dbal/tree/4.5.1"
             },
             "funding": [
                 {
@@ -806,25 +807,25 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-09-24T16:11:26+00:00",
-            "published-time": "2026-09-26T07:58:02+00:00"
+            "time": "2026-11-10T09:21:59+00:00",
+            "published-time": "2026-11-10T09:33:50+00:00"
         },
         {
             "name": "doctrine/deprecations",
-            "version": "1.1.6",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/deprecations.git",
-                "reference": "d4fe3e6fd9bb9e72557a19674f44d8ac7db4c6ca"
+                "reference": "d2e16653a734c8784c1851ad68b02f997b53ca82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/deprecations/zipball/d4fe3e6fd9bb9e72557a19674f44d8ac7db4c6ca",
-                "reference": "d4fe3e6fd9bb9e72557a19674f44d8ac7db4c6ca",
+                "url": "https://api.github.com/repos/doctrine/deprecations/zipball/d2e16653a734c8784c1851ad68b02f997b53ca82",
+                "reference": "d2e16653a734c8784c1851ad68b02f997b53ca82",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1 || ^8.0"
+                "php": "^7.4 || ^8.0"
             },
             "conflict": {
                 "phpunit/phpunit": "<=7.5 || >=14"
@@ -853,10 +854,10 @@
             "homepage": "https://www.doctrine-project.org/",
             "support": {
                 "issues": "https://github.com/doctrine/deprecations/issues",
-                "source": "https://github.com/doctrine/deprecations/tree/1.1.6"
+                "source": "https://github.com/doctrine/deprecations/tree/1.2.0"
             },
-            "time": "2026-02-07T07:09:04+00:00",
-            "published-time": "2026-02-07T07:10:09+00:00"
+            "time": "2026-11-11T10:04:49+00:00",
+            "published-time": "2026-11-11T10:12:24+00:00"
         },
         {
             "name": "doctrine/doctrine-bundle",
@@ -12369,16 +12370,16 @@
         },
         {
             "name": "symfony/ux-autocomplete",
-            "version": "v3.7.0",
+            "version": "v3.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-autocomplete.git",
-                "reference": "792a81716e8d34c2cf6a20a1076ed73829e28f02"
+                "reference": "6e45394f34ae819b1b51dc2a7163c0fb8406806c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-autocomplete/zipball/792a81716e8d34c2cf6a20a1076ed73829e28f02",
-                "reference": "792a81716e8d34c2cf6a20a1076ed73829e28f02",
+                "url": "https://api.github.com/repos/symfony/ux-autocomplete/zipball/6e45394f34ae819b1b51dc2a7163c0fb8406806c",
+                "reference": "6e45394f34ae819b1b51dc2a7163c0fb8406806c",
                 "shasum": ""
             },
             "require": {
@@ -12442,7 +12443,7 @@
                 "symfony-ux"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-autocomplete/tree/v3.7.0"
+                "source": "https://github.com/symfony/ux-autocomplete/tree/v3.7.2"
             },
             "funding": [
                 {
@@ -12462,8 +12463,8 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-04T08:53:23+00:00",
-            "published-time": "2026-11-04T08:54:30+00:00"
+            "time": "2026-11-08T07:40:03+00:00",
+            "published-time": "2026-11-08T07:40:27+00:00"
         },
         {
             "name": "symfony/ux-icons",
@@ -12639,16 +12640,16 @@
         },
         {
             "name": "symfony/ux-live-component",
-            "version": "v3.7.0",
+            "version": "v3.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-live-component.git",
-                "reference": "efd54b6a1e7afff9ddc8e98b72187ec0bab98a25"
+                "reference": "0cce5abd5742b47cf5160fb815775783ea6d5429"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-live-component/zipball/efd54b6a1e7afff9ddc8e98b72187ec0bab98a25",
-                "reference": "efd54b6a1e7afff9ddc8e98b72187ec0bab98a25",
+                "url": "https://api.github.com/repos/symfony/ux-live-component/zipball/0cce5abd5742b47cf5160fb815775783ea6d5429",
+                "reference": "0cce5abd5742b47cf5160fb815775783ea6d5429",
                 "shasum": ""
             },
             "require": {
@@ -12668,7 +12669,7 @@
                 "doctrine/annotations": "^1.0|^2.0",
                 "doctrine/collections": "^1.6.8|^2.0",
                 "doctrine/doctrine-bundle": "^2.14|^3.0|^4.0",
-                "doctrine/orm": "^2.9.4|^3.0",
+                "doctrine/orm": "^2.17.3|^3.0",
                 "doctrine/persistence": "^2.5.2|^3.0|^4.0",
                 "phpdocumentor/reflection-docblock": "^5.6.2",
                 "phpunit/phpunit": "^11.1|^12.0",
@@ -12717,7 +12718,7 @@
                 "twig"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-live-component/tree/v3.7.0"
+                "source": "https://github.com/symfony/ux-live-component/tree/v3.7.2"
             },
             "funding": [
                 {
@@ -12737,8 +12738,8 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-04T08:53:23+00:00",
-            "published-time": "2026-11-04T08:54:22+00:00"
+            "time": "2026-11-08T07:40:03+00:00",
+            "published-time": "2026-11-08T07:40:24+00:00"
         },
         {
             "name": "symfony/ux-map",
@@ -13569,16 +13570,16 @@
         },
         {
             "name": "twbs/bootstrap",
-            "version": "v5.3.8",
+            "version": "v5.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twbs/bootstrap.git",
-                "reference": "25aa8cc0b32f0d1a54be575347e6d84b70b1acd7"
+                "reference": "349bdb50b8ab6782248c1b296443087cd7222ead"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/25aa8cc0b32f0d1a54be575347e6d84b70b1acd7",
-                "reference": "25aa8cc0b32f0d1a54be575347e6d84b70b1acd7",
+                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/349bdb50b8ab6782248c1b296443087cd7222ead",
+                "reference": "349bdb50b8ab6782248c1b296443087cd7222ead",
                 "shasum": ""
             },
             "replace": {
@@ -13613,10 +13614,10 @@
             ],
             "support": {
                 "issues": "https://github.com/twbs/bootstrap/issues",
-                "source": "https://github.com/twbs/bootstrap/tree/v5.3.8"
+                "source": "https://github.com/twbs/bootstrap/tree/v5.3.9"
             },
-            "time": "2025-08-26T02:01:02+00:00",
-            "published-time": "2025-08-26T02:04:51+00:00"
+            "time": "2026-11-11T17:41:09+00:00",
+            "published-time": "2026-11-11T17:53:58+00:00"
         },
         {
             "name": "twig/extra-bundle",
@@ -14446,16 +14447,16 @@
         },
         {
             "name": "dama/doctrine-test-bundle",
-            "version": "v8.7.0",
+            "version": "v8.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dmaicher/doctrine-test-bundle.git",
-                "reference": "c5de1ce3f29009312b97d311e569cf87cb3386c8"
+                "reference": "463b866b178f2a2072d2622d9cfc331e2d099667"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dmaicher/doctrine-test-bundle/zipball/c5de1ce3f29009312b97d311e569cf87cb3386c8",
-                "reference": "c5de1ce3f29009312b97d311e569cf87cb3386c8",
+                "url": "https://api.github.com/repos/dmaicher/doctrine-test-bundle/zipball/463b866b178f2a2072d2622d9cfc331e2d099667",
+                "reference": "463b866b178f2a2072d2622d9cfc331e2d099667",
                 "shasum": ""
             },
             "require": {
@@ -14509,10 +14510,10 @@
             ],
             "support": {
                 "issues": "https://github.com/dmaicher/doctrine-test-bundle/issues",
-                "source": "https://github.com/dmaicher/doctrine-test-bundle/tree/v8.7.0"
+                "source": "https://github.com/dmaicher/doctrine-test-bundle/tree/v8.7.1"
             },
-            "time": "2026-10-08T06:56:07+00:00",
-            "published-time": "2026-10-08T06:56:55+00:00"
+            "time": "2026-11-10T19:25:16+00:00",
+            "published-time": "2026-11-10T19:28:56+00:00"
         },
         {
             "name": "dbrekelmans/bdi",
@@ -14811,16 +14812,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v3.95.28",
+            "version": "v3.95.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "de66c41256ad603e63cf033bd153fa4a14ebaca4"
+                "reference": "e85cafc4d861c122839d5409eda3325ac0ec0300"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/de66c41256ad603e63cf033bd153fa4a14ebaca4",
-                "reference": "de66c41256ad603e63cf033bd153fa4a14ebaca4",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/e85cafc4d861c122839d5409eda3325ac0ec0300",
+                "reference": "e85cafc4d861c122839d5409eda3325ac0ec0300",
                 "shasum": ""
             },
             "require": {
@@ -14854,12 +14855,12 @@
             "require-dev": {
                 "facile-it/paraunit": "^1.3.1 || ^2.11.0",
                 "infection/infection": "^0.32.7",
-                "justinrainbow/json-schema": "^6.12.0",
+                "justinrainbow/json-schema": "^6.14.0",
                 "keradus/cli-executor": "^2.3",
                 "php-coveralls/php-coveralls": "^2.9.1",
                 "php-cs-fixer/phpunit-constraint-isidenticalstring": "^1.8",
                 "php-cs-fixer/phpunit-constraint-xmlmatchesxsd": "^1.8",
-                "phpunit/phpunit": "^9.6.36 || ^10.5.64 || ^11.5.56 || ^12.5.35 || ^13.3.3",
+                "phpunit/phpunit": "^9.6.38 || ^10.5.66 || ^11.5.57 || ^12.5.43 || ^13.4.6",
                 "symfony/polyfill-php85": "^1.43",
                 "symfony/var-dumper": "^5.4.54 || ^6.4.49 || ^7.4.22 || ^8.1.10",
                 "symfony/yaml": "^5.4.56 || ^6.4.50 || ^7.4.23 || ^8.1.11"
@@ -14903,7 +14904,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues",
-                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.95.28"
+                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.95.30"
             },
             "funding": [
                 {
@@ -14911,8 +14912,8 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-11-04T13:04:49+00:00",
-            "published-time": "2026-11-04T13:04:58+00:00"
+            "time": "2026-11-09T14:32:19+00:00",
+            "published-time": "2026-11-09T14:32:30+00:00"
         },
         {
             "name": "infection/abstract-testframework-adapter",
@@ -16098,16 +16099,16 @@
         },
         {
             "name": "phpstan/phpstan-doctrine",
-            "version": "2.1.0",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-doctrine.git",
-                "reference": "1c3be34c9f80f79931eb76f21dc98b2e8015f77c"
+                "reference": "54d759477ffdd095facf2d193fc91ad7a6733c6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-doctrine/zipball/1c3be34c9f80f79931eb76f21dc98b2e8015f77c",
-                "reference": "1c3be34c9f80f79931eb76f21dc98b2e8015f77c",
+                "url": "https://api.github.com/repos/phpstan/phpstan-doctrine/zipball/54d759477ffdd095facf2d193fc91ad7a6733c6a",
+                "reference": "54d759477ffdd095facf2d193fc91ad7a6733c6a",
                 "shasum": ""
             },
             "require": {
@@ -16169,10 +16170,10 @@
             ],
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-doctrine/issues",
-                "source": "https://github.com/phpstan/phpstan-doctrine/tree/2.1.0"
+                "source": "https://github.com/phpstan/phpstan-doctrine/tree/2.1.2"
             },
-            "time": "2026-10-30T17:56:27+00:00",
-            "published-time": "2026-10-30T18:00:10+00:00"
+            "time": "2026-11-06T19:55:47+00:00",
+            "published-time": "2026-11-06T19:56:31+00:00"
         },
         {
             "name": "phpstan/phpstan-symfony",
@@ -18308,16 +18309,16 @@
         },
         {
             "name": "sebastian/version",
-            "version": "6.0.1",
+            "version": "6.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/version.git",
-                "reference": "9e935a16187e14f39b0e79910dabd614972cdb26"
+                "reference": "a8b6643a19ba6c8125a473623e45fb8cbb0e4159"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/version/zipball/9e935a16187e14f39b0e79910dabd614972cdb26",
-                "reference": "9e935a16187e14f39b0e79910dabd614972cdb26",
+                "url": "https://api.github.com/repos/sebastianbergmann/version/zipball/a8b6643a19ba6c8125a473623e45fb8cbb0e4159",
+                "reference": "a8b6643a19ba6c8125a473623e45fb8cbb0e4159",
                 "shasum": ""
             },
             "require": {
@@ -18350,7 +18351,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/version/issues",
                 "security": "https://github.com/sebastianbergmann/version/security/policy",
-                "source": "https://github.com/sebastianbergmann/version/tree/6.0.1"
+                "source": "https://github.com/sebastianbergmann/version/tree/6.0.2"
             },
             "funding": [
                 {
@@ -18370,8 +18371,8 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-10-04T05:50:08+00:00",
-            "published-time": "2026-10-04T05:50:36+00:00"
+            "time": "2026-11-09T06:30:55+00:00",
+            "published-time": "2026-11-09T06:31:20+00:00"
         },
         {
             "name": "staabm/side-effects-detector",
@@ -19569,16 +19570,16 @@
         },
         {
             "name": "zenstruck/foundry",
-            "version": "v2.15.0",
+            "version": "v2.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zenstruck/foundry.git",
-                "reference": "4ff755f89264ea779066780cdacf3d3005d996b8"
+                "reference": "29199b9a8363af0f96daaf3ade8fff191fd63952"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zenstruck/foundry/zipball/4ff755f89264ea779066780cdacf3d3005d996b8",
-                "reference": "4ff755f89264ea779066780cdacf3d3005d996b8",
+                "url": "https://api.github.com/repos/zenstruck/foundry/zipball/29199b9a8363af0f96daaf3ade8fff191fd63952",
+                "reference": "29199b9a8363af0f96daaf3ade8fff191fd63952",
                 "shasum": ""
             },
             "require": {
@@ -19681,7 +19682,7 @@
             ],
             "support": {
                 "issues": "https://github.com/zenstruck/foundry/issues",
-                "source": "https://github.com/zenstruck/foundry/tree/v2.15.0"
+                "source": "https://github.com/zenstruck/foundry/tree/v2.16.0"
             },
             "funding": [
                 {
@@ -19693,8 +19694,8 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-10-26T20:26:42+00:00",
-            "published-time": "2026-10-26T20:26:46+00:00"
+            "time": "2026-11-09T12:40:49+00:00",
+            "published-time": "2026-11-09T12:40:59+00:00"
         }
     ],
     "aliases": [

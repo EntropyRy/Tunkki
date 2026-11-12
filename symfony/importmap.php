@@ -89,7 +89,7 @@ return [
         'version' => '3.2.2',
     ],
     'bootstrap' => [
-        'version' => '5.3.8',
+        'version' => '5.3.9',
     ],
     '@popperjs/core' => [
         'version' => '2.11.8',
@@ -114,11 +114,11 @@ return [
         'version' => '2.8.4',
     ],
     'bootstrap/dist/css/bootstrap.min.css' => [
-        'version' => '5.3.8',
+        'version' => '5.3.9',
         'type' => 'css',
     ],
     'prosemirror-model' => [
-        'version' => '1.25.12',
+        'version' => '1.25.13',
     ],
     'prosemirror-view' => [
         'version' => '1.42.9',
@@ -155,7 +155,7 @@ return [
         'type' => 'css',
     ],
     'tom-select' => [
-        'version' => '2.6.2',
+        'version' => '2.7.0',
     ],
     '@orchidjs/sifter' => [
         'version' => '1.1.0',
@@ -164,19 +164,19 @@ return [
         'version' => '1.2.2',
     ],
     'tom-select/dist/css/tom-select.default.min.css' => [
-        'version' => '2.6.2',
+        'version' => '2.7.0',
         'type' => 'css',
     ],
     'tom-select/dist/css/tom-select.default.css' => [
-        'version' => '2.6.2',
+        'version' => '2.7.0',
         'type' => 'css',
     ],
     'tom-select/dist/css/tom-select.bootstrap4.css' => [
-        'version' => '2.6.2',
+        'version' => '2.7.0',
         'type' => 'css',
     ],
     'tom-select/dist/css/tom-select.bootstrap5.css' => [
-        'version' => '2.6.2',
+        'version' => '2.7.0',
         'type' => 'css',
     ],
     '@toast-ui/editor' => [
