@@ -136,7 +136,7 @@ return [
         'version' => '1.7.2',
     ],
     'prosemirror-inputrules' => [
-        'version' => '1.5.1',
+        'version' => '1.6.0',
     ],
     'prosemirror-history' => [
         'version' => '1.5.1',
@@ -180,10 +180,10 @@ return [
         'type' => 'css',
     ],
     '@toast-ui/editor' => [
-        'version' => '3.2.2',
+        'version' => '3.2.3',
     ],
     '@toast-ui/editor/dist/toastui-editor.css' => [
-        'version' => '3.2.2',
+        'version' => '3.2.3',
         'type' => 'css',
     ],
     'typo-js' => [
@@ -203,10 +203,10 @@ return [
         'type' => 'css',
     ],
     '@stripe/stripe-js' => [
-        'version' => '10.2.1',
+        'version' => '10.3.0',
     ],
     '@toast-ui/editor/dist/theme/toastui-editor-dark.css' => [
-        'version' => '3.2.2',
+        'version' => '3.2.3',
         'type' => 'css',
     ],
 ];
