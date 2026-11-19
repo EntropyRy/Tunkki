@@ -121,10 +121,10 @@ return [
         'version' => '1.25.13',
     ],
     'prosemirror-view' => [
-        'version' => '1.42.9',
+        'version' => '1.43.0',
     ],
     'prosemirror-transform' => [
-        'version' => '1.12.6',
+        'version' => '1.12.7',
     ],
     'prosemirror-state' => [
         'version' => '1.4.4',
@@ -136,10 +136,10 @@ return [
         'version' => '1.7.2',
     ],
     'prosemirror-inputrules' => [
-        'version' => '1.6.0',
+        'version' => '1.7.0',
     ],
     'prosemirror-history' => [
-        'version' => '1.5.1',
+        'version' => '1.5.2',
     ],
     'sortablejs' => [
         'version' => '1.15.7',
@@ -199,7 +199,7 @@ return [
         'version' => '1.3.4',
     ],
     'prosemirror-view/style/prosemirror.min.css' => [
-        'version' => '1.42.9',
+        'version' => '1.43.0',
         'type' => 'css',
     ],
     '@stripe/stripe-js' => [
