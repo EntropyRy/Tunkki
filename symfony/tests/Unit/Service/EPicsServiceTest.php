@@ -22,12 +22,51 @@ final class EPicsServiceTest extends TestCase
         $_ENV['EPICS_ADMIN_USER'] = 'admin@test.com';
         $_ENV['EPICS_ADMIN_PASSWORD'] = 'admin_password';
 
-        $this->service = new EPicsService($this->client);
+        $this->service = new EPicsService($this->client, new \Psr\Log\NullLogger());
+    }
+
+    public function testAccountFailuresLogStageAndStatusWithoutResponseSecrets(): void
+    {
+        foreach (['session', 'admin_login', 'user_lookup', 'user_create', 'password_update'] as $stage) {
+            $session = new MockResponse('', ['response_headers' => [
+                'set-cookie' => ['lychee_session=secret_session', 'XSRF-TOKEN=secret_xsrf'],
+            ]]);
+            $failure = new MockResponse('password=secret_password; cookie=secret_session', ['http_code' => 422]);
+            $responses = match ($stage) {
+                'session' => [$failure],
+                'admin_login' => [$session, $failure],
+                // Existing behavior attempts creation after a failed lookup.
+                'user_lookup' => [$session, new MockResponse(''), $failure, new MockResponse('')],
+                'user_create' => [$session, new MockResponse(''), new MockResponse('[]'), $failure],
+                'password_update' => [$session, new MockResponse(''), new MockResponse('[{"id":1,"username":"member"}]'), $failure],
+            };
+            $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+            $logger->expects(self::once())->method('error')->with(
+                'ePics account API request failed.',
+                ['stage' => $stage, 'status_code' => 422],
+            );
+            $service = new EPicsService(new MockHttpClient($responses), $logger);
+            self::assertSame('user_lookup' === $stage, $service->createOrUpdateUserPassword('member', 'secret_password'));
+        }
+    }
+
+    public function testAccountTransportFailureDoesNotLogExceptionMessage(): void
+    {
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $logger->expects(self::once())->method('error')->with(
+            'ePics account API request failed.',
+            ['stage' => 'session', 'exception_class' => \RuntimeException::class],
+        );
+        $client = new MockHttpClient(static function (): never {
+            throw new \RuntimeException('password=secret_password');
+        });
+
+        self::assertFalse((new EPicsService($client, $logger))->createOrUpdateUserPassword('member', 'secret_password'));
     }
 
     public function testServiceConstructsCorrectly(): void
     {
-        $service = new EPicsService($this->client);
+        $service = new EPicsService($this->client, new \Psr\Log\NullLogger());
 
         $this->assertInstanceOf(EPicsService::class, $service);
     }
@@ -614,7 +653,7 @@ final class EPicsServiceTest extends TestCase
         unset($_ENV['EPICS_BASE_URL']);
         $_SERVER['EPICS_BASE_URL'] = 'https://server.epics.test';
 
-        $service = new EPicsService($this->client);
+        $service = new EPicsService($this->client, new \Psr\Log\NullLogger());
 
         // Can't directly test the URL, but can verify it constructs
         $this->assertInstanceOf(EPicsService::class, $service);
@@ -631,7 +670,7 @@ final class EPicsServiceTest extends TestCase
         $origServer = $_SERVER['EPICS_BASE_URL'] ?? null;
         unset($_ENV['EPICS_BASE_URL'], $_SERVER['EPICS_BASE_URL']);
 
-        $service = new EPicsService($this->client);
+        $service = new EPicsService($this->client, new \Psr\Log\NullLogger());
         $this->assertInstanceOf(EPicsService::class, $service);
 
         // Restore

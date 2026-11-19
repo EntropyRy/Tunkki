@@ -214,7 +214,7 @@ final class ProfileControllerEpicsPasswordTest extends FixturesWebTestCase
             return new MockResponse('', ['http_code' => 500]);
         });
 
-        return new EPicsService($http);
+        return new EPicsService($http, new \Psr\Log\NullLogger());
     }
 
     /**

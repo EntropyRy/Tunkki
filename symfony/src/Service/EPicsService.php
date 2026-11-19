@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
@@ -27,6 +28,7 @@ final readonly class EPicsService implements EPicsServiceInterface
 
     public function __construct(
         private HttpClientInterface $client,
+        private LoggerInterface $logger,
     ) {
         $this->baseUrl = rtrim(
             (string) ($_ENV['EPICS_BASE_URL'] ?? $_SERVER['EPICS_BASE_URL'] ?? 'https://epics.entropy.fi'),
@@ -107,7 +109,7 @@ final readonly class EPicsService implements EPicsServiceInterface
      */
     public function createOrUpdateUserPassword(string $username, string $password): bool
     {
-        $tokens = $this->establishSession();
+        $tokens = $this->establishSession(true);
         if (null === $tokens) {
             return false;
         }
@@ -149,11 +151,15 @@ final readonly class EPicsService implements EPicsServiceInterface
             );
 
             if (200 !== $listResp->getStatusCode()) {
+                $this->logFailure('user_lookup', ['status_code' => $listResp->getStatusCode()]);
+
                 return null;
             }
 
-            $users = json_decode($listResp->getContent(false), true) ?? [];
+            $users = json_decode($listResp->getContent(false), true, 512, \JSON_THROW_ON_ERROR);
             if (!\is_array($users)) {
+                $this->logFailure('user_lookup', ['reason' => 'invalid_response']);
+
                 return null;
             }
 
@@ -164,7 +170,9 @@ final readonly class EPicsService implements EPicsServiceInterface
             }
 
             return null;
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
+            $this->logFailure('user_lookup', ['exception_class' => $e::class]);
+
             return null;
         }
     }
@@ -194,8 +202,17 @@ final readonly class EPicsService implements EPicsServiceInterface
                 ],
             );
 
-            return $resp->getStatusCode() >= 200 && $resp->getStatusCode() < 300;
-        } catch (\Throwable) {
+            $status = $resp->getStatusCode();
+            if ($status < 200 || $status >= 300) {
+                $this->logFailure('password_update', ['status_code' => $status]);
+
+                return false;
+            }
+
+            return true;
+        } catch (\Throwable $e) {
+            $this->logFailure('password_update', ['exception_class' => $e::class]);
+
             return false;
         }
     }
@@ -221,8 +238,17 @@ final readonly class EPicsService implements EPicsServiceInterface
                 ],
             );
 
-            return $create->getStatusCode() >= 200 && $create->getStatusCode() < 300;
-        } catch (\Throwable) {
+            $status = $create->getStatusCode();
+            if ($status < 200 || $status >= 300) {
+                $this->logFailure('user_create', ['status_code' => $status]);
+
+                return false;
+            }
+
+            return true;
+        } catch (\Throwable $e) {
+            $this->logFailure('user_create', ['exception_class' => $e::class]);
+
             return false;
         }
     }
@@ -232,23 +258,40 @@ final readonly class EPicsService implements EPicsServiceInterface
      *
      * @return array{0: string, 1: string}|null [sessionToken, xsrfToken] or null on failure
      */
-    private function establishSession(): ?array
+    private function establishSession(bool $logFailure = false): ?array
     {
         try {
             $initResponse = $this->client->request('GET', $this->baseUrl, [
                 'max_duration' => 5,
             ]);
 
+            $status = $initResponse->getStatusCode();
+            if ($status < 200 || $status >= 300) {
+                if ($logFailure) {
+                    $this->logFailure('session', ['status_code' => $status]);
+                }
+
+                return null;
+            }
+
             $headers = $initResponse->getHeaders();
             $sessionToken = $this->extractCookie($headers, 'lychee_session');
             $xsrfToken = $this->extractCookie($headers, 'XSRF-TOKEN');
 
             if (!$sessionToken || !$xsrfToken) {
+                if ($logFailure) {
+                    $this->logFailure('session', ['reason' => 'missing_cookies']);
+                }
+
                 return null;
             }
 
             return [$sessionToken, $xsrfToken];
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
+            if ($logFailure) {
+                $this->logFailure('session', ['exception_class' => $e::class]);
+            }
+
             return null;
         }
     }
@@ -279,6 +322,8 @@ final readonly class EPicsService implements EPicsServiceInterface
             );
 
             if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 300) {
+                $this->logFailure('admin_login', ['status_code' => $response->getStatusCode()]);
+
                 return null;
             }
 
@@ -287,9 +332,18 @@ final readonly class EPicsService implements EPicsServiceInterface
             $newXsrf = $this->extractCookie($headers, 'XSRF-TOKEN') ?? $xsrfToken;
 
             return [$newSession, $newXsrf];
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
+            $this->logFailure('admin_login', ['exception_class' => $e::class]);
+
             return null;
         }
+    }
+
+    /** @param array<string, int|string> $context */
+    private function logFailure(string $stage, array $context): void
+    {
+        // Never log request/response bodies, credentials, cookies, or exception messages.
+        $this->logger->error('ePics account API request failed.', ['stage' => $stage] + $context);
     }
 
     /**
