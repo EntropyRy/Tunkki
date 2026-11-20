@@ -1570,7 +1570,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         sort_admins?: bool|Param, // Auto order groups and admins by label or id // Default: false
  *         confirm_exit?: bool|Param, // Default: true
  *         js_debug?: bool|Param, // Default: false
- *         skin?: "skin-black"|"skin-black-light"|"skin-blue"|"skin-blue-light"|"skin-green"|"skin-green-light"|"skin-purple"|"skin-purple-light"|"skin-red"|"skin-red-light"|"skin-yellow"|"skin-yellow-light"|Param, // Default: "skin-black"
+ *         skin?: "skin-black"|"skin-black-light"|"skin-blue"|"skin-blue-light"|"skin-green"|"skin-green-light"|"skin-purple"|"skin-purple-light"|"skin-red"|"skin-red-light"|"skin-yellow"|"skin-yellow-light"|Param|null, // AdminLTE skin. Set it to null to not load any skin stylesheet, e.g. when a custom theme brings its own styles. // Default: "skin-black"
  *         use_select2?: bool|Param, // Default: true
  *         use_icheck?: bool|Param, // Default: true
  *         use_bootlint?: bool|Param, // Default: false
@@ -1582,6 +1582,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         default_label_catalogue?: scalar|Param|null, // Deprecated: The "default_label_catalogue" node is deprecated, use "default_translation_domain" instead. // Label Catalogue used for admin services if one isn't provided. // Default: "SonataAdminBundle"
  *         default_translation_domain?: scalar|Param|null, // Translation domain used for admin services if one isn't provided. // Default: null
  *         default_icon?: scalar|Param|null, // Icon used for admin services if one isn't provided. // Default: "fas fa-folder"
+ *         icon_prefixes?: list<scalar|Param|null>,
  *         dropdown_number_groups_per_colums?: int|Param, // Default: 2
  *         logo_content?: "text"|"icon"|"all"|Param, // Default: "all"
  *         list_action_button_content?: "text"|"icon"|"all"|Param, // Default: "all"
@@ -1601,6 +1602,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *                 admin?: scalar|Param|null,
  *                 label?: scalar|Param|null,
  *                 route?: scalar|Param|null,
+ *                 icon?: scalar|Param|null, // Icon of the menu item, like the icon of a group: CSS classes (e.g. "fas fa-edit") or HTML
  *                 roles?: list<scalar|Param|null>,
  *                 route_params?: list<scalar|Param|null>,
  *                 route_absolute?: bool|Param, // Whether the generated url should be absolute // Default: false
